@@ -22,7 +22,7 @@ const Button: React.FC<Props> = ({
   ...rest
 }) => {
   const baseClass =
-    "h-[40px] px-[17.9px] rounded-full font-semibold cursor-pointer";
+    "w-full h-[56px] px-[17.9px] rounded-full font-semibold cursor-pointer";
 
   return (
     <button

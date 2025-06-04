@@ -1,47 +1,48 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import {
-  Form,
-  Input,
-  Button,
-  FormItem,
-  FormField,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/UI";
 import { MissingFieldsEnum } from "@/types/missingFields";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { IAuthData, ILoginForm } from "@/types/login";
 import { setErrorsFields } from "@/utils/formErrors";
+import { Button, Input } from "@/components/UI";
 import { StorageEnum } from "@/types/storage";
-import { z, ZodType, ZodTypeDef } from "zod";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { setCookie } from "@/utils/cookies";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { api } from "@/utils/api";
 import Link from "next/link";
+import * as yup from "yup";
 
-const LoginSchema: ZodType<ILoginForm, ZodTypeDef, ILoginForm> = z.object({
-  email: z.string().email({
-    message: "Էլ. փոստը սխալ է",
-  }),
-  password: z
+const loginSchema = yup.object({
+  email: yup
     .string()
-    .min(6, { message: " Գաղտնաբառը կարճ է" })
-    .max(20, { message: "Password is too long" }),
+    .email("Էլ. փոստը սխալ է")
+    .required("Էլ. փոստը պարտադիր է"),
+  password: yup
+    .string()
+    .min(6, "Գաղտնաբառը կարճ է")
+    .max(20, "Password is too long")
+    .required("Գաղտնաբառը պարտադիր է"),
 });
 
 export const LoginForm: React.FC = () => {
   const router = useRouter();
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+
+  const form = useForm<ILoginForm>({
+    resolver: yupResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = form;
 
   const handleNavigateByMissingFields = (missingField: MissingFieldsEnum) => {
     switch (missingField) {
@@ -54,80 +55,55 @@ export const LoginForm: React.FC = () => {
   };
 
   const onSubmit = async (data: ILoginForm) => {
-    const res = await api.post<IAuthData>(ENDPOINTS_ENUM.AUTH_LOGIN, {
+    const response = await api.post<IAuthData>(ENDPOINTS_ENUM.AUTH_LOGIN, {
       body: JSON.stringify(data),
     });
 
-    if (res.status === "SUCCESS") {
-      const accessToken = res.result.access_token;
+    if (response.status === "SUCCESS") {
+      const accessToken = response.result.access_token;
 
-      const isActivated = res.result.state.user?.is_activated;
+      const isActivated = response.result.state.user?.is_activated;
       await setCookie(StorageEnum.ACCESS_TOKEN, accessToken);
 
-      // TODO set user and profile
       if (!isActivated) {
         router.push("/register?step=2");
         return;
       }
-      const missingFields = res.result.state.missing_fields;
+      const missingFields = response.result.state.missing_fields;
       if (missingFields.length) {
         missingFields.forEach(handleNavigateByMissingFields);
         return;
       }
       router.push("/");
     } else {
-      setErrorsFields(form, res.error);
+      setErrorsFields(form, response.error);
     }
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex gap-2 flex-wrap gap-y-8"
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem className="w-full">
-              <FormLabel>Ձեր էլ. փոստը</FormLabel>
-              <FormControl>
-                <Input placeholder="name@email.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="w-full flex flex-col gap-2 items-end">
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel>Ձեր գաղտնաբառը</FormLabel>
-                <FormControl>
-                  <Input placeholder="********" {...field} type="password" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Link
-            href={"/forgot-password"}
-            className="text-primary-main text-[14px]"
-          >
-            Վերականգնել գաղտնաբառը
-          </Link>
-        </div>
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
+      <Input
+        label="Ձեր էլ. փոստը"
+        placeholder="name@email.com"
+        error={errors.email?.message}
+        {...register("email")}
+      />
 
-        <Button
-          className="w-full h-[72px] font-semibold text-[18px]"
-          type="submit"
-        >
-          Մուտք
-        </Button>
-      </form>
-    </Form>
+      <Input
+        label="Ձեր գաղտնաբառը"
+        placeholder="********"
+        error={errors.password?.message}
+        {...register("password")}
+      />
+
+      <Link
+        href={"/forgot-password"}
+        className="flex justify-end text-primary text-[14px] -mt-2"
+      >
+        Վերականգնել գաղտնաբառը
+      </Link>
+
+      <Button type="submit">Մուտք</Button>
+    </form>
   );
 };

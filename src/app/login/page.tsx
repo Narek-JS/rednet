@@ -7,12 +7,12 @@ export default function Login() {
       <div className="mt-[46px] mb-[30px] flex justify-center">
         <div className="max-w-[560px] w-full min-h-[600px] bg-white rounded-[24px] p-[60px]">
           <div className="mb-8">
-            <h1 className="text-title-active text-[32px] font-semibold">
+            <h1 className="text-title-active text-[32px] text-[#14142B] font-bold">
               Ողջույն!
             </h1>
-            <p className="mt-1 flex items-center gap-2">
+            <p className="mt-1 flex items-center gap-2 text-[#14142B] font-semibold">
               Չունե՞ք հաշիվ
-              <Link href={"/register"} className="text-primary-main">
+              <Link href={"/register"} className="text-primary">
                 Գրանցվել
               </Link>
             </p>

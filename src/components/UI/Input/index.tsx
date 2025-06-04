@@ -2,23 +2,33 @@ import { twMerge } from "tailwind-merge";
 import * as React from "react";
 import clsx from "clsx";
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
+interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
+  error?: string;
+}
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, ...props }, ref) => (
+const Input: React.FC<Props> = ({ label, error, className, ...rest }) => (
+  <div className="relative w-full flex flex-col gap-2.5">
+    {label && (
+      <label className="text-[#14142B] font-semibold text-[14px]">
+        {label}
+      </label>
+    )}
     <input
-      type={type}
       className={twMerge(
         clsx(
-          "flex h-[56px] w-full rounded-[16px] border-none border-input bg-[#EFF0F6] px-3 pl-6 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-ring  disabled:cursor-not-allowed disabled:opacity-50 ",
+          "w-full h-[56px] rounded-[16px] border-none outline-none bg-[#EFF0F6] px-3 pl-6 py-2",
           className
         )
       )}
-      ref={ref}
-      {...props}
+      {...rest}
     />
-  )
+    {error && (
+      <p className="absolute left-0 -bottom-[22px] text-[#C30052] text-sm font-semibold">
+        {error}
+      </p>
+    )}
+  </div>
 );
-Input.displayName = "Input";
 
 export { Input };
