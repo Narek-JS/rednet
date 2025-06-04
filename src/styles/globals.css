@@ -3,11 +3,13 @@
 /* Optional root variables */
 :root {
   --color-primary: #f35d74;
+  --color-secondary: #001d23;
 }
 
 /* Tailwind theme variables to generate utilities like bg-primary */
 @theme {
   --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
 }
 
 @layer components {

@@ -1,14 +1,14 @@
 import React from "react";
 
-type LogoProps = React.SVGProps<SVGSVGElement>;
+type Props = React.SVGProps<SVGSVGElement>;
 
-const Logo: React.FC<LogoProps> = (props) => (
+const Logo: React.FC<Props> = (props) => (
   <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 138 54"
     width="138"
     height="54"
-    viewBox="0 0 138 54"
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
     {...props}
   >
     <g clipPath="url(#clip0_22_833)">
@@ -28,10 +28,10 @@ const Logo: React.FC<LogoProps> = (props) => (
     <defs>
       <clipPath id="clip0_22_833">
         <rect
+          transform="matrix(-1 0 0 1 37.05 8)"
           width="36.1"
           height="38"
           fill="white"
-          transform="matrix(-1 0 0 1 37.05 8)"
         />
       </clipPath>
     </defs>

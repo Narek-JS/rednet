@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-const LoginLayout: React.FC<Props> = ({ children }) => {
+const AuthLayout: React.FC<Props> = ({ children }) => {
   return (
     <div className="relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
       {/* Background image */}
@@ -23,4 +23,4 @@ const LoginLayout: React.FC<Props> = ({ children }) => {
   );
 };
 
-export default LoginLayout;
+export default AuthLayout;

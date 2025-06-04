@@ -92,6 +92,7 @@ export const LoginForm: React.FC = () => {
       <Input
         label="Ձեր գաղտնաբառը"
         placeholder="********"
+        type="password"
         error={errors.password?.message}
         {...register("password")}
       />
