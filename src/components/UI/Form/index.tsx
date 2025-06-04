@@ -13,8 +13,6 @@ import { Label } from "../Label";
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
 
-const Form = FormProvider;
-
 type FormFieldContextValue<
   TFieldValues extends FieldValues = FieldValues,
   TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>
@@ -180,6 +178,7 @@ const FormMessage = React.forwardRef<
 FormMessage.displayName = "FormMessage";
 
 export {
+  FormProvider as Form,
   FormDescription,
   useFormField,
   FormControl,
@@ -187,5 +186,4 @@ export {
   FormField,
   FormLabel,
   FormItem,
-  Form,
 };

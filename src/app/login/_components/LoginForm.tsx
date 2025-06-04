@@ -1,26 +1,27 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z, ZodType, ZodTypeDef } from "zod";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+  Input,
   Button,
+  FormItem,
+  FormField,
+  FormLabel,
+  FormControl,
+  FormMessage,
 } from "@/components/UI";
-import { Input } from "@/components/ui/input";
-// import StorageEnum from "@/lib/enums/storage.enum";
-import { login } from "@/lib/services/auth/auth.service";
-import { setCookie } from "@/lib/services/cookies-service/cookies.service";
-import { setErrorsFields } from "@/lib/utils";
-import { ILoginForm } from "@/types/form";
 import { MissingFieldsEnum } from "@/types/missingFields";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { IAuthData, ILoginForm } from "@/types/login";
+import { setErrorsFields } from "@/utils/formErrors";
+import { StorageEnum } from "@/types/storage";
+import { z, ZodType, ZodTypeDef } from "zod";
+import { ENDPOINTS_ENUM } from "@/constants";
+import { setCookie } from "@/utils/cookies";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { api } from "@/utils/api";
+import Link from "next/link";
 
 const LoginSchema: ZodType<ILoginForm, ZodTypeDef, ILoginForm> = z.object({
   email: z.string().email({
@@ -53,27 +54,30 @@ export const LoginForm: React.FC = () => {
   };
 
   const onSubmit = async (data: ILoginForm) => {
-    // const res = await login(data);
-    // if (res.status === "SUCCESS") {
-    //   const accessToken = res.result.access_token;
-    //   // const user = res.result.state.user
-    //   // const profile = res.result.state.profile
-    //   const isActivated = res.result.state.user?.is_activated;
-    //   await setCookie(StorageEnum.ACCESS_TOKEN, accessToken);
-    //   // TODO set user and profile
-    //   if (!isActivated) {
-    //     router.push("/register?step=2");
-    //     return;
-    //   }
-    //   const missingFields = res.result.state.missing_fields;
-    //   if (missingFields.length) {
-    //     missingFields.forEach(handleNavigateByMissingFields);
-    //     return;
-    //   }
-    //   router.push("/");
-    // } else {
-    //   setErrorsFields(form, res.error);
-    // }
+    const res = await api.post<IAuthData>(ENDPOINTS_ENUM.AUTH_LOGIN, {
+      body: JSON.stringify(data),
+    });
+
+    if (res.status === "SUCCESS") {
+      const accessToken = res.result.access_token;
+
+      const isActivated = res.result.state.user?.is_activated;
+      await setCookie(StorageEnum.ACCESS_TOKEN, accessToken);
+
+      // TODO set user and profile
+      if (!isActivated) {
+        router.push("/register?step=2");
+        return;
+      }
+      const missingFields = res.result.state.missing_fields;
+      if (missingFields.length) {
+        missingFields.forEach(handleNavigateByMissingFields);
+        return;
+      }
+      router.push("/");
+    } else {
+      setErrorsFields(form, res.error);
+    }
   };
 
   return (
