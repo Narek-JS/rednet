@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+/* Optional root variables */
+:root {
+  --color-primary: #1a73e8;
+  --color-secondary: #f9ab00;
+  --color-dark: #1f2937;
+}
+
+/* Tailwind theme variables to generate utilities like bg-primary */
+@theme {
+  --color-primary: var(--color-primary);
+  --color-secondary: var(--color-secondary);
+  --color-dark: var(--color-dark);
+}
+
+@layer components {
+  .container {
+    @apply w-full 2xl:mx-auto px-4 xl:px-[120px] lg:px-12 2xl:max-w-[1440px] max-w-full;
+  }
+}
