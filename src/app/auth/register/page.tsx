@@ -7,13 +7,12 @@ import Link from "next/link";
 
 // const Final = dynamic(() => import("@/components/organism/Modals/Final"));
 
-export default function Register({
-  searchParams: { step = "1" },
-}: {
-  searchParams: {
-    step?: string;
-  };
-}) {
+interface Props {
+  searchParams: Promise<{ step?: string }>;
+}
+
+const Register: React.FC<Props> = async ({ searchParams }) => {
+  const step = (await searchParams).step ?? "1";
   const progress = Number(step) * 25;
 
   if (step === "4") {
@@ -45,4 +44,6 @@ export default function Register({
       </div>
     </div>
   );
-}
+};
+
+export default Register;

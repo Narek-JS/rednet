@@ -9,15 +9,6 @@ import { useEffect } from "react";
 import { api } from "@/utils/api";
 import * as yup from "yup";
 
-interface FormData {
-  org_type: "legal" | "physical";
-  head_full_name?: string;
-  address?: string;
-  name?: string;
-  tin?: string;
-  type: string;
-}
-
 const schema = yup.object().shape({
   org_type: yup
     .string()
@@ -26,32 +17,28 @@ const schema = yup.object().shape({
   type: yup.string(),
   tin: yup.string().when("org_type", {
     is: "legal",
-    then: (s) =>
-      s
-        .required("ՀՎՀՀ-ն պարտադիր է")
-        .matches(/^\d{8}$/, "ՀՎՀՀ-ն պետք է լինի 8 թվանշան"),
+    then: (s) => s.required("ՀՎՀՀ-ն պարտադիր է"),
   }),
   name: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("Անունը պարտադիր է").min(2, "Անունը շատ կարճ է"),
+    then: (s) => s.required("Անունը պարտադիր է"),
   }),
   address: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("Հասցեն պարտադիր է").min(2, "Հասցեն շատ կարճ է"),
+    then: (s) => s.required("Հասցեն պարտադիր է"),
   }),
   head_full_name: yup.string().when("org_type", {
     is: "legal",
-    then: (s) =>
-      s
-        .required("Ղեկավարի անունը պարտադիր է")
-        .min(2, "Ղեկավարի անունը շատ կարճ է"),
+    then: (s) => s.required("Ղեկավարի անունը պարտադիր է"),
   }),
 });
 
-export const Step3: React.FC = () => {
+type FormData = yup.InferType<typeof schema>;
+
+const Step3: React.FC = () => {
   const router = useRouter();
 
-  const form = useForm<FormData>({
+  const form = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
@@ -163,3 +150,5 @@ export const Step3: React.FC = () => {
     </>
   );
 };
+
+export { Step3 };

@@ -1,5 +1,3 @@
-// import { Pin } from "@/components/Register/Step2";
-// import { Step3 } from "@/components/Register/Step3";
 import { Step1 } from "./Step1";
 import { Step2 } from "./Step2";
 import { Step3 } from "./Step3";
