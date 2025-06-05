@@ -1,14 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { IError } from "@/types/general";
-
-export interface RegisterRequest {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-  password_confirmation: string;
-}
+import { MissingFieldsEnum } from "@/types/missingFields";
 
 interface User {
   is_activated: boolean;
@@ -22,7 +15,7 @@ type Profile = any;
 interface State {
   user: User;
   profile: null | Profile;
-  missing_fields: ["organization_type"];
+  missing_fields: Array<MissingFieldsEnum>;
 }
 
 interface Response {
@@ -30,6 +23,20 @@ interface Response {
     access_token: string;
     state: State;
   };
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+export type LoginResponse = Response | IError;
+
+export interface RegisterRequest {
+  first_name: string;
+  last_name: string;
+  email: string;
+  password: string;
+  password_confirmation: string;
 }
 
 export interface VerifyRequest {

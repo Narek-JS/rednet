@@ -1,16 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { MissingFieldsEnum } from "@/types/missingFields";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IAuthData, ILoginForm } from "@/types/login";
 import { setErrorsFields } from "@/utils/formErrors";
+import { useLoginMutation } from "@/store/auth/api";
+import { LoginRequest } from "@/store/auth/types";
 import { Button, Input } from "@/components/UI";
 import { StorageEnum } from "@/types/storage";
-import { ENDPOINTS_ENUM } from "@/constants";
 import { setCookie } from "@/utils/cookies";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { api } from "@/utils/api";
+import { IError } from "@/types/general";
 import Link from "next/link";
 import * as yup from "yup";
 
@@ -26,10 +27,11 @@ const loginSchema = yup.object({
     .required("Գաղտնաբառը պարտադիր է"),
 });
 
-export const LoginForm: React.FC = () => {
+const LoginForm: React.FC = () => {
   const router = useRouter();
+  const [login] = useLoginMutation();
 
-  const form = useForm<ILoginForm>({
+  const form = useForm<LoginRequest>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
       email: "",
@@ -38,44 +40,49 @@ export const LoginForm: React.FC = () => {
   });
 
   const {
+    formState: { errors },
     handleSubmit,
     register,
-    formState: { errors },
   } = form;
 
   const handleNavigateByMissingFields = (missingField: MissingFieldsEnum) => {
     switch (missingField) {
       case MissingFieldsEnum.ORGANIZATION_TYPE:
-        router.push("/register?step=3");
+        router.push("/auth/register?step=3");
         break;
       default:
         return;
     }
   };
 
-  const onSubmit = async (data: ILoginForm) => {
-    const response = await api.post<IAuthData>(ENDPOINTS_ENUM.AUTH_LOGIN, {
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data: LoginRequest) => {
+    const response = await login(data);
 
-    if (response.status === "SUCCESS") {
-      const accessToken = response.result.access_token;
+    if (response.data && "data" in response.data) {
+      const accessToken = response.data.data.access_token;
+      const isActivated = response.data.data.state.user.is_activated;
 
-      const isActivated = response.result.state.user?.is_activated;
       await setCookie(StorageEnum.ACCESS_TOKEN, accessToken);
 
       if (!isActivated) {
-        router.push("/register?step=2");
+        router.push("/auth/register?step=2");
         return;
       }
-      const missingFields = response.result.state.missing_fields;
+
+      const missingFields = response.data.data.state.missing_fields;
       if (missingFields.length) {
         missingFields.forEach(handleNavigateByMissingFields);
         return;
       }
       router.push("/");
-    } else {
-      setErrorsFields(form, response.error);
+    } else if (response.error) {
+      const errors = (response.error as any)?.data;
+
+      if (errors) {
+        setErrorsFields(form, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", response);
+      }
     }
   };
 
@@ -107,3 +114,5 @@ export const LoginForm: React.FC = () => {
     </form>
   );
 };
+
+export { LoginForm };

@@ -29,7 +29,7 @@ const Header: React.FC = () => {
               </li>
 
               <li>
-                <Link href="/register">
+                <Link href="/auth/register">
                   <Button variant="primery">Get started</Button>
                 </Link>
               </li>

@@ -7,12 +7,22 @@ import {
   RegisterRequest,
   VerifyResponse,
   VerifyRequest,
+  LoginResponse,
+  LoginRequest,
 } from "./types";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { RTKApi } from "../RTKApi";
 
 const extendedApi = RTKApi.injectEndpoints({
   endpoints: (build) => ({
+    login: build.mutation<LoginResponse, LoginRequest>({
+      query: (props) => ({
+        url: ENDPOINTS_ENUM.AUTH_LOGIN,
+        method: "POST",
+        body: props,
+      }),
+    }),
+
     register: build.mutation<RegisterResponse, RegisterRequest>({
       query: (props) => ({
         url: ENDPOINTS_ENUM.AUTH_REGISTER,
@@ -57,6 +67,7 @@ export const {
   useOrganizationLegalMutation,
   useRegisterMutation,
   useVerifyMutation,
+  useLoginMutation,
 } = extendedApi;
 
 export default extendedApi;
