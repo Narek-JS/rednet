@@ -8,6 +8,12 @@ const steps = {
   "3": <Step3 />,
 };
 
-export const StepControl = ({ step = "1" }: { step: string }) => {
+interface Props {
+  step: string;
+}
+
+const StepControl: React.FC<Props> = ({ step = "1" }) => {
   return steps[step as keyof typeof steps];
 };
+
+export { StepControl };
