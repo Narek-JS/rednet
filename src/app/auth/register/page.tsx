@@ -35,7 +35,7 @@ const Register: React.FC<Props> = async ({ searchParams }) => {
           {step !== "1" ? (
             <Link
               className="flex mt-8 gap-2 font-semibold"
-              href={`/register?page=${Number(step) - 1}`}
+              href={`/auth/register?page=${Number(step) - 1}`}
             >
               <Back /> Back
             </Link>

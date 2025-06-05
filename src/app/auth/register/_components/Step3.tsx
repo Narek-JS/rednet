@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { api } from "@/utils/api";
 import * as yup from "yup";
+import classNames from "classnames";
 
 const schema = yup.object().shape({
   org_type: yup
@@ -52,10 +53,10 @@ const Step3: React.FC = () => {
   });
 
   const {
-    register,
     handleSubmit,
-    watch,
+    register,
     setValue,
+    watch,
     formState: { errors, isValid },
   } = form;
 
@@ -140,7 +141,9 @@ const Step3: React.FC = () => {
         )}
 
         <Button
-          className="w-full h-[72px] font-semibold text-[18px]"
+          className={classNames("w-full h-[72px] font-semibold text-[18px]", {
+            "opacity-50 cursor-default": !isValid,
+          })}
           disabled={!isValid}
           type="submit"
         >
