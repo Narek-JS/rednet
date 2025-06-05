@@ -1,14 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import {
+  useOrganizationIndividualMutation,
+  useOrganizationLegalMutation,
+} from "@/store/auth/api";
 import { Button, Input, RadioGroup, RadioGroupItem } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ENDPOINTS_ENUM } from "@/constants";
+import { Controller, useForm } from "react-hook-form";
+import { setErrorsFields } from "@/utils/formErrors";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
-import { api } from "@/utils/api";
-import * as yup from "yup";
+import { IError } from "@/types/general";
 import classNames from "classnames";
+import * as yup from "yup";
 
 const schema = yup.object().shape({
   org_type: yup
@@ -34,50 +38,59 @@ const schema = yup.object().shape({
   }),
 });
 
-type FormData = yup.InferType<typeof schema>;
-
 const Step3: React.FC = () => {
   const router = useRouter();
-
+  const [organizationIndividual] = useOrganizationIndividualMutation();
+  const [organizationLegal] = useOrganizationLegalMutation();
   const form = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: {
       org_type: undefined,
-      type: "llc",
-      tin: "",
-      name: "",
-      address: "",
       head_full_name: "",
+      type: "llc",
+      address: "",
+      name: "",
+      tin: "",
     },
   });
 
   const {
+    formState: { errors, isValid },
     handleSubmit,
     register,
-    setValue,
+    control,
     watch,
-    formState: { errors, isValid },
   } = form;
 
-  useEffect(() => {
-    setValue("type", "llc");
-  }, [setValue]);
-
-  const onSubmit = async ({ org_type, ...data }: FormData) => {
+  const onSubmit = async ({ org_type, ...data }: any) => {
     if (org_type === "physical") {
-      const res = await api.post(ENDPOINTS_ENUM.ORGANIZATION_INDIVIDUAL);
+      const res = await organizationIndividual();
 
-      if (res.status === "SUCCESS") {
-        router.push("/auth/register?step=4");
+      if (!res.error) {
+        return router.push("/auth/register?step=4");
       }
+
+      const errors = (res.error as any)?.data;
+      if (errors) {
+        setErrorsFields(form as any, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", res);
+      }
+      return;
+    }
+
+    const res = await organizationLegal({ ...data, type: "llc" });
+
+    if (!res.error) {
+      return router.push("/auth/register?step=4");
+    }
+
+    const errors = (res.error as any)?.data;
+    if (errors) {
+      setErrorsFields(form as any, errors as IError);
     } else {
-      const res = await api.post(ENDPOINTS_ENUM.ORGANIZATION_LEGAL, {
-        body: JSON.stringify({ ...data, type: "llc" }),
-      });
-      if (res.status === "SUCCESS") {
-        router.push("/auth/register?step=4");
-      }
+      console.log("Unexpected error --> ", res);
     }
   };
 
@@ -95,16 +108,26 @@ const Step3: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="w-full mt-8 space-y-8">
-        <RadioGroup className="flex w-full gap-8" {...register("org_type")}>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <RadioGroupItem value="legal" />
-            <span className="font-normal">Իրավաբանական անձ</span>
-          </label>
-          <label className="flex items-center gap-2 cursor-pointer">
-            <RadioGroupItem value="physical" />
-            <span className="font-normal">Ֆիզիկական անձ</span>
-          </label>
-        </RadioGroup>
+        <Controller
+          control={control}
+          name="org_type"
+          render={({ field }) => (
+            <RadioGroup
+              className="flex w-full gap-8"
+              onValueChange={field.onChange}
+              value={field.value}
+            >
+              <label className="flex items-center gap-2 cursor-pointer">
+                <RadioGroupItem value="legal" />
+                <span className="font-normal">Իրավաբանական անձ</span>
+              </label>
+              <label className="flex items-center gap-2 cursor-pointer">
+                <RadioGroupItem value="physical" />
+                <span className="font-normal">Ֆիզիկական անձ</span>
+              </label>
+            </RadioGroup>
+          )}
+        />
         {errors.org_type && (
           <p className="text-[#C30052] text-sm font-semibold">
             {errors.org_type.message}

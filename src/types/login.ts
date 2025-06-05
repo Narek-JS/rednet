@@ -1,4 +1,5 @@
-import { IState } from "./general";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import { IState } from "./general";
 
 export interface ILoginForm {
   email: string;
@@ -7,5 +8,5 @@ export interface ILoginForm {
 
 export interface IAuthData {
   access_token: string;
-  state: IState;
+  state: any; // IState;
 }

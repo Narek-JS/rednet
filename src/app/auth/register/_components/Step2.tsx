@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { setErrorsFields } from "@/utils/formErrors";
-import { IVerifyForm } from "@/types/register";
-import { ENDPOINTS_ENUM } from "@/constants";
+import { useVerifyMutation } from "@/store/auth/api";
+import { VerifyRequest } from "@/store/auth/types";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { api } from "@/utils/api";
+import { IError } from "@/types/general";
 import classNames from "classnames";
 import * as yup from "yup";
 
@@ -20,8 +21,9 @@ const formSchema = yup.object({
 
 const Step2: React.FC = () => {
   const router = useRouter();
+  const [verify] = useVerifyMutation();
 
-  const form = useForm<IVerifyForm>({
+  const form = useForm<VerifyRequest>({
     resolver: yupResolver(formSchema),
     defaultValues: { code: "" },
     mode: "onChange",
@@ -34,17 +36,22 @@ const Step2: React.FC = () => {
     setValue,
   } = form;
 
-  const onSubmit = async (data: IVerifyForm) => {
-    const res = await api.post(ENDPOINTS_ENUM.AUTH_VERIFY, {
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data: VerifyRequest) => {
+    const res = await verify(data);
 
-    if (res.status === "SUCCESS") {
-      router.push("/auth/register?step=3");
-      return;
+    if (!res.error) {
+      return router.push("/auth/register?step=3");
     }
 
-    setErrorsFields(form, res.error);
+    if (res.error) {
+      const errors = (res.error as any)?.data;
+
+      if (errors) {
+        setErrorsFields(form, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", res);
+      }
+    }
   };
 
   return (
@@ -93,7 +100,7 @@ const Step2: React.FC = () => {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 items-center w-full">
+        <div className="flex flex-col gap-3 items-center w-full">
           <Button
             className={classNames("w-full h-[72px] font-semibold text-[18px]", {
               "opacity-50 cursor-default": !isValid,
@@ -103,7 +110,7 @@ const Step2: React.FC = () => {
           >
             Շարունակել
           </Button>
-          <Button variant="border" type="button" className="w-full">
+          <Button variant="text" type="button" className="w-full">
             Կրկին ուղարկել կոդը
           </Button>
         </div>

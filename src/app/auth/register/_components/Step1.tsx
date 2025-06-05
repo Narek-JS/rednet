@@ -1,15 +1,16 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { IAuthData, IRegisterForm } from "@/types/register";
 import { setClientCookie } from "@/utils/cookies/client";
+import { useRegisterMutation } from "@/store/auth/api";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { RegisterRequest } from "@/store/auth/types";
 import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
 import { StorageEnum } from "@/types/storage";
-import { ENDPOINTS_ENUM } from "@/constants";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { api } from "@/utils/api";
+import { IError } from "@/types/general";
 import Link from "next/link";
 import * as yup from "yup";
 
@@ -26,40 +27,36 @@ const UserSchema = yup.object({
 
 const Step1: React.FC = () => {
   const router = useRouter();
-  const form = useForm<IRegisterForm>({
+  const [registerMutation] = useRegisterMutation();
+
+  const form = useForm<RegisterRequest>({
     resolver: yupResolver(UserSchema),
-    defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      password_confirmation: "",
-    },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = form;
+  const { register, handleSubmit, formState } = form;
 
-  const onSubmit = async (data: IRegisterForm) => {
-    const res = await api.post<IAuthData>(ENDPOINTS_ENUM.AUTH_REGISTER, {
-      body: JSON.stringify(data),
-    });
+  const onSubmit = async (data: RegisterRequest) => {
+    const res = await registerMutation(data);
 
-    if (res.status === "SUCCESS") {
-      const accessToken = res.result.access_token;
-      const user = res.result.state.user;
+    if (res.data && "data" in res.data) {
+      const accessToken = res.data.data.access_token;
+      const user = res.data.data.state.user;
 
       setClientCookie(StorageEnum.ACCESS_TOKEN, accessToken);
       if (user) setClientCookie(StorageEnum.USER, JSON.stringify(user));
 
-      router.push("/auth/register?step=2");
-      return;
+      return router.push("/auth/register?step=2");
     }
 
-    setErrorsFields(form, res.error);
+    if (res.error) {
+      const errors = (res.error as any)?.data;
+
+      if (errors) {
+        setErrorsFields(form, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", res);
+      }
+    }
   };
 
   return (
@@ -81,14 +78,14 @@ const Step1: React.FC = () => {
           <Input
             label="Ձեր անունը"
             placeholder="John"
-            error={errors.first_name?.message}
+            error={formState.errors.first_name?.message}
             {...register("first_name")}
           />
 
           <Input
             label="Ձեր ազգանունը"
             placeholder="Doe"
-            error={errors.last_name?.message}
+            error={formState.errors.last_name?.message}
             {...register("last_name")}
           />
         </div>
@@ -96,7 +93,7 @@ const Step1: React.FC = () => {
         <Input
           label="Ձեր էլ. փոստը"
           placeholder="name@email.com"
-          error={errors.email?.message}
+          error={formState.errors.email?.message}
           {...register("email")}
         />
 
@@ -105,7 +102,7 @@ const Step1: React.FC = () => {
             label="Ձեր գաղտնաբառը"
             placeholder="********"
             type="password"
-            error={errors.password?.message}
+            error={formState.errors.password?.message}
             {...register("password")}
           />
 
@@ -113,7 +110,7 @@ const Step1: React.FC = () => {
             label="Կրկնեք գաղտնաբառը"
             placeholder="********"
             type="password"
-            error={errors.password_confirmation?.message}
+            error={formState.errors.password_confirmation?.message}
             {...register("password_confirmation")}
           />
         </div>

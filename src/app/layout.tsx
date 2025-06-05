@@ -1,4 +1,5 @@
 import { Noto_Sans_Armenian } from "next/font/google";
+import { StoreProvider } from "@/store/Provider";
 import { Header } from "@/components/Header";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
@@ -31,8 +32,10 @@ const RootLayout: React.FC<Props> = ({ children }) => {
           notoArmenian.className
         )}
       >
-        <Header />
-        {children}
+        <StoreProvider>
+          <Header />
+          {children}
+        </StoreProvider>
       </body>
     </html>
   );
