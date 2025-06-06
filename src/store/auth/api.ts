@@ -9,18 +9,43 @@ import {
   VerifyRequest,
   LoginResponse,
   LoginRequest,
+  State,
 } from "./types";
+import { setAcessToken, setState } from "./slice";
+import { StorageEnum } from "@/types/storage";
 import { ENDPOINTS_ENUM } from "@/constants";
+import { setCookie } from "@/utils/cookies";
 import { RTKApi } from "../RTKApi";
 
 const extendedApi = RTKApi.injectEndpoints({
   endpoints: (build) => ({
+    getState: build.query<State, void>({
+      query: () => ({
+        url: ENDPOINTS_ENUM.STATE,
+        method: "GET",
+      }),
+      providesTags: ["State"],
+      async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
+        const response = await mutationLifeCycleApi.queryFulfilled;
+        mutationLifeCycleApi.dispatch(setState(response.data));
+      },
+    }),
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (props) => ({
         url: ENDPOINTS_ENUM.AUTH_LOGIN,
         method: "POST",
         body: props,
       }),
+      async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
+        const response = await mutationLifeCycleApi.queryFulfilled;
+        if ("data" in response.data) {
+          const token = response.data.data.access_token;
+          await setCookie(StorageEnum.ACCESS_TOKEN, token);
+
+          mutationLifeCycleApi.dispatch(setAcessToken({ token }));
+          mutationLifeCycleApi.dispatch(setState(response.data.data.state));
+        }
+      },
     }),
 
     register: build.mutation<RegisterResponse, RegisterRequest>({
@@ -29,6 +54,17 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "POST",
         body: props,
       }),
+      async onQueryStarted(queryArgument, mutationLifeCycleApi) {
+        const response = await mutationLifeCycleApi.queryFulfilled;
+
+        if ("data" in response.data) {
+          const token = response.data.data.access_token;
+          await setCookie(StorageEnum.ACCESS_TOKEN, token);
+
+          mutationLifeCycleApi.dispatch(setAcessToken({ token }));
+          mutationLifeCycleApi.dispatch(setState(response.data.data.state));
+        }
+      },
     }),
 
     verify: build.mutation<VerifyResponse, VerifyRequest>({

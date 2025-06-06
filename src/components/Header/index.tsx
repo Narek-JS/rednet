@@ -1,8 +1,14 @@
+"use client";
+
+import { selectState } from "@/store/auth/selectors";
+import { useAppSelector } from "@/store/hooks";
 import { Button, Logo } from "../UI";
 
 import Link from "next/link";
 
 const Header: React.FC = () => {
+  const state = useAppSelector(selectState);
+
   return (
     <div className="bg-[#FFFFFF] shadow h-[80px] w-full">
       <div className="container h-full mx-auto">
@@ -25,7 +31,11 @@ const Header: React.FC = () => {
                 <Link href="/?type=tender">Tender</Link>
               </li>
               <li>
-                <Link href="/profile">Profile</Link>
+                <Link
+                  href={state?.profile?.slug || `profile/${state?.profile?.id}`}
+                >
+                  Profile
+                </Link>
               </li>
 
               <li>

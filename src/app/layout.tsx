@@ -1,8 +1,13 @@
 import { Noto_Sans_Armenian } from "next/font/google";
 import { StoreProvider } from "@/store/Provider";
+import { StorageEnum } from "@/types/storage";
 import { Header } from "@/components/Header";
+import { ENDPOINTS_ENUM } from "@/constants";
+import { getCookie } from "@/utils/cookies";
+import { State } from "@/store/auth/types";
 import type { Metadata } from "next";
 import { ReactNode } from "react";
+import { api } from "@/utils/api";
 
 import classNames from "classnames";
 
@@ -23,7 +28,10 @@ const notoArmenian = Noto_Sans_Armenian({
 
 type Props = Readonly<{ children: ReactNode }>;
 
-const RootLayout: React.FC<Props> = ({ children }) => {
+const RootLayout: React.FC<Props> = async ({ children }) => {
+  const state = await api.get<State>(ENDPOINTS_ENUM.STATE);
+  const token = (await getCookie(StorageEnum.ACCESS_TOKEN)) as string;
+
   return (
     <html lang="en">
       <body
@@ -32,7 +40,9 @@ const RootLayout: React.FC<Props> = ({ children }) => {
           notoArmenian.className
         )}
       >
-        <StoreProvider>
+        <StoreProvider
+          preloadedState={{ auth: { state: state.result, token } }}
+        >
           <Header />
           {children}
         </StoreProvider>

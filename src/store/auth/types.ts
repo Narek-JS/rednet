@@ -10,9 +10,15 @@ interface User {
   email: string;
 }
 
-type Profile = any;
+interface Profile {
+  id: number;
+  brand_name: string;
+  slug: any;
+  profile_photo_url: any;
+  cover_photo_url: any;
+}
 
-interface State {
+export interface State {
   user: User;
   profile: null | Profile;
   missing_fields: Array<MissingFieldsEnum>;
