@@ -100,8 +100,8 @@ const LoginForm: React.FC = () => {
       />
 
       <Link
-        href="/auth/forgot-password"
         className="flex justify-end text-primary text-[14px] -mt-2"
+        href="/auth/forgot-password"
       >
         Վերականգնել գաղտնաբառը
       </Link>

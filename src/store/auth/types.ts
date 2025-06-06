@@ -75,3 +75,31 @@ export interface OrganizationLegalResponse {
   };
 }
 export type OrganizationLegalRequest = Organization;
+
+export interface ResetPasswordResponse {
+  data: {
+    code_sent: boolean;
+  };
+}
+export interface ResetPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordCheckResponse {
+  data: {
+    is_valid: boolean;
+  };
+}
+export interface ResetPasswordCheckRequest {
+  code: string;
+  email: string;
+}
+
+export interface SetNewPasswordRequest {
+  email: string;
+  code: string;
+  password: string;
+  password_confirmation: string;
+}
+
+export type SetNewPasswordResponse = Response;

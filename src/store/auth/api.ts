@@ -1,8 +1,14 @@
 import {
   OrganizationIndividualResponse,
   OrganizationIndividualRequest,
+  ResetPasswordCheckResponse,
+  ResetPasswordCheckRequest,
   OrganizationLegalResponse,
   OrganizationLegalRequest,
+  SetNewPasswordResponse,
+  SetNewPasswordRequest,
+  ResetPasswordResponse,
+  ResetPasswordRequest,
   RegisterResponse,
   RegisterRequest,
   VerifyResponse,
@@ -108,12 +114,55 @@ const extendedApi = RTKApi.injectEndpoints({
       }),
       invalidatesTags: ["State"],
     }),
+
+    resetPassword: build.mutation<ResetPasswordResponse, ResetPasswordRequest>({
+      query: (props) => ({
+        url: ENDPOINTS_ENUM.AUTH_SEND_RESET,
+        method: "POST",
+        body: props,
+      }),
+    }),
+
+    resetPasswordCheck: build.mutation<
+      ResetPasswordCheckResponse,
+      ResetPasswordCheckRequest
+    >({
+      query: (props) => ({
+        url: ENDPOINTS_ENUM.AUTH_CHECK_RESET,
+        method: "POST",
+        body: props,
+      }),
+    }),
+
+    setNewPassword: build.mutation<
+      SetNewPasswordResponse,
+      SetNewPasswordRequest
+    >({
+      query: (props) => ({
+        url: ENDPOINTS_ENUM.AUTH_SET_NEW_PASSWORD,
+        method: "POST",
+        body: props,
+      }),
+      async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
+        const response = await mutationLifeCycleApi.queryFulfilled;
+        if ("data" in response.data) {
+          const token = response.data.data.access_token;
+          await setCookie(StorageEnum.ACCESS_TOKEN, token);
+
+          mutationLifeCycleApi.dispatch(setAcessToken({ token }));
+          mutationLifeCycleApi.dispatch(setState(response.data.data.state));
+        }
+      },
+    }),
   }),
 });
 
 export const {
   useOrganizationIndividualMutation,
+  useResetPasswordCheckMutation,
   useOrganizationLegalMutation,
+  useSetNewPasswordMutation,
+  useResetPasswordMutation,
   useRegisterMutation,
   useVerifyMutation,
   useLoginMutation,
