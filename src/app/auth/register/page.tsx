@@ -2,10 +2,7 @@ import { StepControl } from "./_components/StepControl";
 import { Progress } from "@/components/UI/Progress";
 import { Separator } from "@/components/UI";
 import { Back } from "@/components/Icons";
-// import dynamic from "next/dynamic";
 import Link from "next/link";
-
-// const Final = dynamic(() => import("@/components/organism/Modals/Final"));
 
 interface Props {
   searchParams: Promise<{ step?: string }>;
@@ -14,10 +11,6 @@ interface Props {
 const Register: React.FC<Props> = async ({ searchParams }) => {
   const step = (await searchParams).step ?? "1";
   const progress = Number(step) * 25;
-
-  if (step === "4") {
-    // return <Final />;
-  }
 
   return (
     <div className="container h-full w-full">

@@ -1,3 +1,4 @@
+import { ModalController } from "@/components/ModalController";
 import { Noto_Sans_Armenian } from "next/font/google";
 import { StoreProvider } from "@/store/Provider";
 import { StorageEnum } from "@/types/storage";
@@ -43,6 +44,7 @@ const RootLayout: React.FC<Props> = async ({ children }) => {
         <StoreProvider
           preloadedState={{ auth: { state: state.result, token } }}
         >
+          <ModalController />
           <Header />
           {children}
         </StoreProvider>

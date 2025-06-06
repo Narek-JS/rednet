@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { RTKApi } from "./RTKApi";
+import modalReducer from "./modal/slice";
 import authReducer from "./auth/slice";
 
 const rootReducer = combineReducers({
   [RTKApi.reducerPath]: RTKApi.reducer,
   auth: authReducer,
+  modal: modalReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

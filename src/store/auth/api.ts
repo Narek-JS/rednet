@@ -30,6 +30,7 @@ const extendedApi = RTKApi.injectEndpoints({
         mutationLifeCycleApi.dispatch(setState(response.data));
       },
     }),
+
     login: build.mutation<LoginResponse, LoginRequest>({
       query: (props) => ({
         url: ENDPOINTS_ENUM.AUTH_LOGIN,
@@ -54,7 +55,7 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "POST",
         body: props,
       }),
-      async onQueryStarted(queryArgument, mutationLifeCycleApi) {
+      async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
         const response = await mutationLifeCycleApi.queryFulfilled;
 
         if ("data" in response.data) {
@@ -73,6 +74,16 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "POST",
         body: props,
       }),
+      async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
+        const response = await mutationLifeCycleApi.queryFulfilled;
+        if ("data" in response.data) {
+          const token = response.data.data.access_token;
+          await setCookie(StorageEnum.ACCESS_TOKEN, token);
+
+          mutationLifeCycleApi.dispatch(setAcessToken({ token }));
+          mutationLifeCycleApi.dispatch(setState(response.data.data.state));
+        }
+      },
     }),
 
     organizationIndividual: build.mutation<
@@ -83,6 +94,7 @@ const extendedApi = RTKApi.injectEndpoints({
         url: ENDPOINTS_ENUM.ORGANIZATION_INDIVIDUAL,
         method: "POST",
       }),
+      invalidatesTags: ["State"],
     }),
 
     organizationLegal: build.mutation<
@@ -94,6 +106,7 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "POST",
         body: props,
       }),
+      invalidatesTags: ["State"],
     }),
   }),
 });

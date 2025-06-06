@@ -20,11 +20,7 @@ const loginSchema = yup.object({
     .string()
     .email("Էլ. փոստը սխալ է")
     .required("Էլ. փոստը պարտադիր է"),
-  password: yup
-    .string()
-    .min(6, "Գաղտնաբառը կարճ է")
-    .max(20, "Password is too long")
-    .required("Գաղտնաբառը պարտադիր է"),
+  password: yup.string().required("Գաղտնաբառը պարտադիր է"),
 });
 
 const LoginForm: React.FC = () => {
@@ -104,7 +100,7 @@ const LoginForm: React.FC = () => {
       />
 
       <Link
-        href={"/forgot-password"}
+        href="/auth/forgot-password"
         className="flex justify-end text-primary text-[14px] -mt-2"
       >
         Վերականգնել գաղտնաբառը

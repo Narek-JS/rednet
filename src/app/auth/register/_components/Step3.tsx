@@ -9,7 +9,8 @@ import { Button, Input, RadioGroup, RadioGroupItem } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { setErrorsFields } from "@/utils/formErrors";
-import { useRouter } from "next/navigation";
+import { openModal } from "@/store/modal/slice";
+import { useAppDispatch } from "@/store/hooks";
 import { IError } from "@/types/general";
 import classNames from "classnames";
 import * as yup from "yup";
@@ -39,7 +40,8 @@ const schema = yup.object().shape({
 });
 
 const Step3: React.FC = () => {
-  const router = useRouter();
+  const dispatch = useAppDispatch();
+
   const [organizationIndividual] = useOrganizationIndividualMutation();
   const [organizationLegal] = useOrganizationLegalMutation();
   const form = useForm({
@@ -68,7 +70,7 @@ const Step3: React.FC = () => {
       const res = await organizationIndividual();
 
       if (!res.error) {
-        return router.push("/auth/register?step=4");
+        return dispatch(openModal({ type: "registerSuccess" }));
       }
 
       const errors = (res.error as any)?.data;
@@ -83,7 +85,7 @@ const Step3: React.FC = () => {
     const res = await organizationLegal({ ...data, type: "llc" });
 
     if (!res.error) {
-      return router.push("/auth/register?step=4");
+      return dispatch(openModal({ type: "registerSuccess" }));
     }
 
     const errors = (res.error as any)?.data;
