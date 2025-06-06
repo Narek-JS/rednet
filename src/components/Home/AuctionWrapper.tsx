@@ -1,6 +1,7 @@
 "use client";
 
 import { Dashboard } from "@/components/Home/Dashboard";
+import { SearchSection } from "../SearchSection";
 
 interface AuctionWrapperProps {
     search?: string;
@@ -10,9 +11,11 @@ interface AuctionWrapperProps {
 }
 
 export const AuctionWrapper: React.FC<AuctionWrapperProps> = (props) => {
+  const {search} = props;
+
   return (
     <div className="">
-          {/* search section@ heto  */}
+          <SearchSection search={search}/>
           <Dashboard {...props} />
     </div>
   );

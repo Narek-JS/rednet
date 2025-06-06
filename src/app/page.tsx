@@ -9,7 +9,7 @@ interface SearchParams {
 
 const Home = ({searchParams}: {searchParams: SearchParams}) => {
   return (
-    <main className="container">
+    <main className="container mt-10">
      <AuctionWrapper
         search={searchParams.search}
         category={searchParams.category}
