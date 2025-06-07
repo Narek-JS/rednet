@@ -1,4 +1,4 @@
-"use server";
+"use client";
 
 import { AUCTION_MOCKS, IAuction } from "@/mocks/Auctions";
 import { ResponseDataType } from "@/utils/api";
@@ -10,11 +10,11 @@ export const getAuctions = async ({
   priceLte
 }: {
   search?: string;
-  category?: string;
+  category?: string | string[];
   priceGte?: string;
   priceLte?: string;
 }): Promise<ResponseDataType<{ auctions: IAuction[]; total: number }>> => {
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   let auctions = [...AUCTION_MOCKS];
 
@@ -26,9 +26,13 @@ export const getAuctions = async ({
   }
 
   if (category) {
-    auctions = auctions.filter(
-      auction => auction.category.replace(/\s/g, "_").replace(/[^a-zA-Z0-9]/g, "") === category
-    );
+    const categoryList = Array.isArray(category) ? category : [category];
+    auctions = auctions.filter((auction) => {
+      const normalized = auction.category
+        .replace(/\s/g, "_")
+        .replace(/[^a-zA-Z0-9]/g, "");
+      return categoryList.includes(normalized);
+    });
   }
 
   if (priceGte) {
