@@ -1,4 +1,4 @@
-export type ModalType = "registerSuccess";
+export type ModalType = "registerSuccess" | "tenderDetails";
 
 export interface ModalState {
   props?: Record<string, unknown>;

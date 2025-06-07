@@ -1,7 +1,7 @@
 "use client";
 
-import { AuctionItemSkeleton } from "@/components/UI/AuctionItemSkeleton";
-import { AuctionItem } from "@/components/Home/AuctionItem";
+import { AuctionItemSkeleton } from "@/components/UI/Sceleton/AuctionSceleton";
+import { AuctionItem } from "@/components/Home/AuctionWrapper/AuctionItem";
 import { getAuctions } from "@/services/auctions";
 import type { IAuction } from "@/mocks/Auctions";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ interface DashboardProps {
   priceLte?: string;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({
+export const AuctionDashboard: React.FC<DashboardProps> = ({
   search,
   category,
   priceGte,
