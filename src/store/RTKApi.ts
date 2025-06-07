@@ -17,7 +17,6 @@ const RTKApi = createApi({
         headers.set("Authorization", `Bearer ${token}`);
       }
 
-      headers.set("Content-Type", "application/json");
       headers.set("Accept", "application/json");
       headers.set("locale", "hy");
 

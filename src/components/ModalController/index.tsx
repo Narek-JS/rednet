@@ -2,12 +2,13 @@
 
 import { closeModal as closeModalState } from "@/store/modal/slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { RegisterSuccess } from "../Modals";
+import { ProfileEdit, RegisterSuccess } from "../Modals";
 import { useCallback } from "react";
+
 import * as Dialog from "@radix-ui/react-dialog";
 
 const ModalController: React.FC = () => {
-  const { open, type, props } = useAppSelector((state) => state.modal);
+  const { open, type } = useAppSelector((state) => state.modal);
   const dispatch = useAppDispatch();
 
   const closeModal = useCallback(() => {
@@ -17,8 +18,9 @@ const ModalController: React.FC = () => {
   const renderContent = () => {
     switch (type) {
       case "registerSuccess":
-        return <RegisterSuccess {...props} closeModal={closeModal} />;
-
+        return <RegisterSuccess closeModal={closeModal} />;
+      case "profileEdit":
+        return <ProfileEdit closeModal={closeModal} />;
       default:
         return null;
     }
