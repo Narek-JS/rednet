@@ -25,20 +25,25 @@ export const Dashboard: React.FC<DashboardProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+  
+      try {
+        // TODO: replace mock with real api
+        const res = await getAuctions({ search, category, priceGte, priceLte });
+  
+        if (res.status === "SUCCESS") {
+          setAuctions(res.result.auctions);
+        }
 
-      //simulation to fetch data, retuns mock data TODO: change it to real request 
-      const res = await getAuctions({ search, category, priceGte, priceLte });
-
-      if (res.status === "SUCCESS") {
-        setAuctions(res.result.auctions);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchData();
   }, [search, category, priceGte, priceLte]);
-
+  
   if (loading) {
     return (
       <div className="flex-1 flex flex-wrap gap-5">
