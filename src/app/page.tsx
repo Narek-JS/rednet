@@ -7,14 +7,20 @@ interface SearchParams {
   priceLte?: string;
 }
 
-const Home = ({searchParams}: {searchParams: SearchParams}) => {
+interface Props {
+  searchParams: Promise<SearchParams>;
+}
+
+const Home: React.FC<Props> = async ({ searchParams }) => {
+  const params = await searchParams;
+
   return (
     <main className="container mt-10">
-     <AuctionWrapper
-        search={searchParams.search}
-        category={searchParams.category}
-        priceGte={searchParams.priceGte}
-        priceLte={searchParams.priceLte}
+      <AuctionWrapper
+        search={params.search}
+        category={params.category}
+        priceGte={params.priceGte}
+        priceLte={params.priceLte}
       />
     </main>
   );
