@@ -68,3 +68,15 @@ export const getTenders = async ({
     error: null,
   };
 };
+
+export const getTender = (async (id: string): Promise<ResponseDataType<ITender | null>> => {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  const tenders = TENDER_MOCK as unknown as ITender[];
+  const tender = tenders.find(tender => tender.id === Number(id));
+
+  return {
+    status: "SUCCESS",
+    result: tender || null,
+    error: null
+  };
+});

@@ -16,7 +16,7 @@ interface Props {
 
 export const TenderDetailsModal: React.FC<Props> = ({ tenderSlot, closeModal }) => {
   return (
-    <div className="relative  max-h-[800px]">
+    <div className="relative  max-h-[700px]">
       <button
         className="absolute top-4 right-4 text-gray-400 hover:text-black cursor-pointer"
         onClick={closeModal}
