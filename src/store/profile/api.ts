@@ -7,6 +7,8 @@ import {
   SignCoverPhotoUploadResponse,
   UpdateCoverPhotoNameRequest,
   SignCoverPhotoUploadRequest,
+  UpdateProfileResponse,
+  UpdateProfileRequest,
   IndustriesResponse,
   IndustriesRequest,
 } from "./types";
@@ -74,15 +76,29 @@ const extendedApi = RTKApi.injectEndpoints({
         };
       },
     }),
+    updateProfile: build.mutation<UpdateProfileResponse, UpdateProfileRequest>({
+      query: ({ profileId, ...dto }) => {
+        const url = ENDPOINTS_ENUM.UPDATE_PROFILE.replace(
+          ":profileId",
+          String(profileId)
+        );
+        return {
+          url,
+          method: "PATCH",
+          body: dto,
+        };
+      },
+    }),
   }),
 });
 
 export const {
   useGetIndustriesQuery,
-  useLazySignCoverPhotoUploadQuery,
+  useUpdateProfileMutation,
   useUpdateCoverPhotoNameMutation,
-  useLazySignProfilePhotoUploadQuery,
+  useLazySignCoverPhotoUploadQuery,
   useUpdateProfilePhotoNameMutation,
+  useLazySignProfilePhotoUploadQuery,
 } = extendedApi;
 
 export default extendedApi;

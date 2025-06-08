@@ -73,3 +73,10 @@ export interface UpdateProfilePhotoNameRequest {
   profileId: number;
   imageName: string;
 }
+
+export interface UpdateProfileResponse {}
+export interface UpdateProfileRequest
+  extends Partial<Omit<Profile, "industries">> {
+  industries?: Array<number>;
+  profileId: number;
+}

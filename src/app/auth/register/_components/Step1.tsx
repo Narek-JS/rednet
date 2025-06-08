@@ -14,7 +14,7 @@ import { IError } from "@/types/general";
 import Link from "next/link";
 import * as yup from "yup";
 
-const UserSchema = yup.object({
+const schema = yup.object({
   password_confirmation: yup.string().required("Կրկնեք գաղտնաբառը պարտադիր է"),
   first_name: yup.string().required("Անունը պարտադիր է"),
   last_name: yup.string().required("Ազգանունը պարտադիր է"),
@@ -30,7 +30,7 @@ const Step1: React.FC = () => {
   const [registerMutation] = useRegisterMutation();
 
   const form = useForm<RegisterRequest>({
-    resolver: yupResolver(UserSchema),
+    resolver: yupResolver(schema),
   });
 
   const { register, handleSubmit, formState } = form;

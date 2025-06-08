@@ -30,7 +30,7 @@ const ModalController: React.FC = () => {
     <Dialog.Root open={open} onOpenChange={closeModal}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
-        <Dialog.Content className="max-w-[644px] w-full fixed z-50 p-4 bg-white rounded-xl shadow-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] overflow-auto">
+        <Dialog.Content className="max-w-[644px] w-full fixed z-50 p-4 bg-white rounded-xl shadow-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[90vh] overflow-y-auto">
           {renderContent()}
         </Dialog.Content>
       </Dialog.Portal>

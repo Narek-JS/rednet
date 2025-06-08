@@ -20,8 +20,8 @@ const Select: React.FC<Props> = ({
 }) => (
   <div className="relative w-full flex flex-col gap-2.5">
     {label && (
-      <label className="text-[#14142B] font-semibold text-[14px]">
-        Industry
+      <label className="text-[#14142B] font-semibold text-[14px] text-left">
+        {label}
       </label>
     )}
     <select
@@ -36,7 +36,7 @@ const Select: React.FC<Props> = ({
       <option value="">{placeholder}</option>
       {children}
     </select>
-    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+    <div className="absolute right-4 top-1/2 translate-y-1 pointer-events-none">
       <ChevronDownIcon />
     </div>
     {error && (

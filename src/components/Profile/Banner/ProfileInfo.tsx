@@ -5,13 +5,13 @@ import {
   useUpdateProfilePhotoNameMutation,
 } from "@/store/profile/api";
 import { Message, Change, Verify, Phone, Dots, Link } from "@/components/Icons";
-// import { ProfileEdit } from "@/components/organism/Modals/ProfileModal";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useUploadFileMutation } from "@/store/uploader/api";
 import { selectState } from "@/store/auth/selectors";
 import { Profile } from "@/store/profile/types";
 import { Badge, Button } from "@/components/UI";
 import { openModal } from "@/store/modal/slice";
+import { useRouter } from "next/navigation";
 import { ChangeEvent } from "react";
 import Image from "next/image";
 
@@ -26,10 +26,11 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
 }) => {
   const state = useAppSelector(selectState);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [signProfilePhotoUpload] = useLazySignProfilePhotoUploadQuery();
-  const [uploadFile] = useUploadFileMutation();
   const [updateProfilePhotoName] = useUpdateProfilePhotoNameMutation();
+  const [uploadFile] = useUploadFileMutation();
 
   const handleChangePhoto = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -48,6 +49,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
             imageName: resUpload.data.data.file_name,
             profileId: state?.profile?.id,
           });
+          router.refresh();
         }
       }
     }
@@ -135,7 +137,6 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           </Button>
         </div>
       )}
-      {/* <ProfileEdit profileId={profile?.id} open={isOpen} onClose={onClose} /> */}
     </div>
   );
 };

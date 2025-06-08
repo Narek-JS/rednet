@@ -10,6 +10,7 @@ import { Profile } from "@/store/profile/types";
 import { useAppSelector } from "@/store/hooks";
 import { Change } from "@/components/Icons";
 import { ProfileInfo } from "./ProfileInfo";
+import { useRouter } from "next/navigation";
 import { ChangeEvent } from "react";
 import Image from "next/image";
 
@@ -18,8 +19,9 @@ interface Props {
 }
 
 const ProfileBanner: React.FC<Props> = ({ profileData }) => {
+  const router = useRouter();
   const state = useAppSelector(selectState);
-  const isEditable = state?.profile?.id === profileData?.id || true;
+  const isEditable = state?.profile?.id === profileData?.id;
 
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
   const [updateCoverPhotoName] = useUpdateCoverPhotoNameMutation();
@@ -42,6 +44,7 @@ const ProfileBanner: React.FC<Props> = ({ profileData }) => {
             profileId: state.profile.id,
             coverName: resUpload.data.data.file_name,
           });
+          router.refresh();
         }
       }
     }

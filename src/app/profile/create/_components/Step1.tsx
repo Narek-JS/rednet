@@ -155,6 +155,7 @@ const Step1: React.FC = () => {
       <Select
         error={errors.industry?.message}
         placeholder="Select industry"
+        label="Industry"
         {...register("industry")}
         onChange={(e) =>
           setValue("industry", e.target.value, { shouldValidate: true })
