@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Eye, Clock } from "lucide-react";
-import { Button } from "@/components/UI";
-import { getTender } from "@/services/tenders";
 import { calculateTime } from "@/services/calculateTime";
 import { openModal } from "@/store/modal/slice";
 import { useAppDispatch } from "@/store/hooks";
+import { getTender } from "@/services/tenders";
+import { useEffect, useState } from "react";
+import { Eye, Clock } from "lucide-react";
+import { Button } from "@/components/UI";
 
 interface TenderDetailsProps {
   id: string;
@@ -19,7 +19,7 @@ interface ITenderSlot {
   type: string;
   location: string;
   quantity: number;
-  decription: string;
+  description: string;
 }
 
 interface ITender {
@@ -35,24 +35,18 @@ interface ITender {
 }
 
 export const TenderDetails: React.FC<TenderDetailsProps> = ({ id }) => {
+  const dispatch = useAppDispatch();
   const [tender, setTender] = useState<ITender | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<ITenderSlot | null>(null);
 
-  console.log(selected, ' selected')
-
-  const dispatch = useAppDispatch();
-
-
-
-  useEffect(() => {
+  const handleOpen = (item: ITenderSlot) => {
     dispatch(
       openModal({
         type: "tenderDetails",
-        props: { tenderSlot: selected },
+        props: { tenderSlot: item },
       })
     );
-  }, [dispatch, selected]);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,7 +115,11 @@ export const TenderDetails: React.FC<TenderDetailsProps> = ({ id }) => {
                     <div className="flex w-full items-center">
                     <span className="w-2/3 truncate">{item.name}</span>
                     <div className="w-1/3 flex justify-end pr-1">
-                        <Button variant="link" onClick={() => setSelected(item)} className="w-[24px] p-0">
+                        <Button
+                          variant="link"
+                          onClick={() => handleOpen(item)}
+                          className="w-[24px]"
+                        >
                           <Eye size={20} />
                         </Button>
                     </div>
@@ -140,9 +138,6 @@ export const TenderDetails: React.FC<TenderDetailsProps> = ({ id }) => {
           </tbody>
         </table>
       </div>
-
-      {/* {selected && <TenderDetailsModal closeModal={() => setSelected(null)} tenderSlot={selected} />} */}
     </div>
   );
 };
-    

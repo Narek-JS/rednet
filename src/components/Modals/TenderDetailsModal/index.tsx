@@ -6,7 +6,7 @@ export interface ITenderSlot {
   type: string;
   location: string;
   quantity: number;
-  decription: string;
+  description: string;
 }
 
 interface Props {
@@ -14,7 +14,8 @@ interface Props {
   closeModal: () => void;
 }
 
-export const TenderDetailsModal: React.FC<Props> = ({ tenderSlot, closeModal }) => {
+const TenderDetailsModal: React.FC<Props> = ({ tenderSlot, closeModal }) => {
+  console.log(tenderSlot, ' tenderSlot')
   return (
     <div className="relative  max-h-[700px]">
       <button
@@ -29,8 +30,10 @@ export const TenderDetailsModal: React.FC<Props> = ({ tenderSlot, closeModal }) 
       </h2>
 
       <p className="text-[16px] leading-[28px] ">
-        {tenderSlot?.decription}
+        {tenderSlot?.description}
       </p>
     </div>
   );
 };
+
+export { TenderDetailsModal };
