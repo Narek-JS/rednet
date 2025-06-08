@@ -3,10 +3,10 @@ import {
   ProfileService,
   Profile as IProfile,
 } from "@/store/profile/types";
+import { ProfileAnalytics, ProfileBanner } from "@/components/Profile";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { redirect } from "next/navigation";
 import { api } from "@/utils/api";
-import { ProfileBanner } from "@/components/Profile";
 
 const { PROFILE_BY_ID, PROFILE_SERVICES, PROFILE_PRODUCTS } = ENDPOINTS_ENUM;
 
@@ -41,6 +41,7 @@ const Profile: React.FC<Props> = async ({ params }) => {
     <div className="container">
       <div className="my-[34px] w-full">
         <ProfileBanner profileData={profileData.result} />
+        <ProfileAnalytics />
       </div>
     </div>
   );
