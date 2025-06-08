@@ -6,6 +6,7 @@ import { openModal } from "@/store/modal/slice";
 import { useAppDispatch } from "@/store/hooks";
 import Image from "next/image";
 import { Button } from "@/components/UI";
+import { useWindowSize } from "@/hooks/useWindowSize";
 
 interface Props {
   auction: IAuction;
@@ -13,6 +14,9 @@ interface Props {
 
 export const AuctionItem: React.FC<Props> = ({ auction }) => {
   const dispatch = useAppDispatch();
+  const { width } = useWindowSize();
+  const isMobile = width < 1024;
+  const items = isMobile ? auction.items.slice(0, 1) : auction.items.slice(0, 4);
 
   const handleOpen = (item: IAuctionItem) => {
     dispatch(
@@ -45,10 +49,12 @@ export const AuctionItem: React.FC<Props> = ({ auction }) => {
       </div>
 
       <div className="flex gap-2 flex-wrap pt-3">
-        {auction.items.slice(0, 4).map((item) => (
+        {items.map((item) => (
           <div
             key={item.id + item.name}
-            className="text-[#14142B] hover:shadow-md duration-300 border rounded-[8px] bg-white p-4 border-[#D6D8E7] w-[calc(50%-4px)] h-[274px] flex flex-col justify-between"
+            className={`text-[#14142B] hover:shadow-md duration-300 border rounded-[8px] bg-white p-4 border-[#D6D8E7] h-[274px] flex flex-col justify-between ${
+              isMobile ? "w-full" : "w-[calc(50%-4px)]"
+            }`}
           >
             <div>
               <h3 className="text-[18px] font-semibold mb-4">{item.name}</h3>
