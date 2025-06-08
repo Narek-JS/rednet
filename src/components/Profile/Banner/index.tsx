@@ -19,7 +19,7 @@ interface Props {
 
 const ProfileBanner: React.FC<Props> = ({ profileData }) => {
   const state = useAppSelector(selectState);
-  const isEditable = state?.profile?.id === profileData?.id;
+  const isEditable = state?.profile?.id === profileData?.id || true;
 
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
   const [updateCoverPhotoName] = useUpdateCoverPhotoNameMutation();
@@ -60,7 +60,7 @@ const ProfileBanner: React.FC<Props> = ({ profileData }) => {
         {isEditable && (
           <div className="absolute right-6 top-6">
             <label
-              className="flex items-center justify-center bg-white border-2 rounded-full h-[40px] w-[40px] p-0"
+              className="flex items-center justify-center bg-white border-2 rounded-full h-[40px] w-[40px] p-0 cursor-pointer"
               htmlFor="file-cover"
             >
               <input
@@ -74,7 +74,7 @@ const ProfileBanner: React.FC<Props> = ({ profileData }) => {
           </div>
         )}
       </div>
-      <ProfileInfo profileData={profileData} isEditable={isEditable || true} />
+      <ProfileInfo profileData={profileData} isEditable={isEditable} />
     </div>
   );
 };

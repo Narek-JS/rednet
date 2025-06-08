@@ -115,7 +115,6 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
               <Dots />
             </Button>
           </div>
-          <div className="h-[1px] bg-[#D6D8E7] mb-4" />
           <p className="text-body font-semibold">
             Software Development San Francisco, CA
           </p>
@@ -129,7 +128,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           <Button
             className="inline-flex items-center justify-center bg-white border-2 rounded-full h-[40px] w-[40px] p-0"
             onClick={() => {
-              dispatch(openModal({ type: "registerSuccess" }));
+              dispatch(openModal({ type: "profileEdit" }));
             }}
           >
             <Change />

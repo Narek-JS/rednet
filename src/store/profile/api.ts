@@ -1,14 +1,14 @@
 import {
+  SignProfilePhotoUploadResponse,
+  UpdateProfilePhotoNameResponse,
+  SignProfilePhotoUploadRequest,
+  UpdateProfilePhotoNameRequest,
+  UpdateCoverPhotoNameResponse,
   SignCoverPhotoUploadResponse,
+  UpdateCoverPhotoNameRequest,
   SignCoverPhotoUploadRequest,
   IndustriesResponse,
   IndustriesRequest,
-  UpdateCoverPhotoNameResponse,
-  UpdateCoverPhotoNameRequest,
-  SignProfilePhotoUploadResponse,
-  SignProfilePhotoUploadRequest,
-  UpdateProfilePhotoNameResponse,
-  UpdateProfilePhotoNameRequest,
 } from "./types";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { RTKApi } from "../RTKApi";
@@ -40,9 +40,10 @@ const extendedApi = RTKApi.injectEndpoints({
           ":profileId",
           String(profileId)
         );
+
         return {
           url,
-          method: "PUT",
+          method: "PATCH",
           body: { cover_photo_name: coverName },
         };
       },
@@ -68,7 +69,7 @@ const extendedApi = RTKApi.injectEndpoints({
         );
         return {
           url,
-          method: "PUT",
+          method: "PATCH",
           body: { profile_photo_name: imageName },
         };
       },

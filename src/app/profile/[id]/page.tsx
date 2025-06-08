@@ -44,8 +44,6 @@ const Profile: React.FC<Props> = async ({ params }) => {
       </div>
     </div>
   );
-
-  return <>Profile Profile</>;
 };
 
 export default Profile;
