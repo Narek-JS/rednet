@@ -18,7 +18,7 @@ interface ITenderSlot {
   type: string;
   location: string;
   quantity: number;
-  decription: string;
+  description: string;
 }
 
 interface ITender {

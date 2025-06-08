@@ -2,15 +2,25 @@
 
 import { calculateTime } from "@/services/calculateTime";
 import { IAuction, IAuctionItem } from "@/mocks/Auctions";
+import { openModal } from "@/store/modal/slice";
+import { useAppDispatch } from "@/store/hooks";
 import Image from "next/image";
+import { Button } from "@/components/UI";
 
 interface Props {
   auction: IAuction;
 }
 
 export const AuctionItem: React.FC<Props> = ({ auction }) => {
+  const dispatch = useAppDispatch();
+
   const handleOpen = (item: IAuctionItem) => {
-    console.log("item", item);
+    dispatch(
+      openModal({
+        type: "tenderDetails",
+        props: { tenderSlot: item },
+      })
+    );
   };
 
   return (
@@ -55,12 +65,13 @@ export const AuctionItem: React.FC<Props> = ({ auction }) => {
                 {calculateTime(item.startDate, item.endDate)}
               </div>
             </div>
-            <button
+            <Button
+              variant="link"
               onClick={() => handleOpen(item)}
-              className="text-[#F35D74] text-[18px] font-semibold mt-3 text-left"
+              className="font-semibold mt-3 text-left"
             >
               Տեսնել ավելին
-            </button>
+            </Button>
           </div>
         ))}
       </div>

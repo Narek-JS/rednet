@@ -13,7 +13,7 @@ interface ITenderSlot {
   type: string;
   location: string;
   quantity: number;
-  decription: string;
+  description: string;
 }
 
 interface ITender {
@@ -36,6 +36,7 @@ export const TenderItem: React.FC<ITenderItem> = ({ tender }) => {
   const dispatch = useAppDispatch();
 
   const handleOpenDetails = (item: ITenderSlot) => {
+    console.log(item, ' pppppp')
     dispatch(
       openModal({
         type: "tenderDetails",

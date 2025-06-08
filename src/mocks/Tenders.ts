@@ -4,7 +4,7 @@ export interface ITenderSlot {
     type: string;
     location: string;
     quantity: number;
-    decription: string;
+    description: string;
   }
   
   export interface ITender {
@@ -19,8 +19,8 @@ export interface ITenderSlot {
     items: ITenderSlot[];
   }
   
-  const testDesc = `«Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02,«Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
-  «Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
+  const testDesc = `«k Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02,«Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
+  « lՃանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
   «Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
   
   «Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02
@@ -32,7 +32,7 @@ export interface ITenderSlot {
   export const TENDER_MOCK: ITender[] = [
     {
       id: 1,
-      name: "«Ճանապարհային դեպարտամենտ 1»",
+      name: "«ooo Ճանապարհային դեպարտամենտ 1»",
       // startDate: new Date("2024-08-20T22:15:00.000Z"),
       // endDate: new Date("2024-08-20T23:15:00.000Z"),
       startDate: new Date("2024-08-04T12:35:00.000Z"),
@@ -41,7 +41,7 @@ export interface ITenderSlot {
       location: "Yerevan",
       category: "Մենեջմենտ",
       description:
-        "«Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02    ",
+        " h «Ճանապարհային դեպարտամենտ» հիմնադրամի կարիքների համար ֆինանսական աուդիտի անցկացման ծառայությունների ձեռքբերման նպատակով հայտարարված գնանշման հարցում։Հայտերի ներկայացման հրավեր ՃԴ-ԳՀԾՁԲ-2023/02    ",
       items: [
         {
           id: 1,
@@ -49,7 +49,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 30,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 2,
@@ -57,7 +57,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 40,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 3,
@@ -65,7 +65,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 50,
-          decription: testDesc
+          description: testDesc
         }
       ]
     },
@@ -84,7 +84,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 30,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 2,
@@ -92,7 +92,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 40,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 3,
@@ -100,7 +100,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 50,
-          decription: testDesc
+          description: testDesc
         }
       ],
       description:
@@ -122,7 +122,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 30,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 2,
@@ -130,7 +130,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 40,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 3,
@@ -138,7 +138,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 50,
-          decription: testDesc
+          description: testDesc
         }
       ],
       description:
@@ -160,7 +160,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 30,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 2,
@@ -168,7 +168,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 40,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 3,
@@ -176,7 +176,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 50,
-          decription: testDesc
+          description: testDesc
         }
       ],
       description:
@@ -198,7 +198,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 30,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 2,
@@ -206,7 +206,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 40,
-          decription: testDesc
+          description: testDesc
         },
         {
           id: 3,
@@ -214,7 +214,7 @@ export interface ITenderSlot {
           type: "Example Cell",
           location: "Yerevan",
           quantity: 50,
-          decription: testDesc
+          description: testDesc
         }
       ],
       description:
