@@ -21,7 +21,7 @@ const RegisterSuccess: React.FC<Props> = ({ closeModal }) => {
 
   return (
     <>
-      <div className="flex w-full items-center justify-center">
+      <div className="w-full flex items-center justify-center">
         <Image
           src="/images/welcome.webp"
           alt="welcome image"
@@ -29,8 +29,8 @@ const RegisterSuccess: React.FC<Props> = ({ closeModal }) => {
           width={229}
         />
       </div>
-      <div className="text-center flex items-center gap-6 flex-col">
-        <h2 className="text-title-active text-[48px] font-bold">
+      <div className="flex flex-col items-center gap-6 text-center">
+        <h2 className="text-[48px] font-bold">
           Բարի գալուստ
           <br /> Rednet
         </h2>

@@ -1,10 +1,12 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
+import { uploadApi } from "./uploader/api";
 import { RTKApi } from "./RTKApi";
 import modalReducer from "./modal/slice";
 import authReducer from "./auth/slice";
 
 const rootReducer = combineReducers({
   [RTKApi.reducerPath]: RTKApi.reducer,
+  [uploadApi.reducerPath]: uploadApi.reducer,
   auth: authReducer,
   modal: modalReducer,
 });
@@ -16,7 +18,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(RTKApi.middleware),
+      getDefaultMiddleware().concat(RTKApi.middleware, uploadApi.middleware),
   });
 };
 

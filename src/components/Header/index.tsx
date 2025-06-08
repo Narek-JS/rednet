@@ -32,7 +32,9 @@ const Header: React.FC = () => {
               </li>
               <li>
                 <Link
-                  href={state?.profile?.slug || `profile/${state?.profile?.id}`}
+                  href={
+                    state?.profile?.slug || `/profile/${state?.profile?.id}`
+                  }
                 >
                   Profile
                 </Link>

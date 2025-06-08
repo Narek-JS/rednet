@@ -30,8 +30,8 @@ const Step2: React.FC = () => {
 
   const onSubmit = (data: FormValues) => {
     console.log("data --> ", data);
-    // TODO --> Upload image and attach their URLs to data
-    router.push("/profile/create?step=2");
+
+    router.push("/");
   };
 
   return (

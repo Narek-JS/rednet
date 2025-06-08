@@ -1,6 +1,11 @@
 "use client";
 
-import { useGetIndustriesQuery } from "@/store/profile/api";
+import {
+  useGetIndustriesQuery,
+  useLazySignCoverPhotoUploadQuery,
+  useLazySignProfilePhotoUploadQuery,
+} from "@/store/profile/api";
+import { useUploadFileMutation } from "@/store/uploader/api";
 import { Button, Input, Select } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
@@ -28,6 +33,12 @@ const Step1: React.FC = () => {
   const profileRef = useRef<HTMLInputElement>(null);
   const [coverImage, setCoverImage] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [coverFileName, setCoverFileName] = useState<string | null>(null);
+  const [profileFileName, setProfileFileName] = useState<string | null>(null);
+
+  const [signProfilePhotoUpload] = useLazySignProfilePhotoUploadQuery();
+  const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
+  const [uploadFile] = useUploadFileMutation();
 
   const { data: industries } = useGetIndustriesQuery();
 
@@ -40,7 +51,9 @@ const Step1: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -55,12 +68,28 @@ const Step1: React.FC = () => {
     };
     reader.readAsDataURL(file);
 
-    // TODO --> Upload image to server
+    // Upload logic
+    if (event.target.name === "cover") {
+      const resUpload = await signCoverPhotoUpload({ file_name: file.name });
+      if (resUpload.isSuccess) {
+        await uploadFile({ url: resUpload.data.data.upload_url, file });
+        setCoverFileName(resUpload.data.data.file_name);
+      }
+    }
+
+    if (event.target.name === "profile") {
+      const resUpload = await signProfilePhotoUpload({ file_name: file.name });
+      if (resUpload.isSuccess) {
+        await uploadFile({ url: resUpload.data.data.upload_url, file });
+        setProfileFileName(resUpload.data.data.file_name);
+      }
+    }
   };
 
   const onSubmit = (data: FormValues) => {
+    if (!coverFileName || !profileFileName) return;
+
     console.log("data --> ", data);
-    // TODO --> Upload image and attach their URLs to data
     router.push("/profile/create?step=2");
   };
 
@@ -126,6 +155,7 @@ const Step1: React.FC = () => {
       <Select
         error={errors.industry?.message}
         placeholder="Select industry"
+        label="Industry"
         {...register("industry")}
         onChange={(e) =>
           setValue("industry", e.target.value, { shouldValidate: true })

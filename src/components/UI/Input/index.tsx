@@ -10,7 +10,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
 const Input: React.FC<Props> = ({ label, error, className, ...rest }) => (
   <div className="relative w-full flex flex-col gap-2.5">
     {label && (
-      <label className="text-[#14142B] font-semibold text-[14px]">
+      <label className="text-[#14142B] font-semibold text-[14px] text-left">
         {label}
       </label>
     )}
