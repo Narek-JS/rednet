@@ -1,8 +1,8 @@
 "use client";
 
-import { Dashboard } from "@/components/Home/Dashboard";
-import { SearchSection } from "../SearchSection";
-import { Filter } from "../Filter";
+import { AuctionDashboard } from "@/components/Home/AuctionWrapper/AuctionDashboard";
+import { SearchSection } from "../../SearchSection";
+import { Filter } from "../../Filter";
 
 interface AuctionWrapperProps {
     search?: string;
@@ -19,7 +19,7 @@ export const AuctionWrapper: React.FC<AuctionWrapperProps> = (props) => {
         <Filter />
         <div className='flex-1'>
           <SearchSection search={search} />
-          <Dashboard {...props} />
+          <AuctionDashboard {...props} />
         </div>
       </div>
   );

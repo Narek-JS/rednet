@@ -1,10 +1,12 @@
-import { AuctionWrapper } from "@/components/Home/AuctionWrapper";
+import { AuctionWrapper } from "@/components/Home/AuctionWrapper/AuctionWrapper";
+import { TenderWrapper } from "@/components/Home/TenderWrapper/TenderWrapper";
 
 interface SearchParams {
   search?: string;
   category?: string;
   priceGte?: string;
   priceLte?: string;
+  type?: string;
 }
 
 interface Props {
@@ -16,12 +18,21 @@ const Home: React.FC<Props> = async ({ searchParams }) => {
 
   return (
     <main className="container mt-10">
-      <AuctionWrapper
-        search={params.search}
-        category={params.category}
-        priceGte={params.priceGte}
-        priceLte={params.priceLte}
+      {params.type === 'tender' ? (
+        <TenderWrapper
+          search={params.search}
+          category={params.category}
+          priceGte={params.priceGte}
+          priceLte={params.priceLte}
+        />
+      ):
+        <AuctionWrapper
+          search={params.search}
+          category={params.category}
+          priceGte={params.priceGte}
+          priceLte={params.priceLte}
       />
+      }
     </main>
   );
 };

@@ -2,7 +2,7 @@ import { ReactNode, ButtonHTMLAttributes } from "react";
 import { twMerge } from "tailwind-merge";
 import clsx from "clsx";
 
-type Variant = "primery" | "border" | "text";
+type Variant = "primery" | "border" | "text" | "outline" | "link";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -13,6 +13,8 @@ const variantClasses: Record<Variant, string> = {
   border: "border-2 border-[#D6D8E7] text-[#F35D74] bg-transparent",
   text: "bg-transparent font-medium cursor-pointer",
   primery: "bg-[#F35D74] text-[#FFFFFF]",
+  outline: "border border-primary text-primary bg-white",
+  link: "text-primary px-0 h-auto",
 };
 
 const Button: React.FC<Props> = ({

@@ -9,7 +9,7 @@ export const Filter: React.FC = () => {
     <div className='w-[300px] min-h-[260px] bg-white shadow-main rounded-[7px] p-4'>
       <Accordion type='multiple'>
         <AccordionItem value='item-1'>
-          <AccordionTrigger className='px-4'>Category h</AccordionTrigger>
+          <AccordionTrigger className='px-4'>Category</AccordionTrigger>
           <AccordionContent>
             <CategoryFilter />
           </AccordionContent>
