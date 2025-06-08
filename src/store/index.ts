@@ -18,7 +18,9 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
     reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(RTKApi.middleware, uploadApi.middleware),
+      getDefaultMiddleware({
+        serializableCheck: false, // avoid hydration error
+      }).concat(RTKApi.middleware, uploadApi.middleware),
   });
 };
 
