@@ -80,3 +80,44 @@ export interface UpdateProfileRequest
   industries?: Array<number>;
   profileId: number;
 }
+
+export interface ProfileServicesResponse {
+  data: Array<ProfileService>;
+}
+export interface ProfileServicesRequest {
+  profileId: number;
+}
+
+export interface DeleteProfileServiceResponse {}
+export type DeleteProfileServiceRequest = number;
+
+export interface DeleteProductResponse {}
+export type DeleteProductRequest = number;
+
+export interface SignServicePhotoResponse {
+  data: {
+    file_name: string;
+    upload_url: string;
+    retrieve_url: string;
+    expires_at: string;
+  };
+}
+export interface SignServicePhotoRequest {
+  file_name?: string;
+}
+
+export interface UpdateProfileServiceResponse {}
+export interface UpdateProfileServiceRequest {
+  serviceId: number;
+  name: string;
+  description: string;
+  photo_name: string;
+}
+
+export interface CreateProfileServiceResponse {}
+export interface CreateProfileServiceRequest {
+  profileId: number;
+  name: string;
+  description: string;
+  photo_name: string;
+}

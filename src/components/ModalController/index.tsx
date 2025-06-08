@@ -1,9 +1,9 @@
 "use client";
 
+import { ProfileEdit, RegisterSuccess, ServiceModal } from "../Modals";
 import { closeModal as closeModalState } from "@/store/modal/slice";
 import { TenderDetailsModal } from "../Modals/TenderDetailsModal";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { ProfileEdit, RegisterSuccess } from "../Modals";
 import { useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
@@ -21,8 +21,10 @@ const ModalController: React.FC = () => {
         return <RegisterSuccess closeModal={closeModal} />;
       case "profileEdit":
         return <ProfileEdit closeModal={closeModal} />;
-        case "tenderDetails":
-          return <TenderDetailsModal {...props} closeModal={closeModal} />;
+      case "serviceModal":
+        return <ServiceModal closeModal={closeModal} />;
+      case "tenderDetails":
+        return <TenderDetailsModal {...props} closeModal={closeModal} />;
       default:
         return null;
     }
@@ -33,7 +35,7 @@ const ModalController: React.FC = () => {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 z-50" />
         <Dialog.Content className="max-w-[644px] w-full fixed z-50 p-4 bg-white rounded-xl shadow-lg top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[90vh] overflow-y-auto">
-          <Dialog.Title></Dialog.Title> 
+          <Dialog.Title></Dialog.Title>
           {renderContent()}
         </Dialog.Content>
       </Dialog.Portal>

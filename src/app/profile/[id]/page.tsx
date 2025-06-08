@@ -1,14 +1,14 @@
+import { Profile as IProfile } from "@/store/profile/types";
 import {
-  ProfileProduct,
-  ProfileService,
-  Profile as IProfile,
-} from "@/store/profile/types";
-import { ProfileAnalytics, ProfileBanner } from "@/components/Profile";
+  ProfileAnalytics,
+  ProfileServices,
+  ProfileBanner,
+} from "@/components/Profile";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { redirect } from "next/navigation";
 import { api } from "@/utils/api";
 
-const { PROFILE_BY_ID, PROFILE_SERVICES, PROFILE_PRODUCTS } = ENDPOINTS_ENUM;
+const { PROFILE_BY_ID } = ENDPOINTS_ENUM;
 
 interface Props {
   params: Promise<{
@@ -25,23 +25,12 @@ const Profile: React.FC<Props> = async ({ params }) => {
     return redirect("/");
   }
 
-  const serviceWithParam = PROFILE_SERVICES.replace(":profileId", profileId);
-  const serviceData = await api.get<Array<ProfileService>>(serviceWithParam);
-
-  const productWithParam = PROFILE_PRODUCTS.replace(":profileId", profileId);
-  const productData = await api.get<Array<ProfileProduct>>(productWithParam);
-
-  console.log("serviceData, productData, profileData --> ", {
-    serviceData,
-    productData,
-    profileData,
-  });
-
   return (
     <div className="container">
       <div className="my-[34px] w-full">
         <ProfileBanner profileData={profileData.result} />
         <ProfileAnalytics />
+        <ProfileServices profileId={Number(profileId)} />
       </div>
     </div>
   );
