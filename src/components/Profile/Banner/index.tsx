@@ -15,13 +15,13 @@ import { ChangeEvent } from "react";
 import Image from "next/image";
 
 interface Props {
-  profileData: Profile | null;
+  profileDataSsr: Profile | null;
 }
 
-const ProfileBanner: React.FC<Props> = ({ profileData }) => {
+const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
   const router = useRouter();
   const state = useAppSelector(selectState);
-  const isEditable = state?.profile?.id === profileData?.id;
+  const isEditable = state?.profile?.id === profileDataSsr?.id;
 
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
   const [updateCoverPhotoName] = useUpdateCoverPhotoNameMutation();
@@ -54,7 +54,7 @@ const ProfileBanner: React.FC<Props> = ({ profileData }) => {
     <div className="w-full h-[358px] relative flex items-center justify-center">
       <div className="w-full h-full relative rounded-[8px]">
         <Image
-          src={profileData?.cover_photo_url || "/images/cover-photo.jpg"}
+          src={profileDataSsr?.cover_photo_url || "/images/cover-photo.jpg"}
           alt="The image selected by the user."
           className="rounded-[8px]"
           objectFit="cover"
@@ -77,7 +77,7 @@ const ProfileBanner: React.FC<Props> = ({ profileData }) => {
           </div>
         )}
       </div>
-      <ProfileInfo profileData={profileData} isEditable={isEditable} />
+      <ProfileInfo profileDataSsr={profileDataSsr} isEditable={isEditable} />
     </div>
   );
 };

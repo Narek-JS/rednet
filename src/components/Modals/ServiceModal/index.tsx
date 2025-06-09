@@ -1,41 +1,52 @@
 "use client";
 
 import {
-  useCreateServiceMutation,
   useLazySignServicePhotoUploadQuery,
+  useCreateServiceMutation,
   useUpdateServiceMutation,
 } from "@/store/profile/api";
+import { useUploadFileMutation } from "@/store/uploader/api";
+import { ProfileService } from "@/store/profile/types";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { selectState } from "@/store/auth/selectors";
 import { Upload } from "@/components/Icons/Upload";
 import { Button, Input } from "@/components/UI";
+import { useAppSelector } from "@/store/hooks";
 import { useForm } from "react-hook-form";
-import { X } from "lucide-react";
 import { useRef, useState } from "react";
+import { X } from "lucide-react";
 import * as yup from "yup";
-import { useUploadFileMutation } from "@/store/uploader/api";
 
 interface Props {
+  service?: ProfileService;
   closeModal: () => void;
+  profileId?: number;
 }
 
 const schema = yup.object({
-  name: yup.string().required("Service name is required"),
   description: yup.string().required("Description is required"),
+  name: yup.string().required("Service name is required"),
 });
 
-const ServiceModal: React.FC<Props> = ({ closeModal }) => {
-  const isEdit = true;
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
+  const state = useAppSelector(selectState);
+  const isEdit = state?.profile?.id === profileId;
 
-  const [photoName, setPhotoName] = useState("");
+  const [photoName, setPhotoName] = useState(service?.photo_url || "");
 
   const [signServicePhotoUpload] = useLazySignServicePhotoUploadQuery();
   const [updateService] = useUpdateServiceMutation();
   const [createService] = useCreateServiceMutation();
   const [uploadFile] = useUploadFileMutation();
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
+    defaultValues: {
+      description: service?.description || "",
+      name: service?.name || "",
+    },
   });
 
   const {
@@ -59,14 +70,14 @@ const ServiceModal: React.FC<Props> = ({ closeModal }) => {
   const onSubmit = async (data: yup.InferType<typeof schema>) => {
     if (!isEdit) {
       await updateService({
+        serviceId: Number(service!.id),
         photo_name: photoName,
-        serviceId: 33,
         ...data,
       });
     } else {
       await createService({
         photo_name: photoName,
-        profileId: 69,
+        profileId: profileId!,
         ...data,
       });
     }

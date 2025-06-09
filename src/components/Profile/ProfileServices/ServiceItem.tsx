@@ -1,22 +1,30 @@
 import { Dropdown, DropdownItem } from "@/components/UI/Dropdown";
 import { useDeleteServiceMutation } from "@/store/profile/api";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { ProfileService } from "@/store/profile/types";
+import { selectState } from "@/store/auth/selectors";
 import { openModal } from "@/store/modal/slice";
-import { useAppDispatch } from "@/store/hooks";
 import { Dots } from "@/components/Icons";
 import Image from "next/image";
 
 interface ServiceItemProps {
   onDataChange?: () => void;
   service: ProfileService;
+  profileId: number;
 }
 
-const ServiceItem: React.FC<ServiceItemProps> = ({ onDataChange, service }) => {
+const ServiceItem: React.FC<ServiceItemProps> = ({
+  onDataChange,
+  profileId,
+  service,
+}) => {
+  const state = useAppSelector(selectState);
+
   const [deleteService] = useDeleteServiceMutation();
   const dispatch = useAppDispatch();
 
   const handleEdit = () => {
-    dispatch(openModal({ type: "serviceModal" }));
+    dispatch(openModal({ type: "serviceModal", props: { profileId } }));
   };
 
   const handleDelete = async () => {
@@ -60,7 +68,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ onDataChange, service }) => {
           </div>
         </div>
 
-        {true && ( // isEditable
+        {state?.profile?.id === profileId && (
           <Dropdown trigger={<Dots />}>
             <DropdownItem onClick={handleEdit}>Edit</DropdownItem>
             <DropdownItem onClick={handleDelete}>Delete</DropdownItem>

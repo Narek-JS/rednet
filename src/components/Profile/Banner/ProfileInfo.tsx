@@ -16,12 +16,12 @@ import { ChangeEvent } from "react";
 import Image from "next/image";
 
 interface IProfileInfoProps {
-  profileData: Profile | null;
+  profileDataSsr: Profile | null;
   isEditable: boolean;
 }
 
 export const ProfileInfo: React.FC<IProfileInfoProps> = ({
-  profileData,
+  profileDataSsr,
   isEditable,
 }) => {
   const state = useAppSelector(selectState);
@@ -60,7 +60,9 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
       <div className="w-full h-full flex gap-[40px] relative">
         <div className="relative w-[192px] h-[192px] border-[12px] border-[#FFE2E7] rounded-[8px] group overflow-hidden">
           <Image
-            src={profileData?.profile_photo_url || "/images/profile-photo.jpg"}
+            src={
+              profileDataSsr?.profile_photo_url || "/images/profile-photo.jpg"
+            }
             alt="The image selected by the user."
             className="rounded-[4px] object-cover"
             fill
@@ -89,7 +91,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
         <div className="flex-1 h-full flex flex-col gap-[10px]">
           <div className="flex gap-[11px] items-center">
             <h2 className="text-[#000D26] font-bold text-[32px]">
-              {profileData?.brand_name}
+              {profileDataSsr?.brand_name}
             </h2>
             <Verify />
             <Badge
@@ -105,10 +107,10 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           </div>
           <div className="text-title-active font-normal flex items-center gap-4">
             <p className="flex items-center gap-[6px] font-normal">
-              <Phone /> {profileData?.phone_number || "+1 (855) 635-7754"}
+              <Phone /> {profileDataSsr?.phone_number || "+1 (855) 635-7754"}
             </p>
             <p className="flex items-center gap-[6px] font-normal">
-              <Message /> {profileData?.public_email || "support@airbnb.com"}
+              <Message /> {profileDataSsr?.public_email || "support@airbnb.com"}
             </p>
             <Button className="bg-white border-2 rounded-full h-[40px] w-[40px] p-0 ">
               <Link />

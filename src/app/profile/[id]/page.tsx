@@ -1,9 +1,9 @@
-import { Profile as IProfile } from "@/store/profile/types";
 import {
   ProfileAnalytics,
   ProfileServices,
   ProfileBanner,
 } from "@/components/Profile";
+import { Profile as IProfile } from "@/store/profile/types";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { redirect } from "next/navigation";
 import { api } from "@/utils/api";
@@ -28,7 +28,7 @@ const Profile: React.FC<Props> = async ({ params }) => {
   return (
     <div className="container">
       <div className="my-[34px] w-full">
-        <ProfileBanner profileData={profileData.result} />
+        <ProfileBanner profileDataSsr={profileData.result} />
         <ProfileAnalytics />
         <ProfileServices profileId={Number(profileId)} />
       </div>

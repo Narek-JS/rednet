@@ -22,7 +22,7 @@ const ModalController: React.FC = () => {
       case "profileEdit":
         return <ProfileEdit closeModal={closeModal} />;
       case "serviceModal":
-        return <ServiceModal closeModal={closeModal} />;
+        return <ServiceModal {...props} closeModal={closeModal} />;
       case "tenderDetails":
         return <TenderDetailsModal {...props} closeModal={closeModal} />;
       default:
