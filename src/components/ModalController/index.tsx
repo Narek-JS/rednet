@@ -2,7 +2,6 @@
 
 import { ProfileEdit, RegisterSuccess, ServiceModal } from "../Modals";
 import { closeModal as closeModalState } from "@/store/modal/slice";
-import { TenderDetailsModal } from "../Modals/TenderDetailsModal";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -23,8 +22,6 @@ const ModalController: React.FC = () => {
         return <ProfileEdit closeModal={closeModal} />;
       case "serviceModal":
         return <ServiceModal {...props} closeModal={closeModal} />;
-      case "tenderDetails":
-        return <TenderDetailsModal {...props} closeModal={closeModal} />;
       default:
         return null;
     }

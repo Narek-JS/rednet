@@ -1,6 +1,5 @@
 import { StepControl } from "./_components/StepControl";
 import { Progress } from "@/components/UI/Progress";
-import { Separator } from "@/components/UI";
 import { Back } from "@/components/Icons";
 import Link from "next/link";
 
@@ -22,7 +21,7 @@ const Register: React.FC<Props> = async ({ searchParams }) => {
               <p className="text-[18px] text-[#4E4B66]">{step}/3</p>
               <p className="text-[14px] font-normal text-[#6E7191]">Done</p>
             </div>
-            <Separator />
+            <div className="bg-[#DEE6F0] h-[1px] w-full mt-2.5" />
           </div>
           <StepControl step={step} />
           {step !== "1" ? (
