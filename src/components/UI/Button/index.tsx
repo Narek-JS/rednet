@@ -24,7 +24,7 @@ const Button: React.FC<Props> = ({
   ...rest
 }) => {
   const baseClass =
-    "w-full h-[48px] sm:h-[68px] px-[16px] rounded-[15px] sm:rounded-full font-semibold cursor-pointer duration-200";
+    "w-full h-[48px] sm:h-[55px] px-[16px] rounded-[12px] sm:rounded-[16px] font-semibold cursor-pointer duration-200";
 
   const isText = variant === "text";
   const finalClass = isText

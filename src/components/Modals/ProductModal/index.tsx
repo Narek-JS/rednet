@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -178,13 +177,13 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
             type="button"
             variant="outline"
             onClick={closeModal}
-            className="max-w-fit text-[14px] sm:text-[18px]"
+            className="max-w-fit text-[14px] sm:text-[16px]"
           >
             {TEXTS.productModal.buttons.cancel}
           </Button>
           <Button
             type="submit"
-            className="max-w-fit text-[14px] sm:text-[18px]"
+            className="max-w-fit text-[14px] sm:text-[16px]"
           >
             {isEdit
               ? TEXTS.productModal.buttons.update

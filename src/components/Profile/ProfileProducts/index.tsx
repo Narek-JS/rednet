@@ -47,9 +47,9 @@ const ProfileProducts: React.FC<Props> = ({ profileId }) => {
 
       <div className="w-full flex justify-between">
         <Button
-          variant="link"
           className="max-w-fit text-primary text-[12px] sm:text-[16px] font-normal flex items-center gap-1"
           onClick={seeMore}
+          variant="link"
         >
           <span className="hidden sm:inline">
             {TEXTS.profileProducts.seeMore}
@@ -62,7 +62,7 @@ const ProfileProducts: React.FC<Props> = ({ profileId }) => {
 
         <Button
           variant="link"
-          className="max-w-fit text-primary text-[14px] sm:text-[18px] flex items-center gap-1"
+          className="max-w-fit text-primary text-[14px] sm:text-[16px] flex items-center gap-1"
           onClick={addProduct}
         >
           <Plus fill="#F35D74" fillOpacity="1" />

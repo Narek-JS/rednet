@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useRegisterMutation } from "@/store/auth/api";
@@ -116,7 +115,7 @@ const Step1: React.FC = () => {
           />
         </div>
 
-        <Button className="w-full font-semibold text-[18px]" type="submit">
+        <Button className="w-full font-semibold" type="submit">
           {TEXTS.registerStep1.button}
         </Button>
       </form>

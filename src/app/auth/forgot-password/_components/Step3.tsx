@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useSetNewPasswordMutation } from "@/store/auth/api";
@@ -86,7 +85,7 @@ const Step3: React.FC<{ email: string; code: string }> = ({ email, code }) => {
         {...register("password_confirmation")}
       />
 
-      <Button className="w-full font-semibold text-[18px]" type="submit">
+      <Button className="w-full font-semibold" type="submit">
         {TEXTS.forgotPasswordStep3.button}
       </Button>
     </form>

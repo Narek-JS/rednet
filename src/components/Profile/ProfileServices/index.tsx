@@ -65,7 +65,7 @@ const ProfileServices: React.FC<Props> = ({ profileId }) => {
 
         <Button
           variant="link"
-          className="max-w-fit text-primary text-[14px] sm:text-[18px] flex items-center gap-1"
+          className="max-w-fit text-primary text-[14px] sm:text-[16px] flex items-center gap-1"
           onClick={addService}
         >
           <Plus fill="#F35D74" fillOpacity="1" />

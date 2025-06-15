@@ -13,7 +13,7 @@ const EmptyItems: FC<Props> = ({ text }) => (
       width={110}
       height={100}
     />
-    <p className="text-[12px] sm:text-[16px]">{text}</p>
+    <p className="text-[12px] sm:text-[16px] text-body">{text}</p>
   </div>
 );
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/UI";
@@ -84,9 +83,9 @@ const Step2: React.FC<{ email: string }> = ({ email }) => {
       </div>
 
       <Button
-        className="w-full font-semibold text-[18px]"
-        type="submit"
+        className="w-full font-semibold"
         disabled={!formState.isValid}
+        type="submit"
       >
         {TEXTS.forgotPasswordStep2.confirm}
       </Button>

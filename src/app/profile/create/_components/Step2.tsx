@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useUpdateProfileMutation } from "@/store/profile/api";
@@ -96,10 +95,7 @@ const Step2: React.FC = () => {
         {...register("headline")}
       />
 
-      <Button
-        className="w-full h-[72px] font-semibold text-[18px]"
-        type="submit"
-      >
+      <Button className="w-full font-semibold" type="submit">
         {TEXTS.createProfileStep2.continue}
       </Button>
       <Button

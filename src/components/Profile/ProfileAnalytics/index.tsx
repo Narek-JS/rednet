@@ -13,7 +13,7 @@ const ProfileAnalytics: React.FC = () => (
           <Views />
         </div>
         <div className="flex flex-col justify-between">
-          <h6 className="text-[#000D26] font-semibold text-[16px] sm:text-[24px]">
+          <h6 className="text-[#000D26] text-[16px] sm:text-[22px]">
             {TEXTS.profileAnalytics.viewsLabel}
           </h6>
           <span className="font-medium text-[12px] text-body">

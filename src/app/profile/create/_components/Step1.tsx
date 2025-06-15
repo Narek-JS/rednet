@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -206,7 +205,7 @@ const Step1: React.FC = () => {
       />
 
       <Button
-        className={classNames("w-full h-[72px] font-semibold text-[18px]", {
+        className={classNames("w-full font-semibold", {
           "opacity-50 cursor-default": !isValid || !coverImage || !profileImage,
         })}
         disabled={!isValid || !coverImage || !profileImage}

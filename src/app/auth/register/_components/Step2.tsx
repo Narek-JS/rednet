@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
@@ -120,7 +119,7 @@ const Step2: React.FC = () => {
 
         <div className="flex flex-col gap-3 items-center w-full">
           <Button
-            className={classNames("w-full font-semibold text-[18px]", {
+            className={classNames("w-full font-semibold", {
               "opacity-50 cursor-default": !isValid,
             })}
             disabled={!isValid}
