@@ -1,18 +1,15 @@
 "use client";
 
+import { cn } from "@/utils/strings/cn";
 import * as ProgressPrimitive from "@radix-ui/react-progress";
-import { twMerge } from "tailwind-merge";
-import clsx from "clsx";
 
 type Props = React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>;
 
 const Progress: React.FC<Props> = ({ className, value, ...props }) => (
   <ProgressPrimitive.Root
-    className={twMerge(
-      clsx(
-        "relative h-3 w-full overflow-hidden rounded-[6px] bg-[#EFF0F6]",
-        className
-      )
+    className={cn(
+      "relative h-3 w-full overflow-hidden rounded-[6px] bg-[#EFF0F6]",
+      className
     )}
     {...props}
   >

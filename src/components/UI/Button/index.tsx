@@ -1,6 +1,5 @@
 import { ReactNode, ButtonHTMLAttributes } from "react";
-import { twMerge } from "tailwind-merge";
-import clsx from "clsx";
+import { cn } from "@/utils/strings/cn";
 
 type Variant = "primery" | "border" | "text" | "outline" | "link";
 
@@ -25,12 +24,12 @@ const Button: React.FC<Props> = ({
   ...rest
 }) => {
   const baseClass =
-    "w-full h-[56px] px-[17.9px] rounded-full font-semibold cursor-pointer";
+    "w-full h-[48px] sm:h-[68px] px-[16px] rounded-[15px] sm:rounded-full font-semibold cursor-pointer duration-200";
 
   const isText = variant === "text";
   const finalClass = isText
-    ? twMerge(clsx("text-center text-sm", variantClasses[variant], className))
-    : twMerge(clsx(baseClass, variantClasses[variant], className));
+    ? cn("text-center text-sm", variantClasses[variant], className)
+    : cn(baseClass, variantClasses[variant], className);
 
   return (
     <button type={type} className={finalClass} {...rest}>

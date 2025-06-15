@@ -1,27 +1,31 @@
 import {
   SignProfilePhotoUploadResponse,
-  UpdateProfilePhotoNameResponse,
   SignProfilePhotoUploadRequest,
-  UpdateProfilePhotoNameRequest,
-  UpdateCoverPhotoNameResponse,
   SignCoverPhotoUploadResponse,
   DeleteProfileServiceResponse,
+  UpdateProfileServiceResponse,
+  CreateProfileServiceResponse,
   DeleteProfileServiceRequest,
-  UpdateCoverPhotoNameRequest,
   SignCoverPhotoUploadRequest,
+  UpdateProfileServiceRequest,
+  CreateProfileServiceRequest,
+  SignServicePhotoResponse,
+  SignServicePhotoRequest,
   ProfileServicesResponse,
   ProfileServicesRequest,
+  DeleteProductResponse,
   UpdateProfileResponse,
   UpdateProfileRequest,
   IndustriesResponse,
   IndustriesRequest,
-  DeleteProductResponse,
-  SignServicePhotoResponse,
-  SignServicePhotoRequest,
-  UpdateProfileServiceResponse,
-  UpdateProfileServiceRequest,
-  CreateProfileServiceResponse,
-  CreateProfileServiceRequest,
+  ProfileProductsResponse,
+  ProfileProductsRequest,
+  SignProductPhotoResponse,
+  SignProductPhotoRequest,
+  CreateProfileProductResponse,
+  CreateProfileProductRequest,
+  UpdateProfileProductResponse,
+  UpdateProfileProductRequest,
 } from "./types";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { RTKApi } from "../RTKApi";
@@ -34,6 +38,7 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "GET",
       }),
     }),
+
     signCoverPhotoUpload: build.query<
       SignCoverPhotoUploadResponse,
       SignCoverPhotoUploadRequest
@@ -44,23 +49,7 @@ const extendedApi = RTKApi.injectEndpoints({
         params,
       }),
     }),
-    updateCoverPhotoName: build.mutation<
-      UpdateCoverPhotoNameResponse,
-      UpdateCoverPhotoNameRequest
-    >({
-      query: ({ profileId, coverName }) => {
-        const url = ENDPOINTS_ENUM.UPDATE_PROFILE.replace(
-          ":profileId",
-          String(profileId)
-        );
 
-        return {
-          url,
-          method: "PATCH",
-          body: { cover_photo_name: coverName },
-        };
-      },
-    }),
     signProfilePhotoUpload: build.query<
       SignProfilePhotoUploadResponse,
       SignProfilePhotoUploadRequest
@@ -71,22 +60,7 @@ const extendedApi = RTKApi.injectEndpoints({
         params,
       }),
     }),
-    updateProfilePhotoName: build.mutation<
-      UpdateProfilePhotoNameResponse,
-      UpdateProfilePhotoNameRequest
-    >({
-      query: ({ profileId, imageName }) => {
-        const url = ENDPOINTS_ENUM.UPDATE_PROFILE.replace(
-          ":profileId",
-          String(profileId)
-        );
-        return {
-          url,
-          method: "PATCH",
-          body: { profile_photo_name: imageName },
-        };
-      },
-    }),
+
     updateProfile: build.mutation<UpdateProfileResponse, UpdateProfileRequest>({
       query: ({ profileId, ...dto }) => {
         const url = ENDPOINTS_ENUM.UPDATE_PROFILE.replace(
@@ -100,11 +74,12 @@ const extendedApi = RTKApi.injectEndpoints({
         };
       },
     }),
+
     profileServices: build.query<
       ProfileServicesResponse,
       ProfileServicesRequest
     >({
-      query: ({ profileId }) => {
+      query: ({ profileId, limit }) => {
         const url = ENDPOINTS_ENUM.PROFILE_SERVICES.replace(
           ":profileId",
           String(profileId)
@@ -113,9 +88,31 @@ const extendedApi = RTKApi.injectEndpoints({
         return {
           url,
           method: "GET",
+          params: { ...(limit && { limit }) },
         };
       },
+      providesTags: ["ProfileServices"],
     }),
+
+    profileProducts: build.query<
+      ProfileProductsResponse,
+      ProfileProductsRequest
+    >({
+      query: ({ profileId, limit }) => {
+        const url = ENDPOINTS_ENUM.PROFILE_PRODUCTS.replace(
+          ":profileId",
+          String(profileId)
+        );
+
+        return {
+          url,
+          method: "GET",
+          params: { ...(limit && { limit }) },
+        };
+      },
+      providesTags: ["ProfileProducts"],
+    }),
+
     deleteService: build.mutation<
       DeleteProfileServiceResponse,
       DeleteProfileServiceRequest
@@ -127,7 +124,9 @@ const extendedApi = RTKApi.injectEndpoints({
         );
         return { url, method: "DELETE" };
       },
+      invalidatesTags: ["ProfileServices"],
     }),
+
     deleteProduct: build.mutation<DeleteProductResponse, DeleteProductResponse>(
       {
         query: (productId) => {
@@ -137,6 +136,7 @@ const extendedApi = RTKApi.injectEndpoints({
           );
           return { url, method: "DELETE" };
         },
+        invalidatesTags: ["ProfileProducts"],
       }
     ),
 
@@ -146,6 +146,17 @@ const extendedApi = RTKApi.injectEndpoints({
     >({
       query: (params) => ({
         url: ENDPOINTS_ENUM.SERVICE_PHOTO,
+        method: "GET",
+        params,
+      }),
+    }),
+
+    signProductPhotoUpload: build.query<
+      SignProductPhotoResponse,
+      SignProductPhotoRequest
+    >({
+      query: (params) => ({
+        url: ENDPOINTS_ENUM.PRODUCT_PHOTO,
         method: "GET",
         params,
       }),
@@ -162,6 +173,21 @@ const extendedApi = RTKApi.injectEndpoints({
         );
         return { url, method: "PUT", body: rest };
       },
+      invalidatesTags: ["ProfileServices"],
+    }),
+
+    updateProduct: build.mutation<
+      UpdateProfileProductResponse,
+      UpdateProfileProductRequest
+    >({
+      query: ({ productId, ...rest }) => {
+        const url = ENDPOINTS_ENUM.UPDATE_PRODUCT.replace(
+          ":productId",
+          String(productId)
+        );
+        return { url, method: "PUT", body: rest };
+      },
+      invalidatesTags: ["ProfileProducts"],
     }),
 
     createService: build.mutation<
@@ -175,6 +201,21 @@ const extendedApi = RTKApi.injectEndpoints({
         );
         return { url, method: "POST", body: rest };
       },
+      invalidatesTags: ["ProfileServices"],
+    }),
+
+    createProduct: build.mutation<
+      CreateProfileProductResponse,
+      CreateProfileProductRequest
+    >({
+      query: ({ profileId, ...rest }) => {
+        const url = ENDPOINTS_ENUM.PROFILE_PRODUCTS.replace(
+          ":profileId",
+          String(profileId)
+        );
+        return { url, method: "POST", body: rest };
+      },
+      invalidatesTags: ["ProfileProducts"],
     }),
   }),
 });
@@ -182,16 +223,18 @@ const extendedApi = RTKApi.injectEndpoints({
 export const {
   useGetIndustriesQuery,
   useProfileServicesQuery,
+  useProfileProductsQuery,
   useDeleteProductMutation,
   useDeleteServiceMutation,
   useUpdateProfileMutation,
   useUpdateServiceMutation,
+  useUpdateProductMutation,
   useCreateServiceMutation,
-  useUpdateCoverPhotoNameMutation,
+  useCreateProductMutation,
   useLazySignCoverPhotoUploadQuery,
-  useUpdateProfilePhotoNameMutation,
   useLazySignProfilePhotoUploadQuery,
   useLazySignServicePhotoUploadQuery,
+  useLazySignProductPhotoUploadQuery,
 } = extendedApi;
 
 export default extendedApi;

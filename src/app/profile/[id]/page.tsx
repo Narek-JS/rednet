@@ -1,6 +1,7 @@
 import {
   ProfileAnalytics,
   ProfileServices,
+  ProfileProducts,
   ProfileBanner,
 } from "@/components/Profile";
 import { Profile as IProfile } from "@/store/profile/types";
@@ -11,9 +12,7 @@ import { api } from "@/utils/api";
 const { PROFILE_BY_ID } = ENDPOINTS_ENUM;
 
 interface Props {
-  params: Promise<{
-    id: string;
-  }>;
+  params: Promise<{ id: string }>;
 }
 
 const Profile: React.FC<Props> = async ({ params }) => {
@@ -26,11 +25,12 @@ const Profile: React.FC<Props> = async ({ params }) => {
   }
 
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <div className="my-[34px] w-full">
         <ProfileBanner profileDataSsr={profileData.result} />
         <ProfileAnalytics />
         <ProfileServices profileId={Number(profileId)} />
+        <ProfileProducts profileId={Number(profileId)} />
       </div>
     </div>
   );

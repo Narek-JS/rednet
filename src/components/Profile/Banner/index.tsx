@@ -2,12 +2,11 @@
 
 import {
   useLazySignCoverPhotoUploadQuery,
-  useUpdateCoverPhotoNameMutation,
+  useUpdateProfileMutation,
 } from "@/store/profile/api";
 import { useUploadFileMutation } from "@/store/uploader/api";
-import { selectState } from "@/store/auth/selectors";
+import { useGetStateQuery } from "@/store/auth/api";
 import { Profile } from "@/store/profile/types";
-import { useAppSelector } from "@/store/hooks";
 import { Change } from "@/components/Icons";
 import { ProfileInfo } from "./ProfileInfo";
 import { useRouter } from "next/navigation";
@@ -20,11 +19,12 @@ interface Props {
 
 const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
   const router = useRouter();
-  const state = useAppSelector(selectState);
-  const isEditable = state?.profile?.id === profileDataSsr?.id;
+  const { data: state } = useGetStateQuery();
+
+  const isEditable = state?.data.profile?.id === profileDataSsr?.id;
 
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
-  const [updateCoverPhotoName] = useUpdateCoverPhotoNameMutation();
+  const [updateProfile] = useUpdateProfileMutation();
   const [uploadFile] = useUploadFileMutation();
 
   const handleChaneCoverPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -33,16 +33,16 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
     if (file) {
       const resUpload = await signCoverPhotoUpload({ file_name: file.name });
 
-      if (resUpload.isSuccess && state?.profile?.id) {
+      if (resUpload.isSuccess && state?.data?.profile?.id) {
         const res = await uploadFile({
           url: resUpload.data.data.upload_url,
           file,
         });
 
         if (!res.error) {
-          await updateCoverPhotoName({
-            profileId: state.profile.id,
-            coverName: resUpload.data.data.file_name,
+          await updateProfile({
+            profileId: state.data.profile.id,
+            cover_photo_name: resUpload.data.data.file_name,
           });
           router.refresh();
         }
@@ -51,11 +51,11 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
   };
 
   return (
-    <div className="w-full h-[358px] relative flex items-center justify-center">
+    <div className="relative h-[258px] sm:h-[358px] w-full flex items-center justify-center">
       <div className="w-full h-full relative rounded-[8px]">
         <Image
           src={profileDataSsr?.cover_photo_url || "/images/cover-photo.jpg"}
-          alt="The image selected by the user."
+          alt="Profile Cover Image"
           className="rounded-[8px]"
           objectFit="cover"
           fill
@@ -63,7 +63,7 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
         {isEditable && (
           <div className="absolute right-6 top-6">
             <label
-              className="flex items-center justify-center bg-white border-2 rounded-full h-[40px] w-[40px] p-0 cursor-pointer"
+              className="flex items-center justify-center bg-white border-2 border-[#D9DBE9] rounded-full h-[40px] w-[40px] p-0 cursor-pointer"
               htmlFor="file-cover"
             >
               <input

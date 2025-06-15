@@ -4,12 +4,77 @@
 :root {
   --color-primary: #f35d74;
   --color-secondary: #001d23;
+  --color-body: #4e4b66;
 }
 
-/* Tailwind theme variables to generate utilities like bg-primary */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #eff0f6 transparent;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #eff0f6;
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Tailwind theme variables */
 @theme {
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
+  --color-body: var(--color-body);
+}
+
+@layer utilities {
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-out {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+
+  .animate-slide-in {
+    animation: slide-in 0.2s ease-out forwards;
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out forwards;
+  }
+
+  .animate-slide-out {
+    animation: slide-out 0.2s ease-in forwards;
+  }
 }
 
 @layer components {

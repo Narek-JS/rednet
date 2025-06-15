@@ -3,7 +3,7 @@ import { StorageEnum } from "@/types/storage";
 import { getCookie } from "@/utils/cookies";
 
 const BASE_URL = process.env.NEXT_PUBLIC_URL;
-const tagTypes = ["State"] as const;
+const tagTypes = ["State", "ProfileServices", "ProfileProducts"] as const;
 
 const RTKApi = createApi({
   reducerPath: "api",

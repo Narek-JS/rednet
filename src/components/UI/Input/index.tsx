@@ -1,6 +1,5 @@
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/utils/strings/cn";
 import * as React from "react";
-import clsx from "clsx";
 
 interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -17,16 +16,14 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       )}
       <input
         ref={ref}
-        className={twMerge(
-          clsx(
-            "w-full h-[56px] rounded-[16px] border-none outline-none bg-[#EFF0F6] px-3 pl-6 py-2",
-            className
-          )
+        className={cn(
+          "w-full h-[46px] sm:h-[56px] rounded-[12px] sm:rounded-[16px] border-none outline-none bg-[#EFF0F6] px-3 pl-6 py-2",
+          className
         )}
         {...rest}
       />
       {error && (
-        <p className="absolute left-0 -bottom-[22px] text-[#C30052] text-sm font-semibold">
+        <p className="absolute left-0 -bottom-[22px] text-[#C30052] whitespace-nowrap text-sm font-semibold">
           {error}
         </p>
       )}

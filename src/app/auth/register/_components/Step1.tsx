@@ -1,28 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { setClientCookie } from "@/utils/cookies/client";
 import { useRegisterMutation } from "@/store/auth/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterRequest } from "@/store/auth/types";
 import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
-import { StorageEnum } from "@/types/storage";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
 import Link from "next/link";
 import * as yup from "yup";
 
 const schema = yup.object({
-  password_confirmation: yup.string().required("Կրկնեք գաղտնաբառը պարտադիր է"),
-  first_name: yup.string().required("Անունը պարտադիր է"),
-  last_name: yup.string().required("Ազգանունը պարտադիր է"),
-  password: yup.string().required("Գաղտնաբառը պարտադիր է"),
+  password_confirmation: yup
+    .string()
+    .required(TEXTS.registerStep1.validation.passwordConfirm),
+  first_name: yup.string().required(TEXTS.registerStep1.validation.firstName),
+  last_name: yup.string().required(TEXTS.registerStep1.validation.lastName),
+  password: yup.string().required(TEXTS.registerStep1.validation.password),
   email: yup
     .string()
-    .email("Էլ. փոստը սխալ է")
-    .required("Էլ. փոստը պարտադիր է"),
+    .email(TEXTS.registerStep1.validation.emailInvalid)
+    .required(TEXTS.registerStep1.validation.emailRequired),
 });
 
 const Step1: React.FC = () => {
@@ -39,13 +40,11 @@ const Step1: React.FC = () => {
     const res = await registerMutation(data);
 
     if (res.data && "data" in res.data) {
-      const accessToken = res.data.data.access_token;
-      const user = res.data.data.state.user;
-
-      setClientCookie(StorageEnum.ACCESS_TOKEN, accessToken);
-      if (user) setClientCookie(StorageEnum.USER, JSON.stringify(user));
-
-      return router.push("/auth/register?step=2");
+      if (!res.data.data.state.user.is_activated) {
+        return router.push("/auth/register?step=2");
+      } else {
+        return router.push("/auth/register?step=3");
+      }
     }
 
     if (res.error) {
@@ -62,11 +61,13 @@ const Step1: React.FC = () => {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-[32px] text-[#14142B] font-bold">Գրանցվել</h1>
+        <h1 className="text-[32px] text-[#14142B] font-bold">
+          {TEXTS.registerStep1.title}
+        </h1>
         <p className="mt-1 flex items-center gap-2 text-[#14142B] font-semibold">
-          Արդեն ունեք հաշիվ?{" "}
+          {TEXTS.registerStep1.subtitle}
           <Link href="/auth/login" className="text-primary">
-            Մուտք գործեք
+            {TEXTS.registerStep1.login}
           </Link>
         </p>
       </div>
@@ -74,52 +75,49 @@ const Step1: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="flex gap-2 flex-wrap gap-y-8"
       >
-        <div className="flex gap-2.5">
+        <div className="flex flex-col sm:flex-row gap-2.5 gap-y-8 w-full">
           <Input
-            label="Ձեր անունը"
-            placeholder="John"
+            label={TEXTS.registerStep1.fields.firstName}
+            placeholder={TEXTS.registerStep1.placeholders.firstName}
             error={formState.errors.first_name?.message}
             {...register("first_name")}
           />
 
           <Input
-            label="Ձեր ազգանունը"
-            placeholder="Doe"
+            label={TEXTS.registerStep1.fields.lastName}
+            placeholder={TEXTS.registerStep1.placeholders.lastName}
             error={formState.errors.last_name?.message}
             {...register("last_name")}
           />
         </div>
 
         <Input
-          label="Ձեր էլ. փոստը"
-          placeholder="name@email.com"
+          label={TEXTS.registerStep1.fields.email}
+          placeholder={TEXTS.registerStep1.placeholders.email}
           error={formState.errors.email?.message}
           {...register("email")}
         />
 
-        <div className="flex gap-2.5">
+        <div className="flex flex-col sm:flex-row gap-2.5 gap-y-8 w-full">
           <Input
-            label="Ձեր գաղտնաբառը"
-            placeholder="********"
+            label={TEXTS.registerStep1.fields.password}
+            placeholder={TEXTS.registerStep1.placeholders.password}
             type="password"
             error={formState.errors.password?.message}
             {...register("password")}
           />
 
           <Input
-            label="Կրկնեք գաղտնաբառը"
-            placeholder="********"
+            label={TEXTS.registerStep1.fields.passwordConfirm}
+            placeholder={TEXTS.registerStep1.placeholders.passwordConfirm}
             type="password"
             error={formState.errors.password_confirmation?.message}
             {...register("password_confirmation")}
           />
         </div>
 
-        <Button
-          className="w-full h-[72px] font-semibold text-[18px]"
-          type="submit"
-        >
-          Շարունակել
+        <Button className="w-full font-semibold text-[18px]" type="submit">
+          {TEXTS.registerStep1.button}
         </Button>
       </form>
     </>

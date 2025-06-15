@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   OrganizationIndividualResponse,
   OrganizationIndividualRequest,
@@ -5,6 +6,8 @@ import {
   ResetPasswordCheckRequest,
   OrganizationLegalResponse,
   OrganizationLegalRequest,
+  ActivationResendResponse,
+  ActivationResendRequest,
   SetNewPasswordResponse,
   SetNewPasswordRequest,
   ResetPasswordResponse,
@@ -14,8 +17,9 @@ import {
   VerifyResponse,
   VerifyRequest,
   LoginResponse,
+  StateResponse,
+  StateRequest,
   LoginRequest,
-  State,
 } from "./types";
 import { setAcessToken, setState } from "./slice";
 import { StorageEnum } from "@/types/storage";
@@ -25,7 +29,7 @@ import { RTKApi } from "../RTKApi";
 
 const extendedApi = RTKApi.injectEndpoints({
   endpoints: (build) => ({
-    getState: build.query<State, void>({
+    getState: build.query<StateResponse, StateRequest>({
       query: () => ({
         url: ENDPOINTS_ENUM.STATE,
         method: "GET",
@@ -33,7 +37,7 @@ const extendedApi = RTKApi.injectEndpoints({
       providesTags: ["State"],
       async onQueryStarted(_queryArgument, mutationLifeCycleApi) {
         const response = await mutationLifeCycleApi.queryFulfilled;
-        mutationLifeCycleApi.dispatch(setState(response.data));
+        mutationLifeCycleApi.dispatch(setState(response.data.data));
       },
     }),
 
@@ -92,6 +96,16 @@ const extendedApi = RTKApi.injectEndpoints({
       },
     }),
 
+    activationResend: build.mutation<
+      ActivationResendResponse,
+      ActivationResendRequest
+    >({
+      query: () => ({
+        url: ENDPOINTS_ENUM.AUTH_ACTIVATION_RESEND,
+        method: "POST",
+      }),
+    }),
+
     organizationIndividual: build.mutation<
       OrganizationIndividualResponse,
       OrganizationIndividualRequest
@@ -100,7 +114,15 @@ const extendedApi = RTKApi.injectEndpoints({
         url: ENDPOINTS_ENUM.ORGANIZATION_INDIVIDUAL,
         method: "POST",
       }),
-      invalidatesTags: ["State"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(
+          (RTKApi.endpoints as any)?.getState.initiate(undefined, {
+            subscribe: false,
+            forceRefetch: true,
+          })
+        );
+      },
     }),
 
     organizationLegal: build.mutation<
@@ -112,7 +134,15 @@ const extendedApi = RTKApi.injectEndpoints({
         method: "POST",
         body: props,
       }),
-      invalidatesTags: ["State"],
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(
+          (RTKApi.endpoints as any)?.getState.initiate(undefined, {
+            subscribe: false,
+            forceRefetch: true,
+          })
+        );
+      },
     }),
 
     resetPassword: build.mutation<ResetPasswordResponse, ResetPasswordRequest>({
@@ -161,11 +191,13 @@ export const {
   useOrganizationIndividualMutation,
   useResetPasswordCheckMutation,
   useOrganizationLegalMutation,
+  useActivationResendMutation,
   useSetNewPasswordMutation,
   useResetPasswordMutation,
   useRegisterMutation,
   useVerifyMutation,
   useLoginMutation,
+  useGetStateQuery,
 } = extendedApi;
 
 export default extendedApi;

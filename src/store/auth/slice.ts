@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { removeClientCookie } from "@/utils/cookies/client";
+import { StorageEnum } from "@/types/storage";
 import { State } from "./types";
 
 interface AuthState {
@@ -21,8 +23,13 @@ const authSlice = createSlice({
     setAcessToken(state, action: PayloadAction<{ token: string }>) {
       state.token = action.payload.token;
     },
+    clearState(state) {
+      removeClientCookie(StorageEnum.ACCESS_TOKEN);
+      state.state = null;
+      state.token = null;
+    },
   },
 });
 
-export const { setState, setAcessToken } = authSlice.actions;
+export const { setState, setAcessToken, clearState } = authSlice.actions;
 export default authSlice.reducer;

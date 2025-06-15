@@ -7,14 +7,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { setErrorsFields } from "@/utils/formErrors";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
   code: yup
     .string()
-    .length(6, "Կոդը պետք է լինի 6 նիշ")
-    .required("Թվային կոդը պարտադիր է"),
+    .length(6, TEXTS.forgotPasswordStep2.validation.length)
+    .required(TEXTS.forgotPasswordStep2.validation.required),
 });
 
 const Step2: React.FC<{ email: string }> = ({ email }) => {
@@ -56,7 +57,9 @@ const Step2: React.FC<{ email: string }> = ({ email }) => {
       className="w-full flex gap-2 flex-wrap gap-y-8"
     >
       <div className="w-full">
-        <label className="block font-semibold mb-2">Թվային կոդ</label>
+        <label className="block font-semibold mb-2">
+          {TEXTS.forgotPasswordStep2.label}
+        </label>
         <InputOTP
           maxLength={6}
           value={code || ""}
@@ -68,7 +71,7 @@ const Step2: React.FC<{ email: string }> = ({ email }) => {
               <InputOTPSlot
                 key={index}
                 index={index}
-                className="w-[63px] h-[56px] !rounded-[16px] bg-[#EFF0F6] !border-none"
+                className="w-[40px] sm:w-[63px] h-[40px] sm:h-[56px] !rounded-[10px] sm:!rounded-[16px] bg-[#EFF0F6] !border-none"
               />
             ))}
           </InputOTPGroup>
@@ -81,11 +84,11 @@ const Step2: React.FC<{ email: string }> = ({ email }) => {
       </div>
 
       <Button
-        className="w-full h-[72px] font-semibold text-[18px]"
+        className="w-full font-semibold text-[18px]"
         type="submit"
         disabled={!formState.isValid}
       >
-        Հաստատել
+        {TEXTS.forgotPasswordStep2.confirm}
       </Button>
     </form>
   );

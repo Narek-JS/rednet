@@ -1,27 +1,34 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import {
+  useActivationResendMutation,
+  useVerifyMutation,
+} from "@/store/auth/api";
 import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { setErrorsFields } from "@/utils/formErrors";
-import { useVerifyMutation } from "@/store/auth/api";
 import { VerifyRequest } from "@/store/auth/types";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
+import { useToast } from "@/hooks";
 import classNames from "classnames";
 import * as yup from "yup";
 
 const formSchema = yup.object({
   code: yup
     .string()
-    .length(6, "Կոդը պետք է լինի 6 նիշ")
-    .required("Կոդը պարտադիր է"),
+    .length(6, TEXTS.registerStep2.validation.length)
+    .required(TEXTS.registerStep2.validation.required),
 });
 
 const Step2: React.FC = () => {
   const router = useRouter();
   const [verify] = useVerifyMutation();
+  const [activationResend] = useActivationResendMutation();
+  const { showToast } = useToast();
 
   const form = useForm<VerifyRequest>({
     resolver: yupResolver(formSchema),
@@ -39,7 +46,11 @@ const Step2: React.FC = () => {
   const onSubmit = async (data: VerifyRequest) => {
     const res = await verify(data);
 
-    if (!res.error) {
+    if (
+      !res.error &&
+      "data" in res.data &&
+      res.data.data.state.user.is_activated
+    ) {
       return router.push("/auth/register?step=3");
     }
 
@@ -54,14 +65,21 @@ const Step2: React.FC = () => {
     }
   };
 
+  const resend = async () => {
+    const res = await activationResend();
+    if (res.data?.activation_code_resent) {
+      showToast(TEXTS.registerStep2.resendSuccess);
+    }
+  };
+
   return (
     <>
       <div className="mb-8">
         <h1 className="text-title-active text-[32px] font-semibold leading-[43.58px]">
-          Հաստատեք էլփոստի հասցեն
+          {TEXTS.registerStep2.title}
         </h1>
         <p className="font-medium text-body mt-1">
-          Մենք ուղարկել ենք կոդը ձեր էլ.փոստի հասցեին
+          {TEXTS.registerStep2.subtitle}
         </p>
       </div>
 
@@ -69,9 +87,9 @@ const Step2: React.FC = () => {
         onSubmit={handleSubmit(onSubmit)}
         className="w-full flex gap-2 flex-wrap gap-y-8"
       >
-        <div className="w-full flex flex-col gap-2.5 relative">
+        <div className="flex flex-col mx-auto mx:0 gap-2.5 relative">
           <label className="text-[#14142B] font-semibold text-[14px]">
-            Թվային կոդ
+            {TEXTS.registerStep2.label}
           </label>
 
           <InputOTP
@@ -85,7 +103,7 @@ const Step2: React.FC = () => {
             <InputOTPGroup className="gap-3">
               {[...Array(6)].map((_, index) => (
                 <InputOTPSlot
-                  className="w-[63px] h-[56px] !rounded-[16px] bg-[#EFF0F6] !border-none"
+                  className="w-[40px] sm:w-[63px] h-[40px] sm:h-[56px] !rounded-[10px] sm:!rounded-[16px] bg-[#EFF0F6] !border-none"
                   index={index}
                   key={index}
                 />
@@ -102,16 +120,21 @@ const Step2: React.FC = () => {
 
         <div className="flex flex-col gap-3 items-center w-full">
           <Button
-            className={classNames("w-full h-[72px] font-semibold text-[18px]", {
+            className={classNames("w-full font-semibold text-[18px]", {
               "opacity-50 cursor-default": !isValid,
             })}
             disabled={!isValid}
             type="submit"
           >
-            Շարունակել
+            {TEXTS.registerStep2.continue}
           </Button>
-          <Button variant="text" type="button" className="w-full">
-            Կրկին ուղարկել կոդը
+          <Button
+            className="w-fit hover:text-primary"
+            onClick={resend}
+            variant="text"
+            type="button"
+          >
+            {TEXTS.registerStep2.resend}
           </Button>
         </div>
       </form>

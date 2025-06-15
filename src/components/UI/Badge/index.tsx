@@ -1,6 +1,5 @@
-import { twMerge } from "tailwind-merge";
+import { cn } from "@/utils/strings/cn";
 import * as React from "react";
-import clsx from "clsx";
 
 type Variant = "default" | "secondary" | "destructive" | "outline";
 
@@ -28,7 +27,7 @@ const Badge: React.FC<BadgeProps> = ({
 
   return (
     <div
-      className={twMerge(clsx(baseClass, variantClasses[variant], className))}
+      className={cn(baseClass, variantClasses[variant], className)}
       {...props}
     />
   );

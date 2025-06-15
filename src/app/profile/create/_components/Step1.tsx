@@ -1,17 +1,25 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import {
-  useGetIndustriesQuery,
-  useLazySignCoverPhotoUploadQuery,
   useLazySignProfilePhotoUploadQuery,
+  useLazySignCoverPhotoUploadQuery,
+  useUpdateProfileMutation,
+  useGetIndustriesQuery,
 } from "@/store/profile/api";
 import { useUploadFileMutation } from "@/store/uploader/api";
 import { Button, Input, Select } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Controller, useForm } from "react-hook-form";
+import { selectState } from "@/store/auth/selectors";
+import { setErrorsFields } from "@/utils/formErrors";
+import { SelectItem } from "@/components/UI/Select";
+import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
 import { Plus } from "@/components/Icons";
+import { TEXTS } from "@/constants/texts";
 import { useRef, useState } from "react";
+import { IError } from "@/types/general";
 import classNames from "classnames";
 import Image from "next/image";
 import * as yup from "yup";
@@ -22,40 +30,46 @@ interface FormValues {
 }
 
 const schema = yup.object({
-  description: yup.string().required("Նկարագրությունը պարտադիր է"),
-  industry: yup.string().required("Ընդհանուր ոլորտ ընտրելը պարտադիր է"),
+  description: yup
+    .string()
+    .required(TEXTS.createProfileStep1.validation.description),
+  industry: yup.string().required(TEXTS.createProfileStep1.validation.industry),
 });
 
 const Step1: React.FC = () => {
+  const state = useAppSelector(selectState);
   const router = useRouter();
 
-  const coverRef = useRef<HTMLInputElement>(null);
-  const profileRef = useRef<HTMLInputElement>(null);
-  const [coverImage, setCoverImage] = useState<string | null>(null);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [coverFileName, setCoverFileName] = useState<string | null>(null);
   const [profileFileName, setProfileFileName] = useState<string | null>(null);
+  const [coverFileName, setCoverFileName] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [coverImage, setCoverImage] = useState<string | null>(null);
+
+  const profileRef = useRef<HTMLInputElement>(null);
+  const coverRef = useRef<HTMLInputElement>(null);
 
   const [signProfilePhotoUpload] = useLazySignProfilePhotoUploadQuery();
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
+  const [updateProfile] = useUpdateProfileMutation();
   const [uploadFile] = useUploadFileMutation();
 
   const { data: industries } = useGetIndustriesQuery();
 
+  const form = useForm<FormValues>({
+    resolver: yupResolver(schema),
+  });
+
   const {
-    setValue,
     register,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<FormValues>({
-    resolver: yupResolver(schema),
-  });
+  } = form;
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file || !state?.profile?.id) return;
 
     const reader = new FileReader();
     reader.onload = () => {
@@ -86,11 +100,28 @@ const Step1: React.FC = () => {
     }
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     if (!coverFileName || !profileFileName) return;
+    if (!state?.profile?.id) return;
 
-    console.log("data --> ", data);
-    router.push("/profile/create?step=2");
+    const res = await updateProfile({
+      ...data,
+      profileId: state?.profile?.id,
+      cover_photo_name: coverFileName,
+      profile_photo_name: profileFileName,
+      industries: [Number(data.industry)],
+    });
+
+    if (!res.error) {
+      router.push("/profile/create?step=2");
+    } else if (res.error) {
+      const errors = (res.error as any)?.data;
+      if (errors) {
+        setErrorsFields(form, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", res);
+      }
+    }
   };
 
   return (
@@ -119,7 +150,7 @@ const Step1: React.FC = () => {
         ) : (
           <div className="flex flex-col items-center justify-center gap-2">
             <Plus />
-            <p className="text-sm">Upload cover picture</p>
+            <p className="text-sm">{TEXTS.createProfileStep1.uploadCover}</p>
           </div>
         )}
         <div
@@ -139,34 +170,40 @@ const Step1: React.FC = () => {
           ) : (
             <div className="flex flex-col items-center justify-center gap-2 h-full">
               <Plus />
-              <p className="text-sm text-center">Profile picture</p>
+              <p className="text-sm text-center">
+                {TEXTS.createProfileStep1.uploadProfile}
+              </p>
             </div>
           )}
         </div>
       </div>
 
       <Input
-        label="Կարճ նկարագրություն"
-        placeholder="Կարճ նկարագրություն"
+        label={TEXTS.createProfileStep1.descriptionLabel}
+        placeholder={TEXTS.createProfileStep1.descriptionPlaceholder}
         error={errors.description?.message}
         {...register("description")}
       />
 
-      <Select
-        error={errors.industry?.message}
-        placeholder="Select industry"
-        label="Industry"
-        {...register("industry")}
-        onChange={(e) =>
-          setValue("industry", e.target.value, { shouldValidate: true })
-        }
-      >
-        {industries?.data?.map((industry) => (
-          <option key={industry.id} value={industry.id.toString()}>
-            {industry.name}
-          </option>
-        ))}
-      </Select>
+      <Controller
+        name="industry"
+        control={form.control}
+        render={({ field }) => (
+          <Select
+            value={field.value}
+            onValueChange={field.onChange}
+            placeholder={TEXTS.createProfileStep1.industryPlaceholder}
+            label={TEXTS.createProfileStep1.industryLabel}
+            error={errors.industry?.message}
+          >
+            {industries?.data?.map((industry) => (
+              <SelectItem key={industry.id} value={industry.id.toString()}>
+                {industry.name}
+              </SelectItem>
+            ))}
+          </Select>
+        )}
+      />
 
       <Button
         className={classNames("w-full h-[72px] font-semibold text-[18px]", {
@@ -175,7 +212,7 @@ const Step1: React.FC = () => {
         disabled={!isValid || !coverImage || !profileImage}
         type="submit"
       >
-        Շարունակել
+        {TEXTS.createProfileStep1.continue}
       </Button>
       <Button
         onClick={() => router.push("/")}
@@ -183,7 +220,7 @@ const Step1: React.FC = () => {
         variant="text"
         type="button"
       >
-        Բաց թողնել
+        {TEXTS.createProfileStep1.skip}
       </Button>
     </form>
   );

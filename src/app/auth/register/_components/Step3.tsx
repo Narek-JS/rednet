@@ -11,6 +11,7 @@ import { Controller, useForm } from "react-hook-form";
 import { setErrorsFields } from "@/utils/formErrors";
 import { openModal } from "@/store/modal/slice";
 import { useAppDispatch } from "@/store/hooks";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
 import classNames from "classnames";
 import * as yup from "yup";
@@ -18,24 +19,24 @@ import * as yup from "yup";
 const schema = yup.object().shape({
   org_type: yup
     .string()
-    .required("Ընտրությունը պարտադիր է")
+    .required(TEXTS.registerStep3.validation.orgType)
     .oneOf(["legal", "physical"]),
   type: yup.string(),
   tin: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("ՀՎՀՀ-ն պարտադիր է"),
+    then: (s) => s.required(TEXTS.registerStep3.validation.tin),
   }),
   name: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("Անունը պարտադիր է"),
+    then: (s) => s.required(TEXTS.registerStep3.validation.name),
   }),
   address: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("Հասցեն պարտադիր է"),
+    then: (s) => s.required(TEXTS.registerStep3.validation.address),
   }),
   head_full_name: yup.string().when("org_type", {
     is: "legal",
-    then: (s) => s.required("Ղեկավարի անունը պարտադիր է"),
+    then: (s) => s.required(TEXTS.registerStep3.validation.headFullName),
   }),
 });
 
@@ -44,6 +45,7 @@ const Step3: React.FC = () => {
 
   const [organizationIndividual] = useOrganizationIndividualMutation();
   const [organizationLegal] = useOrganizationLegalMutation();
+
   const form = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
@@ -102,10 +104,10 @@ const Step3: React.FC = () => {
     <>
       <div className="mb-8">
         <h1 className="text-title-active text-[32px] font-semibold">
-          Վերնագիր
+          {TEXTS.registerStep3.title}
         </h1>
         <p className="font-medium text-body mt-1">
-          Հանդիսանում եք որպես իրավաբանական անձ, թե ֆիզիկական անձ:
+          {TEXTS.registerStep3.subtitle}
         </p>
       </div>
 
@@ -115,17 +117,21 @@ const Step3: React.FC = () => {
           name="org_type"
           render={({ field }) => (
             <RadioGroup
-              className="flex w-full gap-8"
+              className="flex flex-col sm:flex-row w-full gap-3 sm:gap-8"
               onValueChange={field.onChange}
               value={field.value}
             >
               <label className="flex items-center gap-2 cursor-pointer">
                 <RadioGroupItem value="legal" />
-                <span className="font-normal">Իրավաբանական անձ</span>
+                <span className="font-normal text-body text-[14px] sm:text-[16px]">
+                  {TEXTS.registerStep3.orgTypes.legal}
+                </span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <RadioGroupItem value="physical" />
-                <span className="font-normal">Ֆիզիկական անձ</span>
+                <span className="font-normal text-body text-[14px] sm:text-[16px]">
+                  {TEXTS.registerStep3.orgTypes.physical}
+                </span>
               </label>
             </RadioGroup>
           )}
@@ -139,26 +145,26 @@ const Step3: React.FC = () => {
         {orgType === "legal" && (
           <>
             <Input
-              label="ՀՎՀՀ"
-              placeholder="ՀՎՀՀ"
+              label={TEXTS.registerStep3.fields.tin}
+              placeholder={TEXTS.registerStep3.placeholders.tin}
               error={errors.tin?.message}
               {...register("tin")}
             />
             <Input
-              label="Ընկերության լրիվ և ճշգրիտ անվանումը"
-              placeholder="Company name"
+              label={TEXTS.registerStep3.fields.name}
+              placeholder={TEXTS.registerStep3.placeholders.name}
               error={errors.name?.message}
               {...register("name")}
             />
             <Input
-              label="Ընկերության հասցեն"
-              placeholder="Address"
+              label={TEXTS.registerStep3.fields.address}
+              placeholder={TEXTS.registerStep3.placeholders.address}
               error={errors.address?.message}
               {...register("address")}
             />
             <Input
-              label="Ղեկավարի Անուն Ազգանուն"
-              placeholder="Name Surname"
+              label={TEXTS.registerStep3.fields.headFullName}
+              placeholder={TEXTS.registerStep3.placeholders.headFullName}
               error={errors.head_full_name?.message}
               {...register("head_full_name")}
             />
@@ -166,13 +172,13 @@ const Step3: React.FC = () => {
         )}
 
         <Button
-          className={classNames("w-full h-[72px] font-semibold text-[18px]", {
+          className={classNames("w-full font-semibold text-[18px]", {
             "opacity-50 cursor-default": !isValid,
           })}
           disabled={!isValid}
           type="submit"
         >
-          Շարունակել
+          {TEXTS.registerStep3.continue}
         </Button>
       </form>
     </>

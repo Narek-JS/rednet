@@ -6,6 +6,7 @@ enum ENDPOINTS_ENUM {
   AUTH_SEND_RESET = "/auth/password-reset",
   AUTH_CHECK_RESET = "/auth/password-reset/check",
   AUTH_SET_NEW_PASSWORD = "/auth/password-reset/set-new-password",
+  AUTH_ACTIVATION_RESEND = "/auth/register/resend-activation-code",
   CATEGORIES = "/categories",
   INDUSTRIES = "/industries",
   MEASUREMENT_UNITS = "/measurement-units",

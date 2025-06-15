@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-interface Industries {
+export interface Industries {
   id: number;
   name: string;
 }
@@ -46,14 +46,9 @@ export interface SignCoverPhotoUploadResponse {
     expires_at: string;
   };
 }
+
 export interface SignCoverPhotoUploadRequest {
   file_name?: string;
-}
-
-export interface UpdateCoverPhotoNameResponse {}
-export interface UpdateCoverPhotoNameRequest {
-  profileId: number;
-  coverName: string;
 }
 
 export interface SignProfilePhotoUploadResponse {
@@ -68,15 +63,11 @@ export interface SignProfilePhotoUploadRequest {
   file_name?: string;
 }
 
-export interface UpdateProfilePhotoNameResponse {}
-export interface UpdateProfilePhotoNameRequest {
-  profileId: number;
-  imageName: string;
-}
-
 export interface UpdateProfileResponse {}
 export interface UpdateProfileRequest
   extends Partial<Omit<Profile, "industries">> {
+  cover_photo_name?: string;
+  profile_photo_name?: string;
   industries?: Array<number>;
   profileId: number;
 }
@@ -86,6 +77,15 @@ export interface ProfileServicesResponse {
 }
 export interface ProfileServicesRequest {
   profileId: number;
+  limit?: number;
+}
+
+export interface ProfileProductsResponse {
+  data: Array<ProfileProduct>;
+}
+export interface ProfileProductsRequest {
+  profileId: number;
+  limit?: number;
 }
 
 export interface DeleteProfileServiceResponse {}
@@ -106,6 +106,18 @@ export interface SignServicePhotoRequest {
   file_name?: string;
 }
 
+export interface SignProductPhotoResponse {
+  data: {
+    file_name: string;
+    upload_url: string;
+    retrieve_url: string;
+    expires_at: string;
+  };
+}
+export interface SignProductPhotoRequest {
+  file_name?: string;
+}
+
 export interface UpdateProfileServiceResponse {}
 export interface UpdateProfileServiceRequest {
   serviceId: number;
@@ -114,8 +126,24 @@ export interface UpdateProfileServiceRequest {
   photo_name: string;
 }
 
+export interface UpdateProfileProductResponse {}
+export interface UpdateProfileProductRequest {
+  productId: number;
+  name: string;
+  description: string;
+  photo_name: string;
+}
+
 export interface CreateProfileServiceResponse {}
 export interface CreateProfileServiceRequest {
+  profileId: number;
+  name: string;
+  description: string;
+  photo_name: string;
+}
+
+export interface CreateProfileProductResponse {}
+export interface CreateProfileProductRequest {
   profileId: number;
   name: string;
   description: string;

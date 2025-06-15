@@ -1,9 +1,9 @@
 "use client";
 
+import { ComponentPropsWithoutRef, forwardRef } from "react";
+import { cn } from "@/utils/strings/cn";
+
 import * as LabelPrimitive from "@radix-ui/react-label";
-import React, { ComponentPropsWithoutRef } from "react";
-import { twMerge } from "tailwind-merge";
-import clsx from "clsx";
 
 const baseLabelClass =
   "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70";
@@ -14,11 +14,11 @@ interface LabelProps extends ComponentPropsWithoutRef<Primitive> {
   className?: string;
 }
 
-const Label = React.forwardRef<React.ComponentRef<Primitive>, LabelProps>(
+const Label = forwardRef<React.ComponentRef<Primitive>, LabelProps>(
   ({ className, ...props }, ref) => (
     <LabelPrimitive.Root
       ref={ref}
-      className={twMerge(clsx(baseLabelClass, className))}
+      className={cn(baseLabelClass, className)}
       {...props}
     />
   )

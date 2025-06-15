@@ -1,69 +1,106 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { Button, Input, Select } from "@/components/UI";
+import { useUpdateProfileMutation } from "@/store/profile/api";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { selectState } from "@/store/auth/selectors";
+import { setErrorsFields } from "@/utils/formErrors";
+import { Button, Input } from "@/components/UI";
+import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
+import { TEXTS } from "@/constants/texts";
 import { useForm } from "react-hook-form";
+import { IError } from "@/types/general";
 import * as yup from "yup";
 
-interface FormValues {
-  state: string;
-  companySize: string;
-}
-
 const schema = yup.object({
-  state: yup.string().required("Մարզը պարտադիր է"),
-  companySize: yup.string().required("Company size ընտրելը պարտադիր է"),
+  region: yup.string().required(TEXTS.validation.required.region),
+  phone_number: yup.string().required(TEXTS.validation.required.phone),
+  public_email: yup
+    .string()
+    .email(TEXTS.validation.format.email)
+    .required(TEXTS.validation.required.email),
+  website_url: yup
+    .string()
+    .url(TEXTS.validation.format.website)
+    .required(TEXTS.validation.required.website),
+  headline: yup.string().required(TEXTS.validation.required.headline),
 });
 
 const Step2: React.FC = () => {
   const router = useRouter();
+  const state = useAppSelector(selectState);
+  const [updateProfile] = useUpdateProfileMutation();
 
-  const {
-    setValue,
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormValues>({
+  const form = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: FormValues) => {
-    console.log("data --> ", data);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = form;
 
-    router.push("/");
+  const onSubmit = async (data: yup.InferType<typeof schema>) => {
+    if (!state?.profile?.id) return;
+
+    const res = await updateProfile({ ...data, profileId: state.profile.id });
+
+    if (!res.error) {
+      router.push(`/profile/${state.profile.id}`);
+    } else if (res.error) {
+      const errors = (res.error as any)?.data;
+      if (errors) {
+        setErrorsFields(form, errors as IError);
+      } else {
+        console.log("Unexpected error --> ", res);
+      }
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
       <Input
-        label="Մարզ"
-        placeholder="Մարզ"
-        error={errors.state?.message}
-        {...register("state")}
+        placeholder={TEXTS.profileEdit.placeholders.region}
+        label={TEXTS.profileEdit.fields.region}
+        error={errors.region?.message}
+        {...register("region")}
       />
 
-      <Select
-        error={errors.companySize?.message}
-        placeholder="Company Size"
-        {...register("companySize")}
-        onChange={(e) =>
-          setValue("companySize", e.target.value, { shouldValidate: true })
-        }
-      >
-        <option value="1-5">1-5</option>
-        <option value="5-10">5-10</option>
-        <option value="10-20">10-20</option>
-        <option value="20-50">20-50</option>
-        <option value="50-100">50-100</option>
-        <option value="100+">100+</option>
-      </Select>
+      <Input
+        placeholder={TEXTS.profileEdit.placeholders.phone}
+        label={TEXTS.profileEdit.fields.phone}
+        error={errors.phone_number?.message}
+        {...register("phone_number")}
+      />
+
+      <Input
+        placeholder={TEXTS.profileEdit.placeholders.email}
+        label={TEXTS.profileEdit.fields.email}
+        error={errors.public_email?.message}
+        {...register("public_email")}
+      />
+
+      <Input
+        placeholder={TEXTS.profileEdit.placeholders.website}
+        label={TEXTS.profileEdit.fields.website}
+        error={errors.website_url?.message}
+        {...register("website_url")}
+      />
+
+      <Input
+        placeholder={TEXTS.profileEdit.placeholders.headline}
+        label={TEXTS.profileEdit.fields.headline}
+        error={errors.headline?.message}
+        {...register("headline")}
+      />
 
       <Button
         className="w-full h-[72px] font-semibold text-[18px]"
         type="submit"
       >
-        Շարունակել
+        {TEXTS.createProfileStep2.continue}
       </Button>
       <Button
         onClick={() => router.push("/")}
@@ -71,7 +108,7 @@ const Step2: React.FC = () => {
         variant="text"
         type="button"
       >
-        Բաց թողնել
+        {TEXTS.createProfileStep2.skip}
       </Button>
     </form>
   );

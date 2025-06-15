@@ -11,6 +11,7 @@ import { StorageEnum } from "@/types/storage";
 import { setCookie } from "@/utils/cookies";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
 import Link from "next/link";
 import * as yup from "yup";
@@ -18,9 +19,9 @@ import * as yup from "yup";
 const loginSchema = yup.object({
   email: yup
     .string()
-    .email("Էլ. փոստը սխալ է")
-    .required("Էլ. փոստը պարտադիր է"),
-  password: yup.string().required("Գաղտնաբառը պարտադիր է"),
+    .email(TEXTS.loginForm.validation.emailInvalid)
+    .required(TEXTS.loginForm.validation.emailRequired),
+  password: yup.string().required(TEXTS.loginForm.validation.passwordRequired),
 });
 
 const LoginForm: React.FC = () => {
@@ -85,15 +86,15 @@ const LoginForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-7">
       <Input
-        label="Ձեր էլ. փոստը"
-        placeholder="name@email.com"
+        label={TEXTS.loginForm.fields.email}
+        placeholder={TEXTS.loginForm.placeholders.email}
         error={errors.email?.message}
         {...register("email")}
       />
 
       <Input
-        label="Ձեր գաղտնաբառը"
-        placeholder="********"
+        label={TEXTS.loginForm.fields.password}
+        placeholder={TEXTS.loginForm.placeholders.password}
         type="password"
         error={errors.password?.message}
         {...register("password")}
@@ -103,10 +104,10 @@ const LoginForm: React.FC = () => {
         className="flex justify-end text-primary text-[14px] -mt-2"
         href="/auth/forgot-password"
       >
-        Վերականգնել գաղտնաբառը
+        {TEXTS.loginForm.forgot}
       </Link>
 
-      <Button type="submit">Մուտք</Button>
+      <Button type="submit">{TEXTS.loginForm.button}</Button>
     </form>
   );
 };

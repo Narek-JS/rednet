@@ -2,6 +2,7 @@ export type ModalType =
   | "registerSuccess"
   | "tenderDetails"
   | "serviceModal"
+  | "productModal"
   | "profileEdit";
 
 export interface ModalState {

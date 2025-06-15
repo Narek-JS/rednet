@@ -1,13 +1,12 @@
 export { EmptyItems } from "./EmptyItems";
 export { Message } from "./Message";
-export { Search } from "./Search";
 export { Change } from "./Change";
 export { Verify } from "./Verify";
 export { Phone } from "./Phone";
 export { Graph } from "./Graph";
 export { Views } from "./Views";
 export { Back } from "./Back";
-export { Sort } from "./Sort";
 export { Plus } from "./Plus";
 export { Dots } from "./Dots";
 export { Link } from "./Link";
+export { Down } from "./Down";

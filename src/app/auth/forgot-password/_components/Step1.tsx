@@ -8,14 +8,15 @@ import { setErrorsFields } from "@/utils/formErrors";
 import { Input, Button } from "@/components/UI";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { TEXTS } from "@/constants/texts";
 import { IError } from "@/types/general";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
   email: yup
     .string()
-    .email("Էլ. փոստը սխալ է")
-    .required("Էլ. փոստը պարտադիր է"),
+    .email(TEXTS.forgotPasswordStep1.validation.invalid)
+    .required(TEXTS.forgotPasswordStep1.validation.required),
 });
 
 const Step1: React.FC = () => {
@@ -30,7 +31,6 @@ const Step1: React.FC = () => {
 
   const onSubmit = async (data: ResetPasswordRequest) => {
     const res = await resetPassword({ email: data.email });
-
     if (res.data && "data" in res.data) {
       return router.push(`/auth/forgot-password?step=2&email=${data.email}`);
     }
@@ -49,17 +49,14 @@ const Step1: React.FC = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-y-8">
       <Input
-        label="Ձեր էլ. փոստը"
-        placeholder="name@email.com"
+        label={TEXTS.forgotPasswordStep1.field}
+        placeholder={TEXTS.forgotPasswordStep1.placeholder}
         error={formState.errors.email?.message}
         {...register("email")}
       />
 
-      <Button
-        className="w-full h-[72px] font-semibold text-[18px]"
-        type="submit"
-      >
-        Ստանալ կոդը
+      <Button className="w-full font-semibold text-[18px]" type="submit">
+        {TEXTS.forgotPasswordStep1.button}
       </Button>
     </form>
   );
