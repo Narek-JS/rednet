@@ -11,10 +11,7 @@ import { IError } from "@/types/general";
 import * as yup from "yup";
 
 const schema = yup.object().shape({
-  code: yup
-    .string()
-    .length(6, TEXTS.forgotPasswordStep2.validation.length)
-    .required(TEXTS.forgotPasswordStep2.validation.required),
+  code: yup.string().required(TEXTS.forgotPasswordStep2.validation.required),
 });
 
 const Step2: React.FC<{ email: string }> = ({ email }) => {

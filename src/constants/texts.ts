@@ -205,7 +205,7 @@ const TEXTS = {
       industry: "Ոլորտ",
       region: "Մարզ",
       phone: "Հեռախոսահամար",
-      email: "Էլ. փոստ",
+      email: "Հանրային Էլ. փոստ",
       website: "Կայքի հղում",
     },
     placeholders: {

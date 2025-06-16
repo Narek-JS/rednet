@@ -41,7 +41,7 @@ const ServiceItem: React.FC<ServiceItemProps> = ({ profileId, service }) => {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <div className="sn:w-[109px] w-[85px] sn:h-[109px] h-[85px] rounded-[8px] relative">
+          <div className="min-w-[85px] w-[85px] sm:w-[109px] min-h-[85px] h-[85px] sm:h-[109px] rounded-[8px] relative">
             {service.photo_url && (
               <Image
                 src={service.photo_url}

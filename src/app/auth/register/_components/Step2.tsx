@@ -17,10 +17,7 @@ import classNames from "classnames";
 import * as yup from "yup";
 
 const formSchema = yup.object({
-  code: yup
-    .string()
-    .length(6, TEXTS.registerStep2.validation.length)
-    .required(TEXTS.registerStep2.validation.required),
+  code: yup.string().required(TEXTS.registerStep2.validation.required),
 });
 
 const Step2: React.FC = () => {
@@ -31,7 +28,6 @@ const Step2: React.FC = () => {
 
   const form = useForm<VerifyRequest>({
     resolver: yupResolver(formSchema),
-    defaultValues: { code: "" },
     mode: "onChange",
   });
 

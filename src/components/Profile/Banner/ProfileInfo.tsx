@@ -5,20 +5,14 @@ import {
   useUpdateProfileMutation,
   useGetIndustriesQuery,
 } from "@/store/profile/api";
-import {
-  Link as LinkIcon,
-  Message,
-  Change,
-  Verify,
-  Phone,
-} from "@/components/Icons";
+import { Link as LinkIcon, Message, Change, Phone } from "@/components/Icons";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useUploadFileMutation } from "@/store/uploader/api";
+import { cutEmail, cutWordToEtc } from "@/utils/strings";
 import { selectState } from "@/store/auth/selectors";
 import { Profile } from "@/store/profile/types";
 import { openModal } from "@/store/modal/slice";
 import { useRouter } from "next/navigation";
-import { cutEmail, cutWordToEtc } from "@/utils/strings";
 import { TEXTS } from "@/constants/texts";
 import { Badge } from "@/components/UI";
 import { ChangeEvent } from "react";
@@ -115,7 +109,6 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           <div className="flex flex-col sm:flex-row gap-[5px] sm:gap-[11px] sm:items-center">
             <h2 className="text-[#000D26] font-semibold sm:font-bold text-[18px] sm:text-[32px] flex items-center gap-1 sm:gap-2.5">
               {cutWordToEtc(profileDataSsr?.brand_name || "", 20)}
-              <Verify /> {/* To do to check */}
             </h2>
             {!!profileDataSsr?.industries.length && (
               <Badge

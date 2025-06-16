@@ -41,7 +41,7 @@ const ProductItem: React.FC<ProductItemProps> = ({ profileId, product }) => {
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-6">
-          <div className="sn:w-[109px] w-[85px] sn:h-[109px] h-[85px] rounded-[8px] relative">
+          <div className="min-w-[85px] w-[85px] sm:w-[109px] min-h-[85px] h-[85px] sm:h-[109px] rounded-[8px] relative">
             {product.photo_url && (
               <Image
                 src={product.photo_url}
