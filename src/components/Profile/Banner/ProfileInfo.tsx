@@ -167,6 +167,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
             </p>
           )}
         </div>
+        <h1>{profileDataSsr?.profile_photo_url}</h1>
       </div>
       {isEditable && profileDataSsr && industries?.data && (
         <div className="absolute right-4 top-4">
