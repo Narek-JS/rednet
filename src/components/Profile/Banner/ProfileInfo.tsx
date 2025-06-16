@@ -61,7 +61,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           file,
         });
 
-        if (res) {
+        if (!res?.error) {
           await updateProfile({
             profileId: state?.profile?.id,
             profile_photo_name: resUpload.data.data.file_name,
@@ -167,7 +167,6 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
             </p>
           )}
         </div>
-        <h1>{profileDataSsr?.profile_photo_url}</h1>
       </div>
       {isEditable && profileDataSsr && industries?.data && (
         <div className="absolute right-4 top-4">
