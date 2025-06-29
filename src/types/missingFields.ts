@@ -1,5 +1,6 @@
-enum MissingFieldsEnum {
+export enum MissingFieldsEnum {
   ORGANIZATION_TYPE = "organization_type",
 }
 
-export { MissingFieldsEnum };
+// Type for missing fields array
+export type MissingFields = Array<MissingFieldsEnum>;

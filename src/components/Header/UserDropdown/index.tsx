@@ -37,6 +37,7 @@ const UserDropdown: React.FC<Props> = ({
               width={40}
               height={40}
               src={avatarUrl}
+              priority={true}
               alt="User avatar"
               className="h-full w-full object-cover"
             />

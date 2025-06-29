@@ -3,30 +3,33 @@
 import {
   useLazySignProfilePhotoUploadQuery,
   useUpdateProfileMutation,
-  useGetIndustriesQuery,
 } from "@/store/profile/api";
 import { Link as LinkIcon, Message, Change, Phone } from "@/components/Icons";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useUploadFileMutation } from "@/store/uploader/api";
+import { useGetIndustriesQuery } from "@/store/lookup/api";
 import { cutEmail, cutWordToEtc } from "@/utils/strings";
 import { selectState } from "@/store/auth/selectors";
+import { Badge, Skeleton } from "@/components/UI";
 import { Profile } from "@/store/profile/types";
 import { openModal } from "@/store/modal/slice";
+import { ChangeEvent, Fragment, useState } from "react";
 import { useRouter } from "next/navigation";
 import { TEXTS } from "@/constants/texts";
-import { Badge } from "@/components/UI";
-import { ChangeEvent } from "react";
+import classNames from "classnames";
 import Image from "next/image";
 import Link from "next/link";
 
 interface IProfileInfoProps {
   profileDataSsr: Profile | null;
-  isEditable: boolean;
+  isEditable?: boolean;
+  seeProfile?: boolean;
 }
 
 export const ProfileInfo: React.FC<IProfileInfoProps> = ({
   profileDataSsr,
   isEditable,
+  seeProfile,
 }) => {
   const state = useAppSelector(selectState);
   const dispatch = useAppDispatch();
@@ -35,6 +38,8 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
   const [signProfilePhotoUpload] = useLazySignProfilePhotoUploadQuery();
   const [updateProfile] = useUpdateProfileMutation();
   const [uploadFile] = useUploadFileMutation();
+
+  const [profileImageLoad, setProfileImageLoad] = useState(false);
 
   const { data: industries } = useGetIndustriesQuery(undefined, {
     skip: !isEditable,
@@ -61,7 +66,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           file,
         });
 
-        if (!res?.error) {
+        if (!res.error) {
           await updateProfile({
             profileId: state?.profile?.id,
             profile_photo_name: resUpload.data.data.file_name,
@@ -73,15 +78,21 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
   };
 
   return (
-    <div className="absolute w-[96%] sm:w-[96%] bg-[#ffffff] rounded-[8px] top-[156px] sm:top-[223px] z-20 py-2.5 sm:py-6 px-2 sm:px-4">
+    <Fragment>
       <div className="w-full h-full flex gap-2.5 sm:gap-[40px] relative">
         <div className="relative w-[112px] sm:w-[192px] sm:min-w-[192px] min-w-[112px] min-h-[112px] h-[112px] sm:min-h-[192px] sm:h-[192px] border-[8px] sm:border-[12px] border-[#FFE2E7] rounded-[8px] group overflow-hidden">
+          {!profileImageLoad && <Skeleton className="w-full h-full" />}
           <Image
             src={
               profileDataSsr?.profile_photo_url || "/images/profile-photo.jpg"
             }
-            className="rounded-[4px] object-cover"
+            onLoad={() => setProfileImageLoad(true)}
+            className={classNames("rounded-[4px] object-cover", {
+              "opacity-0": !profileImageLoad,
+              "opacity-100": profileImageLoad,
+            })}
             alt={TEXTS.profileInfo.alt}
+            priority={true}
             fill
           />
 
@@ -110,7 +121,7 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
             <h2 className="text-[#000D26] font-semibold sm:font-bold text-[18px] sm:text-[32px] flex items-center gap-1 sm:gap-2.5">
               {cutWordToEtc(profileDataSsr?.brand_name || "", 20)}
             </h2>
-            {!!profileDataSsr?.industries.length && (
+            {!!profileDataSsr?.industries?.length && (
               <Badge
                 className="max-w-fit py-[3px] sm:py-[6px] px-[6px] sm:px-[12px] rounded-[5px] sm:rounded-[8px] bg-[#D4D3FF] border-none text-[10px] sm:text-[15px] font-normal"
                 variant="outline"
@@ -168,7 +179,17 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           )}
         </div>
       </div>
-      {isEditable && profileDataSsr && industries?.data && (
+      {seeProfile && (
+        <div className="absolute right-4 top-4">
+          <Link
+            href={"/profile/" + state?.profile?.id}
+            className="text-primary text-[18px] font-semibold"
+          >
+            See profile
+          </Link>
+        </div>
+      )}
+      {!seeProfile && isEditable && profileDataSsr && industries?.data && (
         <div className="absolute right-4 top-4">
           <button
             className="bg-white border-2 border-[#D9DBE9] rounded-full h-[40px] w-[40px] flex items-center justify-center cursor-pointer"
@@ -178,6 +199,6 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
           </button>
         </div>
       )}
-    </div>
+    </Fragment>
   );
 };

@@ -3,10 +3,12 @@ import { IError } from "../api";
 
 const setErrorsFields = <F extends FieldValues>(
   form: UseFormReturn<F>,
-  { errors }: IError
+  { errors }: IError,
+  prefix?: string
 ) => {
   Object.entries(errors).forEach(([key, value]) => {
-    form.setError(key as FieldPath<F>, { message: value[0] });
+    const fieldName = prefix ? `${prefix}.${key}` : key;
+    form.setError(fieldName as FieldPath<F>, { message: value[0] });
   });
 };
 

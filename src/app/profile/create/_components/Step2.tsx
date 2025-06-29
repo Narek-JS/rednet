@@ -1,9 +1,9 @@
 "use client";
 
 import { useUpdateProfileMutation } from "@/store/profile/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { selectState } from "@/store/auth/selectors";
-import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
 import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
@@ -29,7 +29,7 @@ const schema = yup.object({
 const Step2: React.FC = () => {
   const router = useRouter();
   const state = useAppSelector(selectState);
-  const [updateProfile] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
   const form = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
@@ -95,7 +95,11 @@ const Step2: React.FC = () => {
         {...register("headline")}
       />
 
-      <Button className="w-full font-semibold" type="submit">
+      <Button
+        className="w-full font-semibold"
+        loading={isLoading}
+        type="submit"
+      >
         {TEXTS.createProfileStep2.continue}
       </Button>
       <Button

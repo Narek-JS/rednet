@@ -1,9 +1,9 @@
 "use client";
 
 import { useResetPasswordMutation } from "@/store/auth/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { ResetPasswordRequest } from "@/store/auth/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { Input, Button } from "@/components/UI";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -20,7 +20,7 @@ const schema = yup.object().shape({
 
 const Step1: React.FC = () => {
   const router = useRouter();
-  const [resetPassword] = useResetPasswordMutation({});
+  const [resetPassword, { isLoading }] = useResetPasswordMutation({});
 
   const form = useForm<ResetPasswordRequest>({
     resolver: yupResolver(schema),
@@ -54,7 +54,11 @@ const Step1: React.FC = () => {
         {...register("email")}
       />
 
-      <Button className="w-full font-semibold" type="submit">
+      <Button
+        className="w-full font-semibold"
+        loading={isLoading}
+        type="submit"
+      >
         {TEXTS.forgotPasswordStep1.button}
       </Button>
     </form>

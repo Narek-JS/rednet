@@ -1,0 +1,13 @@
+apps:
+  - name: frontend
+    script: ./node_modules/next/dist/bin/next
+    exec_mode: cluster
+    exp_backoff_restart_delay: 100
+    watch: true
+    max_memory_restart: "400M"
+    #    interpreter: bun
+    instances: max
+    args:
+      - start
+
+

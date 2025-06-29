@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-duplicate-enum-values */
 enum ENDPOINTS_ENUM {
   STATE = "/state",
   AUTH_LOGIN = "/auth/login",
@@ -7,11 +8,13 @@ enum ENDPOINTS_ENUM {
   AUTH_CHECK_RESET = "/auth/password-reset/check",
   AUTH_SET_NEW_PASSWORD = "/auth/password-reset/set-new-password",
   AUTH_ACTIVATION_RESEND = "/auth/register/resend-activation-code",
+  ORGANIZATION_INDIVIDUAL = "/organization-type/make-individual",
+  ORGANIZATION_LEGAL = "/organization-type/make-legal-entity",
+
+  // Lookup
   CATEGORIES = "/categories",
   INDUSTRIES = "/industries",
   MEASUREMENT_UNITS = "/measurement-units",
-  ORGANIZATION_INDIVIDUAL = "/organization-type/make-individual",
-  ORGANIZATION_LEGAL = "/organization-type/make-legal-entity",
 
   // Profile
   PROFILE_BY_ID = "/profiles",
@@ -26,11 +29,20 @@ enum ENDPOINTS_ENUM {
   UPDATE_SERVICE = "/services/:serviceId",
   UPDATE_PRODUCT = "/products/:productId",
 
+  // Tenders
+  PROFILE_TENDERS = "/profiles/:profileId/tenders",
+  CREATE_TENDER = "/profiles/:profileId/tenders",
+  CREATE_TENDER_LOT = "/tenders/:tenderId/lots",
+  PUBLISH_TENDER = "/tenders/:tenderId/publish",
+  TENDER_BY_ID = "/tenders/:tenderId",
+  TENDER_LOTS_BY_TENDER_ID = "/tenders/:tenderId/lots",
+
   // Files
-  PROFILE_PHOTO = "/file-signature/profile-photo",
   COVER_PHOTO = "/file-signature/cover-photo",
+  PROFILE_PHOTO = "/file-signature/profile-photo",
   SERVICE_PHOTO = "/file-signature/service-photo",
   PRODUCT_PHOTO = "/file-signature/product-photo",
+  TENDER_LOT_PHOTO = "/file-signature/auction-lots/file",
 }
 
 export { ENDPOINTS_ENUM };

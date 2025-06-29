@@ -6,6 +6,7 @@ type Variant = "primery" | "border" | "text" | "outline" | "link";
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   variant?: Variant;
+  loading?: boolean;
 }
 
 const variantClasses: Record<Variant, string> = {
@@ -21,21 +22,54 @@ const Button: React.FC<Props> = ({
   type = "button",
   className,
   children,
+  loading = false,
+  disabled,
   ...rest
 }) => {
   const baseClass =
-    "w-full h-[48px] sm:h-[55px] px-[16px] rounded-[12px] sm:rounded-[16px] font-semibold cursor-pointer duration-200";
+    "w-full h-[48px] sm:h-[55px] px-[16px] rounded-[12px] sm:rounded-[16px] font-semibold cursor-pointer duration-200 flex items-center justify-center gap-2";
 
   const isText = variant === "text";
   const finalClass = isText
     ? cn("text-center text-sm", variantClasses[variant], className)
     : cn(baseClass, variantClasses[variant], className);
 
+  const isDisabled = disabled || loading;
+
   return (
-    <button type={type} className={finalClass} {...rest}>
-      {children}
+    <button type={type} className={finalClass} disabled={isDisabled} {...rest}>
+      {loading ? (
+        <Loading
+          classname={variant === "outline" ? "bg-primary" : "bg-white"}
+        />
+      ) : (
+        children
+      )}
     </button>
   );
 };
+
+const Loading = ({ classname }: { classname?: string }) => (
+  <div className="flex gap-2">
+    <div
+      className={cn(
+        "w-1.5 h-1.5 rounded-full animate-pulse bg-[white]",
+        classname
+      )}
+    />
+    <div
+      className={cn(
+        "w-1.5 h-1.5 rounded-full animate-pulse bg-[white]",
+        classname
+      )}
+    />{" "}
+    <div
+      className={cn(
+        "w-1.5 h-1.5 rounded-full animate-pulse bg-[white]",
+        classname
+      )}
+    />
+  </div>
+);
 
 export { Button };

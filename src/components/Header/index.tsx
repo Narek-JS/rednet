@@ -65,15 +65,17 @@ const Header: React.FC = () => {
           <Link href="/">New Item</Link>
           <Link href="/">New Item</Link>
           <Link href="/">New Item</Link>
-          <Link href="/">New Item</Link>
+          <Link href="/tenders">Tenders</Link>
 
           <div className="hidden lg:block">
             {getStartedLink() ? (
-              <Link href={getStartedLink()!} className="lg:ml-4">
-                <Button variant="primery" className="!h-[38px]">
-                  {TEXTS.header.getStarted}
-                </Button>
-              </Link>
+              <Button
+                variant="primery"
+                className="!h-[38px] lg:ml-4"
+                onClick={() => router.push(`/auth/login`)}
+              >
+                {TEXTS.header.getStarted}
+              </Button>
             ) : (
               <UserDropdown
                 onProfile={() => router.push(`/profile/${state?.profile?.id}`)}

@@ -37,7 +37,7 @@ const RootLayout: React.FC<Props> = async ({ children }) => {
     <html lang="en">
       <body
         className={classNames(
-          "antialiased bg-[#EFF0F6]",
+          "antialiased bg-[#FCFCFC]",
           notoArmenian.className
         )}
       >

@@ -5,10 +5,11 @@ import {
   useCreateProductMutation,
   useUpdateProductMutation,
 } from "@/store/profile/api";
+import { getNonEmptyFields } from "@/utils/form/updateFields";
 import { useUploadFileMutation } from "@/store/uploader/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { ProfileProduct } from "@/store/profile/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
 import { useForm } from "react-hook-form";
 import { TEXTS } from "@/constants/texts";
@@ -42,8 +43,8 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
   const [photoName, setPhotoName] = useState("");
 
   const [signProductPhotoUpload] = useLazySignProductPhotoUploadQuery();
-  const [updateProduct] = useUpdateProductMutation();
-  const [createProduct] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
   const [uploadFile] = useUploadFileMutation();
 
   const form = useForm<yup.InferType<typeof schema>>({
@@ -83,10 +84,12 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
     let res = null;
 
     if (isEdit) {
+      const diff = getNonEmptyFields(data, product);
+
       res = await updateProduct({
         productId: Number(product!.id),
-        photo_name: photoName,
-        ...data,
+        ...(photoName && { photo_name: photoName }),
+        ...diff,
       });
     } else {
       res = await createProduct({
@@ -108,6 +111,8 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
       }
     }
   };
+
+  const isLoading = isCreating || isUpdating;
 
   return (
     <div className="flex flex-col items-center gap-6 text-center pt-8">
@@ -182,8 +187,9 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
             {TEXTS.productModal.buttons.cancel}
           </Button>
           <Button
+            className="min-w-[236px] max-w-fit text-[14px] sm:text-[16px]"
+            loading={isLoading}
             type="submit"
-            className="max-w-fit text-[14px] sm:text-[16px]"
           >
             {isEdit
               ? TEXTS.productModal.buttons.update

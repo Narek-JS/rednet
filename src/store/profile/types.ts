@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
-export interface Industries {
-  id: number;
-  name: string;
-}
-
-export interface IndustriesResponse {
-  data: Array<Industries>;
-}
-export type IndustriesRequest = void;
+import { Paginated } from "@/types/pageinatedResponse";
+import {
+  UploadSignResponse,
+  UploadSignRequest,
+  ApiResponse,
+  PaginationRequest,
+} from "@/types/general";
+import { Industry } from "../lookup/types";
 
 export interface Profile {
   id: number;
@@ -21,7 +20,7 @@ export interface Profile {
   phone_number: string | null;
   public_email: string | null;
   website_url: string | null;
-  industries: Array<Industries>;
+  industries: Array<Industry>;
 }
 
 export interface ProfileService {
@@ -37,33 +36,16 @@ export interface ProfileProduct {
   name: string;
   description: string;
 }
+export interface ProfileTender {}
 
-export interface SignCoverPhotoUploadResponse {
-  data: {
-    file_name: string;
-    upload_url: string;
-    retrieve_url: string;
-    expires_at: string;
-  };
-}
+// Profile information Update.
+export type SignCoverPhotoUploadResponse = UploadSignResponse;
+export type SignCoverPhotoUploadRequest = UploadSignRequest;
 
-export interface SignCoverPhotoUploadRequest {
-  file_name?: string;
-}
+export type SignProfilePhotoUploadResponse = UploadSignResponse;
+export type SignProfilePhotoUploadRequest = UploadSignRequest;
 
-export interface SignProfilePhotoUploadResponse {
-  data: {
-    file_name: string;
-    upload_url: string;
-    retrieve_url: string;
-    expires_at: string;
-  };
-}
-export interface SignProfilePhotoUploadRequest {
-  file_name?: string;
-}
-
-export interface UpdateProfileResponse {}
+export type UpdateProfileResponse = ApiResponse<void>;
 export interface UpdateProfileRequest
   extends Partial<Omit<Profile, "industries">> {
   cover_photo_name?: string;
@@ -72,69 +54,13 @@ export interface UpdateProfileRequest
   profileId: number;
 }
 
-export interface ProfileServicesResponse {
-  data: Array<ProfileService>;
-}
-export interface ProfileServicesRequest {
+// Profile Service CRUD.
+export type ProfileServicesResponse = Paginated<Array<ProfileService>>;
+export interface ProfileServicesRequest extends PaginationRequest {
   profileId: number;
-  limit?: number;
 }
 
-export interface ProfileProductsResponse {
-  data: Array<ProfileProduct>;
-}
-export interface ProfileProductsRequest {
-  profileId: number;
-  limit?: number;
-}
-
-export interface DeleteProfileServiceResponse {}
-export type DeleteProfileServiceRequest = number;
-
-export interface DeleteProductResponse {}
-export type DeleteProductRequest = number;
-
-export interface SignServicePhotoResponse {
-  data: {
-    file_name: string;
-    upload_url: string;
-    retrieve_url: string;
-    expires_at: string;
-  };
-}
-export interface SignServicePhotoRequest {
-  file_name?: string;
-}
-
-export interface SignProductPhotoResponse {
-  data: {
-    file_name: string;
-    upload_url: string;
-    retrieve_url: string;
-    expires_at: string;
-  };
-}
-export interface SignProductPhotoRequest {
-  file_name?: string;
-}
-
-export interface UpdateProfileServiceResponse {}
-export interface UpdateProfileServiceRequest {
-  serviceId: number;
-  name: string;
-  description: string;
-  photo_name: string;
-}
-
-export interface UpdateProfileProductResponse {}
-export interface UpdateProfileProductRequest {
-  productId: number;
-  name: string;
-  description: string;
-  photo_name: string;
-}
-
-export interface CreateProfileServiceResponse {}
+export type CreateProfileServiceResponse = ApiResponse<void>;
 export interface CreateProfileServiceRequest {
   profileId: number;
   name: string;
@@ -142,10 +68,44 @@ export interface CreateProfileServiceRequest {
   photo_name: string;
 }
 
-export interface CreateProfileProductResponse {}
+export type UpdateProfileServiceResponse = ApiResponse<void>;
+export interface UpdateProfileServiceRequest {
+  serviceId: number;
+  name?: string;
+  description?: string;
+  photo_name?: string;
+}
+
+export type SignServicePhotoResponse = UploadSignResponse;
+export type SignServicePhotoRequest = UploadSignRequest;
+
+export type DeleteProfileServiceResponse = ApiResponse<void>;
+export type DeleteProfileServiceRequest = number;
+
+// Profile Product CRUD.
+export type ProfileProductsResponse = Paginated<Array<ProfileProduct>>;
+export interface ProfileProductsRequest extends PaginationRequest {
+  profileId: number;
+}
+
+export type CreateProfileProductResponse = ApiResponse<void>;
 export interface CreateProfileProductRequest {
   profileId: number;
   name: string;
   description: string;
   photo_name: string;
 }
+
+export type UpdateProfileProductResponse = ApiResponse<void>;
+export interface UpdateProfileProductRequest {
+  productId: number;
+  name?: string;
+  description?: string;
+  photo_name?: string;
+}
+
+export type DeleteProductResponse = ApiResponse<void>;
+export type DeleteProductRequest = number;
+
+export type SignProductPhotoResponse = UploadSignResponse;
+export type SignProductPhotoRequest = UploadSignRequest;

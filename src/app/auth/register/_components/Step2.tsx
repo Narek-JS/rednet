@@ -5,8 +5,8 @@ import {
   useVerifyMutation,
 } from "@/store/auth/api";
 import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/UI";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { VerifyRequest } from "@/store/auth/types";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -22,8 +22,9 @@ const formSchema = yup.object({
 
 const Step2: React.FC = () => {
   const router = useRouter();
-  const [verify] = useVerifyMutation();
-  const [activationResend] = useActivationResendMutation();
+  const [verify, { isLoading: isVerifying }] = useVerifyMutation();
+  const [activationResend, { isLoading: isResending }] =
+    useActivationResendMutation();
   const { showToast } = useToast();
 
   const form = useForm<VerifyRequest>({
@@ -118,6 +119,7 @@ const Step2: React.FC = () => {
             className={classNames("w-full font-semibold", {
               "opacity-50 cursor-default": !isValid,
             })}
+            loading={isVerifying}
             disabled={!isValid}
             type="submit"
           >
@@ -125,6 +127,7 @@ const Step2: React.FC = () => {
           </Button>
           <Button
             className="w-fit hover:text-primary"
+            loading={isResending}
             onClick={resend}
             variant="text"
             type="button"

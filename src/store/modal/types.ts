@@ -1,6 +1,7 @@
 export type ModalType =
+  | "participateTenderLotModal"
+  | "createTenderSuccess"
   | "registerSuccess"
-  | "tenderDetails"
   | "serviceModal"
   | "productModal"
   | "profileEdit";

@@ -1,15 +1,16 @@
-import { MissingFieldsEnum } from "@/types/missingFields";
-import { IError } from "@/types/general";
+import { MissingFields } from "@/types/missingFields";
+import { IError, ApiResponse } from "@/types/general";
 
-// General Usefull types for Auth flow.
-interface User {
+// User interface
+export interface User {
   is_activated: boolean;
   first_name: string;
   last_name: string;
   email: string;
 }
 
-interface Profile {
+// Profile interface
+export interface Profile {
   id: number;
   brand_name: string;
   slug: string;
@@ -17,42 +18,42 @@ interface Profile {
   cover_photo_url: string;
 }
 
-interface Response {
+// Organization interface
+export interface Organization {
+  head_full_name?: string;
+  address?: string;
+  type?: string;
+  name?: string;
+  tin?: string;
+}
+
+// Auth state interface
+export interface AuthState {
+  user: User;
+  profile: Profile | null;
+  missing_fields: MissingFields;
+}
+
+// Auth response wrapper
+export interface AuthResponse {
   data: {
     access_token: string;
-    state: State;
+    state: AuthState;
   };
 }
 
-interface Organization {
-  head_full_name?: string | undefined;
-  address?: string | undefined;
-  type?: string | undefined;
-  name?: string | undefined;
-  tin?: string | undefined;
-}
-
-// This State type usefull from components too.
-export interface State {
-  user: User;
-  profile: null | Profile;
-  missing_fields: Array<MissingFieldsEnum>;
-}
-
-// Get State info req-res
-export interface StateResponse {
-  data: State;
-}
+// State API types
+export type StateResponse = ApiResponse<AuthState>;
 export type StateRequest = void;
 
-// Post Login req-res
+// Login API types
 export interface LoginRequest {
   email: string;
   password: string;
 }
-export type LoginResponse = Response | IError;
+export type LoginResponse = AuthResponse | IError;
 
-// Post Register req-res
+// Register API types
 export interface RegisterRequest {
   first_name: string;
   last_name: string;
@@ -60,61 +61,50 @@ export interface RegisterRequest {
   password: string;
   password_confirmation: string;
 }
-export type RegisterResponse = Response | IError;
+export type RegisterResponse = AuthResponse | IError;
 
-// Post Verify req-res
+// Verify API types
 export interface VerifyRequest {
   code: string;
 }
-export type VerifyResponse = Response | IError;
+export type VerifyResponse = AuthResponse | IError;
 
+// Activation resend API types
 export interface ActivationResendResponse {
   activation_code_resent: boolean;
 }
 export type ActivationResendRequest = void;
 
-// Post Individual Organization type req-res
-export interface OrganizationIndividualResponse {
-  data: {
-    organization_chosen: boolean;
-  };
-}
+// Organization type selection API types
+export type OrganizationIndividualResponse = ApiResponse<{
+  organization_chosen: boolean;
+}>;
 export type OrganizationIndividualRequest = void;
 
-// Post Legal Organization type req-res
-export interface OrganizationLegalResponse {
-  data: {
-    organization_chosen: boolean;
-  };
-}
+export type OrganizationLegalResponse = ApiResponse<{
+  organization_chosen: boolean;
+}>;
 export type OrganizationLegalRequest = Organization;
 
-// Post Reset Password req-res.
-export interface ResetPasswordResponse {
-  data: {
-    code_sent: boolean;
-  };
-}
+// Password reset API types
+export type ResetPasswordResponse = ApiResponse<{ code_sent: boolean }>;
 export interface ResetPasswordRequest {
   email: string;
 }
 
-// Post Reset Password Check req-res.
-export interface ResetPasswordCheckResponse {
-  data: {
-    is_valid: boolean;
-  };
-}
+export type ResetPasswordCheckResponse = ApiResponse<{ is_valid: boolean }>;
 export interface ResetPasswordCheckRequest {
   code: string;
   email: string;
 }
 
-// Post Set new password req-res.
 export interface SetNewPasswordRequest {
   email: string;
   code: string;
   password: string;
   password_confirmation: string;
 }
-export type SetNewPasswordResponse = Response;
+export type SetNewPasswordResponse = AuthResponse;
+
+// Re-export for backward compatibility
+export type State = AuthState;

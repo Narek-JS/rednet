@@ -5,10 +5,11 @@ import {
   useCreateServiceMutation,
   useUpdateServiceMutation,
 } from "@/store/profile/api";
+import { getNonEmptyFields } from "@/utils/form/updateFields";
 import { useUploadFileMutation } from "@/store/uploader/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { ProfileService } from "@/store/profile/types";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
 import { useForm } from "react-hook-form";
 import { TEXTS } from "@/constants/texts";
@@ -42,8 +43,8 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
   const [photoName, setPhotoName] = useState("");
 
   const [signServicePhotoUpload] = useLazySignServicePhotoUploadQuery();
-  const [updateService] = useUpdateServiceMutation();
-  const [createService] = useCreateServiceMutation();
+  const [updateService, { isLoading: isUpdating }] = useUpdateServiceMutation();
+  const [createService, { isLoading: isCreating }] = useCreateServiceMutation();
   const [uploadFile] = useUploadFileMutation();
 
   const form = useForm<yup.InferType<typeof schema>>({
@@ -83,10 +84,12 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
     let res = null;
 
     if (isEdit) {
+      const diff = getNonEmptyFields(data, service);
+
       res = await updateService({
         serviceId: Number(service!.id),
-        photo_name: photoName,
-        ...data,
+        ...(photoName && { photo_name: photoName }),
+        ...diff,
       });
     } else {
       res = await createService({
@@ -108,6 +111,8 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
       }
     }
   };
+
+  const isLoading = isCreating || isUpdating;
 
   return (
     <div className="flex flex-col items-center gap-6 text-center pt-8">
@@ -174,16 +179,17 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
 
         <div className="w-full flex justify-end gap-4">
           <Button
-            type="button"
-            variant="outline"
-            onClick={closeModal}
             className="max-w-fit text-[14px] sm:text-[16px]"
+            onClick={closeModal}
+            variant="outline"
+            type="button"
           >
             {TEXTS.serviceModal.buttons.cancel}
           </Button>
           <Button
+            className="min-w-[236px] max-w-fit text-[14px] sm:text-[16px]"
+            loading={isLoading}
             type="submit"
-            className="max-w-fit text-[14px] sm:text-[16px]"
           >
             {isEdit
               ? TEXTS.serviceModal.buttons.update

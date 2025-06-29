@@ -4,13 +4,15 @@ import {
   useLazySignCoverPhotoUploadQuery,
   useUpdateProfileMutation,
 } from "@/store/profile/api";
+import { ProfileInfo } from "@/components/shared/ProfileInfo";
 import { useUploadFileMutation } from "@/store/uploader/api";
 import { useGetStateQuery } from "@/store/auth/api";
 import { Profile } from "@/store/profile/types";
+import { ChangeEvent, useState } from "react";
 import { Change } from "@/components/Icons";
-import { ProfileInfo } from "./ProfileInfo";
 import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { Skeleton } from "@/components/UI";
+import classNames from "classnames";
 import Image from "next/image";
 
 interface Props {
@@ -21,13 +23,15 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
   const router = useRouter();
   const { data: state } = useGetStateQuery();
 
-  const isEditable = state?.data.profile?.id === profileDataSsr?.id;
-
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
   const [updateProfile] = useUpdateProfileMutation();
   const [uploadFile] = useUploadFileMutation();
 
-  const handleChaneCoverPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
+  const [bannerImageLoad, setBannerImageLoad] = useState(false);
+
+  const isEditable = state?.data.profile?.id === profileDataSsr?.id;
+
+  const handleChangeCoverPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
 
     if (file) {
@@ -53,11 +57,17 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
   return (
     <div className="relative h-[258px] sm:h-[358px] w-full flex items-center justify-center">
       <div className="w-full h-full relative rounded-[8px]">
+        {!bannerImageLoad && <Skeleton className="w-full h-full" />}
         <Image
           src={profileDataSsr?.cover_photo_url || "/images/cover-photo.jpg"}
+          onLoad={() => setBannerImageLoad(true)}
+          className={classNames("rounded-[8px]", {
+            "opacity-0": !bannerImageLoad,
+            "opacity-100": bannerImageLoad,
+          })}
           alt="Profile Cover Image"
-          className="rounded-[8px]"
           objectFit="cover"
+          priority={true}
           fill
         />
         {isEditable && (
@@ -67,7 +77,7 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
               htmlFor="file-cover"
             >
               <input
-                onChange={handleChaneCoverPhoto}
+                onChange={handleChangeCoverPhoto}
                 id="file-cover"
                 type="file"
                 hidden
@@ -77,7 +87,9 @@ const ProfileBanner: React.FC<Props> = ({ profileDataSsr }) => {
           </div>
         )}
       </div>
-      <ProfileInfo profileDataSsr={profileDataSsr} isEditable={isEditable} />
+      <div className="absolute w-[96%] sm:w-[96%] bg-[#ffffff] rounded-[8px] top-[156px] sm:top-[223px] z-20 py-2.5 sm:py-6 px-2 sm:px-4">
+        <ProfileInfo profileDataSsr={profileDataSsr} isEditable={isEditable} />
+      </div>
     </div>
   );
 };

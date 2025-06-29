@@ -1,10 +1,12 @@
 "use client";
 
 import {
+  CreateTenderSuccess,
   RegisterSuccess,
   ProductModal,
   ServiceModal,
   ProfileEdit,
+  ParticipateTenderLotModal,
 } from "@/components/Modals";
 import { closeModal as closeModalState } from "@/store/modal/slice";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
@@ -24,12 +26,16 @@ const ModalController: React.FC = () => {
     switch (type) {
       case "registerSuccess":
         return <RegisterSuccess closeModal={closeModal} />;
+      case "createTenderSuccess":
+        return <CreateTenderSuccess closeModal={closeModal} />;
       case "profileEdit":
         return <ProfileEdit {...props} closeModal={closeModal} />;
       case "serviceModal":
         return <ServiceModal {...props} closeModal={closeModal} />;
       case "productModal":
         return <ProductModal {...props} closeModal={closeModal} />;
+      case "participateTenderLotModal":
+        return <ParticipateTenderLotModal closeModal={closeModal} />;
       default:
         return null;
     }

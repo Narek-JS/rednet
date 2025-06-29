@@ -1,9 +1,9 @@
 "use client";
 
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { useRegisterMutation } from "@/store/auth/api";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { RegisterRequest } from "@/store/auth/types";
-import { setErrorsFields } from "@/utils/formErrors";
 import { Button, Input } from "@/components/UI";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -27,7 +27,7 @@ const schema = yup.object({
 
 const Step1: React.FC = () => {
   const router = useRouter();
-  const [registerMutation] = useRegisterMutation();
+  const [registerMutation, { isLoading }] = useRegisterMutation();
 
   const form = useForm<RegisterRequest>({
     resolver: yupResolver(schema),
@@ -115,7 +115,11 @@ const Step1: React.FC = () => {
           />
         </div>
 
-        <Button className="w-full font-semibold" type="submit">
+        <Button
+          className="w-full font-semibold"
+          loading={isLoading}
+          type="submit"
+        >
           {TEXTS.registerStep1.button}
         </Button>
       </form>

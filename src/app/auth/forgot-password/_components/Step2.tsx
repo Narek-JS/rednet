@@ -2,8 +2,8 @@
 
 import { Button, InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/UI";
 import { useResetPasswordCheckMutation } from "@/store/auth/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { TEXTS } from "@/constants/texts";
@@ -16,7 +16,7 @@ const schema = yup.object().shape({
 
 const Step2: React.FC<{ email: string }> = ({ email }) => {
   const router = useRouter();
-  const [resetPasswordCheck] = useResetPasswordCheckMutation();
+  const [resetPasswordCheck, { isLoading }] = useResetPasswordCheckMutation();
 
   const form = useForm<{ code: string }>({
     resolver: yupResolver(schema),
@@ -82,6 +82,7 @@ const Step2: React.FC<{ email: string }> = ({ email }) => {
       <Button
         className="w-full font-semibold"
         disabled={!formState.isValid}
+        loading={isLoading}
         type="submit"
       >
         {TEXTS.forgotPasswordStep2.confirm}

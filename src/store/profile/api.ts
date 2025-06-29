@@ -24,21 +24,13 @@ import {
   DeleteProductResponse,
   UpdateProfileResponse,
   UpdateProfileRequest,
-  IndustriesResponse,
-  IndustriesRequest,
 } from "./types";
 import { ENDPOINTS_ENUM } from "@/constants";
 import { RTKApi } from "../RTKApi";
 
 const extendedApi = RTKApi.injectEndpoints({
   endpoints: (build) => ({
-    getIndustries: build.query<IndustriesResponse, IndustriesRequest>({
-      query: () => ({
-        url: ENDPOINTS_ENUM.INDUSTRIES,
-        method: "GET",
-      }),
-    }),
-
+    // Profile information Update.
     signCoverPhotoUpload: build.query<
       SignCoverPhotoUploadResponse,
       SignCoverPhotoUploadRequest
@@ -49,7 +41,6 @@ const extendedApi = RTKApi.injectEndpoints({
         params,
       }),
     }),
-
     signProfilePhotoUpload: build.query<
       SignProfilePhotoUploadResponse,
       SignProfilePhotoUploadRequest
@@ -60,7 +51,6 @@ const extendedApi = RTKApi.injectEndpoints({
         params,
       }),
     }),
-
     updateProfile: build.mutation<UpdateProfileResponse, UpdateProfileRequest>({
       query: ({ profileId, ...dto }) => {
         const url = ENDPOINTS_ENUM.UPDATE_PROFILE.replace(
@@ -75,11 +65,12 @@ const extendedApi = RTKApi.injectEndpoints({
       },
     }),
 
+    // Profile Service CRUD.
     profileServices: build.query<
       ProfileServicesResponse,
       ProfileServicesRequest
     >({
-      query: ({ profileId, limit }) => {
+      query: ({ profileId, page }) => {
         const url = ENDPOINTS_ENUM.PROFILE_SERVICES.replace(
           ":profileId",
           String(profileId)
@@ -88,31 +79,47 @@ const extendedApi = RTKApi.injectEndpoints({
         return {
           url,
           method: "GET",
-          params: { ...(limit && { limit }) },
+          params: { ...(page !== undefined && { page }) },
         };
       },
       providesTags: ["ProfileServices"],
     }),
-
-    profileProducts: build.query<
-      ProfileProductsResponse,
-      ProfileProductsRequest
+    createService: build.mutation<
+      CreateProfileServiceResponse,
+      CreateProfileServiceRequest
     >({
-      query: ({ profileId, limit }) => {
-        const url = ENDPOINTS_ENUM.PROFILE_PRODUCTS.replace(
+      query: ({ profileId, ...rest }) => {
+        const url = ENDPOINTS_ENUM.PROFILE_SERVICES.replace(
           ":profileId",
           String(profileId)
         );
-
-        return {
-          url,
-          method: "GET",
-          params: { ...(limit && { limit }) },
-        };
+        return { url, method: "POST", body: rest };
       },
-      providesTags: ["ProfileProducts"],
+      invalidatesTags: ["ProfileServices"],
     }),
-
+    updateService: build.mutation<
+      UpdateProfileServiceResponse,
+      UpdateProfileServiceRequest
+    >({
+      query: ({ serviceId, ...rest }) => {
+        const url = ENDPOINTS_ENUM.UPDATE_SERVICE.replace(
+          ":serviceId",
+          String(serviceId)
+        );
+        return { url, method: "PATCH", body: rest };
+      },
+      invalidatesTags: ["ProfileServices"],
+    }),
+    signServicePhotoUpload: build.query<
+      SignServicePhotoResponse,
+      SignServicePhotoRequest
+    >({
+      query: (params) => ({
+        url: ENDPOINTS_ENUM.SERVICE_PHOTO,
+        method: "GET",
+        params,
+      }),
+    }),
     deleteService: build.mutation<
       DeleteProfileServiceResponse,
       DeleteProfileServiceRequest
@@ -127,83 +134,25 @@ const extendedApi = RTKApi.injectEndpoints({
       invalidatesTags: ["ProfileServices"],
     }),
 
-    deleteProduct: build.mutation<DeleteProductResponse, DeleteProductResponse>(
-      {
-        query: (productId) => {
-          const url = ENDPOINTS_ENUM.UPDATE_PRODUCT.replace(
-            ":productId",
-            String(productId)
-          );
-          return { url, method: "DELETE" };
-        },
-        invalidatesTags: ["ProfileProducts"],
-      }
-    ),
-
-    signServicePhotoUpload: build.query<
-      SignServicePhotoResponse,
-      SignServicePhotoRequest
+    // Profile Product CRUD.
+    profileProducts: build.query<
+      ProfileProductsResponse,
+      ProfileProductsRequest
     >({
-      query: (params) => ({
-        url: ENDPOINTS_ENUM.SERVICE_PHOTO,
-        method: "GET",
-        params,
-      }),
-    }),
-
-    signProductPhotoUpload: build.query<
-      SignProductPhotoResponse,
-      SignProductPhotoRequest
-    >({
-      query: (params) => ({
-        url: ENDPOINTS_ENUM.PRODUCT_PHOTO,
-        method: "GET",
-        params,
-      }),
-    }),
-
-    updateService: build.mutation<
-      UpdateProfileServiceResponse,
-      UpdateProfileServiceRequest
-    >({
-      query: ({ serviceId, ...rest }) => {
-        const url = ENDPOINTS_ENUM.UPDATE_SERVICE.replace(
-          ":serviceId",
-          String(serviceId)
-        );
-        return { url, method: "PUT", body: rest };
-      },
-      invalidatesTags: ["ProfileServices"],
-    }),
-
-    updateProduct: build.mutation<
-      UpdateProfileProductResponse,
-      UpdateProfileProductRequest
-    >({
-      query: ({ productId, ...rest }) => {
-        const url = ENDPOINTS_ENUM.UPDATE_PRODUCT.replace(
-          ":productId",
-          String(productId)
-        );
-        return { url, method: "PUT", body: rest };
-      },
-      invalidatesTags: ["ProfileProducts"],
-    }),
-
-    createService: build.mutation<
-      CreateProfileServiceResponse,
-      CreateProfileServiceRequest
-    >({
-      query: ({ profileId, ...rest }) => {
-        const url = ENDPOINTS_ENUM.PROFILE_SERVICES.replace(
+      query: ({ profileId, page }) => {
+        const url = ENDPOINTS_ENUM.PROFILE_PRODUCTS.replace(
           ":profileId",
           String(profileId)
         );
-        return { url, method: "POST", body: rest };
-      },
-      invalidatesTags: ["ProfileServices"],
-    }),
 
+        return {
+          url,
+          method: "GET",
+          params: { ...(page !== undefined && { page }) },
+        };
+      },
+      providesTags: ["ProfileProducts"],
+    }),
     createProduct: build.mutation<
       CreateProfileProductResponse,
       CreateProfileProductRequest
@@ -217,11 +166,43 @@ const extendedApi = RTKApi.injectEndpoints({
       },
       invalidatesTags: ["ProfileProducts"],
     }),
+    updateProduct: build.mutation<
+      UpdateProfileProductResponse,
+      UpdateProfileProductRequest
+    >({
+      query: ({ productId, ...rest }) => {
+        const url = ENDPOINTS_ENUM.UPDATE_PRODUCT.replace(
+          ":productId",
+          String(productId)
+        );
+        return { url, method: "PATCH", body: rest };
+      },
+      invalidatesTags: ["ProfileProducts"],
+    }),
+    deleteProduct: build.mutation<DeleteProductResponse, number>({
+      query: (productId) => {
+        const url = ENDPOINTS_ENUM.UPDATE_PRODUCT.replace(
+          ":productId",
+          String(productId)
+        );
+        return { url, method: "DELETE" };
+      },
+      invalidatesTags: ["ProfileProducts"],
+    }),
+    signProductPhotoUpload: build.query<
+      SignProductPhotoResponse,
+      SignProductPhotoRequest
+    >({
+      query: (params) => ({
+        url: ENDPOINTS_ENUM.PRODUCT_PHOTO,
+        method: "GET",
+        params,
+      }),
+    }),
   }),
 });
 
 export const {
-  useGetIndustriesQuery,
   useProfileServicesQuery,
   useProfileProductsQuery,
   useDeleteProductMutation,

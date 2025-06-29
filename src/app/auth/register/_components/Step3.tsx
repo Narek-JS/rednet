@@ -5,9 +5,9 @@ import {
   useOrganizationLegalMutation,
 } from "@/store/auth/api";
 import { Button, Input, RadioGroup, RadioGroupItem } from "@/components/UI";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { setErrorsFields } from "@/utils/formErrors";
 import { openModal } from "@/store/modal/slice";
 import { useAppDispatch } from "@/store/hooks";
 import { TEXTS } from "@/constants/texts";
@@ -42,8 +42,10 @@ const schema = yup.object().shape({
 const Step3: React.FC = () => {
   const dispatch = useAppDispatch();
 
-  const [organizationIndividual] = useOrganizationIndividualMutation();
-  const [organizationLegal] = useOrganizationLegalMutation();
+  const [organizationIndividual, { isLoading: isIndividualLoading }] =
+    useOrganizationIndividualMutation();
+  const [organizationLegal, { isLoading: isLegalLoading }] =
+    useOrganizationLegalMutation();
 
   const form = useForm({
     resolver: yupResolver(schema),
@@ -98,6 +100,7 @@ const Step3: React.FC = () => {
   };
 
   const orgType = watch("org_type");
+  const isLoading = isIndividualLoading || isLegalLoading;
 
   return (
     <>
@@ -175,6 +178,7 @@ const Step3: React.FC = () => {
             "opacity-50 cursor-default": !isValid,
           })}
           disabled={!isValid}
+          loading={isLoading}
           type="submit"
         >
           {TEXTS.registerStep3.continue}

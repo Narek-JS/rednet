@@ -5,7 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
-const ProfileLayout: React.FC<Props> = ({ children }) => (
+const CreateProfileLayout: React.FC<Props> = ({ children }) => (
   <div className="relative w-full min-h-[calc(100vh-80px)] overflow-hidden">
     {/* Background image */}
     <Image
@@ -21,4 +21,4 @@ const ProfileLayout: React.FC<Props> = ({ children }) => (
   </div>
 );
 
-export default ProfileLayout;
+export default CreateProfileLayout;

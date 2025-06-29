@@ -4,14 +4,14 @@ import {
   useLazySignProfilePhotoUploadQuery,
   useLazySignCoverPhotoUploadQuery,
   useUpdateProfileMutation,
-  useGetIndustriesQuery,
 } from "@/store/profile/api";
 import { useUploadFileMutation } from "@/store/uploader/api";
+import { setErrorsFields } from "@/utils/form/errorFields";
+import { useGetIndustriesQuery } from "@/store/lookup/api";
 import { Button, Input, Select } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { selectState } from "@/store/auth/selectors";
-import { setErrorsFields } from "@/utils/formErrors";
 import { SelectItem } from "@/components/UI/Select";
 import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
@@ -49,7 +49,7 @@ const Step1: React.FC = () => {
 
   const [signProfilePhotoUpload] = useLazySignProfilePhotoUploadQuery();
   const [signCoverPhotoUpload] = useLazySignCoverPhotoUploadQuery();
-  const [updateProfile] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
   const [uploadFile] = useUploadFileMutation();
 
   const { data: industries } = useGetIndustriesQuery();
@@ -209,6 +209,7 @@ const Step1: React.FC = () => {
           "opacity-50 cursor-default": !isValid || !coverImage || !profileImage,
         })}
         disabled={!isValid || !coverImage || !profileImage}
+        loading={isLoading}
         type="submit"
       >
         {TEXTS.createProfileStep1.continue}

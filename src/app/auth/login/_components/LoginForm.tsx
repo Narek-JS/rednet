@@ -1,8 +1,8 @@
 "use client";
 
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { MissingFieldsEnum } from "@/types/missingFields";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { useLoginMutation } from "@/store/auth/api";
 import { LoginRequest } from "@/store/auth/types";
 import { Button, Input } from "@/components/UI";
@@ -25,7 +25,7 @@ const loginSchema = yup.object({
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
-  const [login] = useLoginMutation();
+  const [login, { isLoading }] = useLoginMutation();
 
   const form = useForm<LoginRequest>({
     resolver: yupResolver(loginSchema),
@@ -106,7 +106,9 @@ const LoginForm: React.FC = () => {
         {TEXTS.loginForm.forgot}
       </Link>
 
-      <Button type="submit">{TEXTS.loginForm.button}</Button>
+      <Button type="submit" loading={isLoading}>
+        {TEXTS.loginForm.button}
+      </Button>
     </form>
   );
 };

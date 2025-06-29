@@ -2,11 +2,12 @@ import {
   ProfileAnalytics,
   ProfileServices,
   ProfileProducts,
+  ProfileTenders,
   ProfileBanner,
 } from "@/components/Profile";
 import { Profile as IProfile } from "@/store/profile/types";
 import { ENDPOINTS_ENUM } from "@/constants";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { api } from "@/utils/api";
 
 const { PROFILE_BY_ID } = ENDPOINTS_ENUM;
@@ -20,8 +21,8 @@ const Profile: React.FC<Props> = async ({ params }) => {
 
   const profileData = await api.get<IProfile>(`${PROFILE_BY_ID}/${profileId}`);
 
-  if (profileData.status === "ERROR") {
-    return redirect("/");
+  if (!profileData.result) {
+    return notFound();
   }
 
   return (
@@ -31,6 +32,7 @@ const Profile: React.FC<Props> = async ({ params }) => {
         <ProfileAnalytics />
         <ProfileServices profileId={Number(profileId)} />
         <ProfileProducts profileId={Number(profileId)} />
+        <ProfileTenders profileId={Number(profileId)} />
       </div>
     </div>
   );

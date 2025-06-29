@@ -24,7 +24,7 @@ const Select: React.FC<Props> = ({
   placeholder,
   className,
 }) => (
-  <div className="relative w-full flex flex-col gap-2.5">
+  <div className="relative overflow-x-clip w-full flex flex-col gap-2.5">
     {label && (
       <label className="text-[#14142B] font-semibold text-[14px] text-left">
         {label}
@@ -47,6 +47,7 @@ const Select: React.FC<Props> = ({
 
       <SelectPrimitive.Portal>
         <SelectPrimitive.Content
+          style={{ width: "var(--radix-select-trigger-width)" }}
           className="bg-white rounded-md shadow-lg z-50"
           position="popper"
           side="bottom"
@@ -60,7 +61,7 @@ const Select: React.FC<Props> = ({
     </SelectPrimitive.Root>
 
     {error && (
-      <p className="absolute left-0 -bottom-[22px] text-[#C30052] text-sm font-semibold">
+      <p className="absolute left-0 -bottom-[22px] text-[#C30052] whitespace-nowrap text-sm font-semibold">
         {error}
       </p>
     )}

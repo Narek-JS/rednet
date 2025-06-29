@@ -1,13 +1,14 @@
 "use client";
 
 import { useUpdateProfileMutation } from "@/store/profile/api";
-import { Industries, Profile } from "@/store/profile/types";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { Button, Input, Select } from "@/components/UI";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { selectState } from "@/store/auth/selectors";
-import { setErrorsFields } from "@/utils/formErrors";
 import { SelectItem } from "@/components/UI/Select";
+import { Industries } from "@/store/lookup/types";
+import { Profile } from "@/store/profile/types";
 import { useAppSelector } from "@/store/hooks";
 import { useRouter } from "next/navigation";
 import { TEXTS } from "@/constants/texts";
@@ -46,7 +47,7 @@ const ProfileEdit: React.FC<Props> = ({
   const state = useAppSelector(selectState);
   const router = useRouter();
 
-  const [updateProfile] = useUpdateProfileMutation();
+  const [updateProfile, { isLoading }] = useUpdateProfileMutation();
 
   const form = useForm<yup.InferType<typeof schema>>({
     resolver: yupResolver(schema),
@@ -179,7 +180,12 @@ const ProfileEdit: React.FC<Props> = ({
         <div className="bg-[#dee6f094] h-[1px] w-full mt-2.5" />
 
         <div className="w-full flex justify-end gap-3.5">
-          <Button type="submit" variant="primery" className="max-w-[150px]">
+          <Button
+            className="max-w-[150px]"
+            loading={isLoading}
+            variant="primery"
+            type="submit"
+          >
             {TEXTS.profileEdit.buttons.save}
           </Button>
           <Button

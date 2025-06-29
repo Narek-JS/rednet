@@ -1,10 +1,12 @@
 export { EmptyItems } from "./EmptyItems";
+export { BackArrow } from "./BackArrow";
 export { Message } from "./Message";
 export { Change } from "./Change";
 export { Verify } from "./Verify";
 export { Phone } from "./Phone";
 export { Graph } from "./Graph";
 export { Views } from "./Views";
+export { Time } from "./Time";
 export { Back } from "./Back";
 export { Plus } from "./Plus";
 export { Dots } from "./Dots";

@@ -2,8 +2,8 @@
 
 import { useSetNewPasswordMutation } from "@/store/auth/api";
 import { SetNewPasswordRequest } from "@/store/auth/types";
+import { setErrorsFields } from "@/utils/form/errorFields";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { setErrorsFields } from "@/utils/formErrors";
 import { selectState } from "@/store/auth/selectors";
 import { Button, Input } from "@/components/UI";
 import { useAppSelector } from "@/store/hooks";
@@ -29,7 +29,7 @@ const schema = yup.object().shape({
 const Step3: React.FC<{ email: string; code: string }> = ({ email, code }) => {
   const router = useRouter();
   const state = useAppSelector(selectState);
-  const [setNewPassword] = useSetNewPasswordMutation();
+  const [setNewPassword, { isLoading }] = useSetNewPasswordMutation();
 
   const form = useForm<Omit<SetNewPasswordRequest, "email" | "code">>({
     resolver: yupResolver(schema),
@@ -85,7 +85,11 @@ const Step3: React.FC<{ email: string; code: string }> = ({ email, code }) => {
         {...register("password_confirmation")}
       />
 
-      <Button className="w-full font-semibold" type="submit">
+      <Button
+        className="w-full font-semibold"
+        loading={isLoading}
+        type="submit"
+      >
         {TEXTS.forgotPasswordStep3.button}
       </Button>
     </form>
