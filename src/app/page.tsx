@@ -1,7 +1,23 @@
-import { TEXTS } from "@/constants/texts";
+import {
+  SubscriptionsSection,
+  ContactUsSection,
+  PartnersSection,
+  TendersSection,
+  BannerSection,
+  DemoSection,
+} from "@/components/HomeSections";
 
-const Home: React.FC = async () => {
-  return <main className="container mt-10">{TEXTS.home.title}</main>;
+const Home: React.FC = () => {
+  return (
+    <main>
+      <BannerSection />
+      <PartnersSection />
+      <TendersSection />
+      <SubscriptionsSection />
+      <ContactUsSection />
+      <DemoSection />
+    </main>
+  );
 };
 
 export default Home;
