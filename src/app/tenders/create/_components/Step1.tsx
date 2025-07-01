@@ -70,7 +70,10 @@ const Step1: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex flex-col gap-5 sm:gap-6"
+    >
       <Controller
         name="type"
         control={control}

@@ -212,7 +212,7 @@ const Step2: React.FC<Props> = ({ tenderId }) => {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid sm:grid-cols-2 gap-5">
         <Controller
           name="newLot.measurement_unit_id"
           control={control}
@@ -346,7 +346,7 @@ const Step2: React.FC<Props> = ({ tenderId }) => {
             />
           )}
         />
-        <label htmlFor="agreement" className="text-sm">
+        <label htmlFor="agreement" className="text-[10px] sm:text-sm">
           {TEXTS.createTenderStep2.agreement}
         </label>
         {errors.agreement && (
