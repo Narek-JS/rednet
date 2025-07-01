@@ -11,34 +11,33 @@ interface Props {
 }
 
 const ProfileTender: React.FC<Props> = ({ tender, profileImage }) => (
-  <div className="min-h-max sm:min-h-[570px] flex flex-col gap-4 border border-[#D6D8E7] rounded-md p-3.5">
-    <div className="w-full flex justify-between items-center">
-      <div className="flex gap-3">
+  <div className="min-h-max sm:min-h-[570px] flex flex-col gap-3 sm:gap-4 border border-[#D6D8E7] rounded-md p-2 sm:p-3.5">
+    <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
+      <div className="flex gap-2 sm:gap-3 items-center">
         <Image
-          className="rounded-full max-w-[48px] min-w-[48px] max-h-[48px] min-h-[48px]"
+          className="rounded-full w-10 h-10 sm:w-12 sm:h-12 object-cover"
           src={profileImage || "/images/profile-photo.jpg"}
           alt="Tender image"
-          height={48}
-          width={48}
+          height={40}
+          width={40}
         />
         <div className="flex flex-col justify-between">
-          <p className="text-[#14142B] text-[18px] font-semibold">
+          <p className="text-[#14142B] text-[16px] sm:text-[18px] font-semibold truncate max-w-[160px] sm:max-w-none">
             {tender?.name}
           </p>
-          <p className="text-[12px] texr-[#001D23]">
+          <p className="text-[12px] text-[#001D23]">
             {tender?.type} | {tender?.lots?.length} {TEXTS.tenders.lots}
           </p>
         </div>
       </div>
       <Link
         href={"/tenders/" + tender?.id}
-        className="text-primary text-[15px] sm:text-[18px] font-semibold"
+        className="text-primary text-[14px] sm:text-[18px] font-semibold"
       >
         {TEXTS.tenders.seeAll}
       </Link>
     </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
       {tender?.lots?.slice(0, 6)?.map((lot, index) => (
         <TenderLot key={index} lot={lot} />
       ))}

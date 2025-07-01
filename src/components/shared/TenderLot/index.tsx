@@ -24,39 +24,28 @@ const TenderLot: React.FC<Props> = ({ lot }) => {
   };
 
   return (
-    <div className="border border-[#D6D8E7] rounded-md p-3.5">
-      <h4 className="text-[#14142B] text-[16px] sm:text-[18px] font-semibold">
+    <div className="border border-[#D6D8E7] rounded-md p-2 sm:p-3.5 flex flex-col gap-2 sm:gap-0">
+      <h4 className="text-[#14142B] text-[15px] sm:text-[18px] font-semibold truncate">
         {cutWordToEtc(lot.name, 25)}
       </h4>
-      <div className="w-full flex justify-between mt-3 sm:mt-5">
-        <span className="text-[#14142B] text-[14px] sm:text-[16px]">
-          {TEXTS.tenderLot.quantity}
-        </span>
-        <span className="text-[#14142B] text-[16px] sm:text-[18px] font-semibold">
+      <div className="w-full flex justify-between mt-2 sm:mt-5 text-[13px] sm:text-[16px]">
+        <span className="text-[#14142B]">{TEXTS.tenderLot.quantity}</span>
+        <span className="text-[#14142B] font-semibold">
           {lot.quantity} {lot.measurement_unit.name}
         </span>
       </div>
       <div className="bg-[#dee6f094] h-[1px] w-full mt-2 sm:mt-2.5" />
-      <div className="w-full flex justify-between text-[#14142B] mt-2 sm:mt-2.5">
-        <span className="text-[14px] sm:text-[16px]">
-          {TEXTS.tenderLot.price}
-        </span>
-        <span className="text-[16px] sm:text-[18px] font-semibold">
-          ֏ {lot.starting_price}
-        </span>
+      <div className="w-full flex justify-between text-[#14142B] mt-2 sm:mt-2.5 text-[13px] sm:text-[16px]">
+        <span>{TEXTS.tenderLot.price}</span>
+        <span className="font-semibold">֏ {lot.starting_price}</span>
       </div>
-      <div className="h-[38px] sm:h-[42px] bg-[#EFF0F6] rounded-md flex items-center gap-1.5 sm:gap-2 px-1.5 sm:px-2.5 text-[#14142B] mt-3 sm:mt-4">
+      <div className="h-[36px] sm:h-[42px] bg-[#EFF0F6] rounded-md flex items-center gap-1 sm:gap-2 px-1 sm:px-2.5 text-[#14142B] mt-3 sm:mt-4 text-[13px] sm:text-[16px]">
         <Time />
-        <span className="text-[14px] sm:text-[16px]">
-          {TEXTS.tenderLot.timeLeft}
-        </span>
-        <span className="text-[16px] sm:text-[18px] font-semibold">
-          {TEXTS.tenderLot.timeLeftValue}
-        </span>
+        <span>{TEXTS.tenderLot.timeLeft}</span>
+        <span className="font-semibold">{TEXTS.tenderLot.timeLeftValue}</span>
       </div>
-
       <Button
-        className="text-primary text-[14px] sm:text-[18px] font-semibold mt-6"
+        className="text-primary text-[14px] sm:text-[18px] font-semibold mt-4 sm:mt-6"
         onClick={openParticipateModal}
         variant="text"
       >
