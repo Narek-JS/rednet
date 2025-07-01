@@ -50,7 +50,7 @@ const UserDropdown: React.FC<Props> = ({
       <DropdownMenu.Content
         align="end"
         sideOffset={5}
-        className="min-w-[160px] bg-white rounded-md shadow-lg p-1 z-10"
+        className="min-w-[160px] bg-white rounded-md shadow-lg p-1 z-20"
       >
         <DropdownMenu.Item
           onSelect={onProfile}

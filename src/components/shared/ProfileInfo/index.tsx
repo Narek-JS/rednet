@@ -180,10 +180,10 @@ export const ProfileInfo: React.FC<IProfileInfoProps> = ({
         </div>
       </div>
       {seeProfile && (
-        <div className="absolute right-2 sm:right-4 top-2.5 sm:top-4">
+        <div className="absolute right-0.5 sm:right-4 top-0 sm:top-4">
           <Link
             href={"/profile/" + state?.profile?.id}
-            className="text-primary text-[14px] sm:text-[18px] font-semibold"
+            className="text-primary text-[11px] sm:text-[18px] font-semibold"
           >
             See profile
           </Link>

@@ -177,17 +177,17 @@ const ProductModal: React.FC<Props> = ({ closeModal, profileId, product }) => {
 
         <div className="h-[1px] bg-[#dee6f094]" />
 
-        <div className="w-full flex justify-end gap-4">
+        <div className="w-full flex flex-col sm:flex-row justify-end gap-4">
           <Button
             type="button"
             variant="outline"
             onClick={closeModal}
-            className="max-w-fit text-[14px] sm:text-[16px]"
+            className="max-w-full sm:max-w-fit text-[14px] sm:text-[16px]"
           >
             {TEXTS.productModal.buttons.cancel}
           </Button>
           <Button
-            className="min-w-[236px] max-w-fit text-[14px] sm:text-[16px]"
+            className="min-w-[236px] max-w-full sm:max-w-fit text-[14px] sm:text-[16px]"
             loading={isLoading}
             type="submit"
           >

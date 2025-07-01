@@ -177,9 +177,9 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
 
         <div className="h-[1px] bg-[#dee6f094]" />
 
-        <div className="w-full flex justify-end gap-4">
+        <div className="w-full flex flex-col sm:flex-row justify-end gap-4">
           <Button
-            className="max-w-fit text-[14px] sm:text-[16px]"
+            className="max-w-full sm:max-w-fit text-[14px] sm:text-[16px]"
             onClick={closeModal}
             variant="outline"
             type="button"
@@ -187,7 +187,7 @@ const ServiceModal: React.FC<Props> = ({ closeModal, profileId, service }) => {
             {TEXTS.serviceModal.buttons.cancel}
           </Button>
           <Button
-            className="min-w-[236px] max-w-fit text-[14px] sm:text-[16px]"
+            className="min-w-[236px] max-w-full sm:max-w-fit text-[14px] sm:text-[16px]"
             loading={isLoading}
             type="submit"
           >

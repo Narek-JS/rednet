@@ -6,7 +6,7 @@ const SearchTenders: React.FC = () => {
   return (
     <div className="relative">
       <SearchIcon
-        className="absolute z-50 top-[12.5px] left-2"
+        className="absolute z-10 top-[12.5px] left-2"
         color="#A0A3BD"
       />
       <Input

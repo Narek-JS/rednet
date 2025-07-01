@@ -44,14 +44,14 @@ const Tender: React.FC<Props> = async ({ params }) => {
         <div className="flex flex-col gap-3 sm:gap-4 border border-[#D6D8E7] rounded-md p-2 sm:p-3.5">
           <div className="w-full flex flex-row justify-between items-center rounded-md h-auto sm:h-[50px] bg-[#EFF0F6] text-[#14142B] px-2 sm:px-3.5 py-2 sm:py-0 gap-2 sm:gap-0">
             <div className="flex flex-row items-center gap-1 sm:gap-2.5">
-              <p className="font-bold text-[16px] sm:text-[18px]">
+              <p className="font-bold text-[14px] sm:text-[18px]">
                 {tenderDataSsr.result.name}
               </p>
-              <p className="font-light text-[13px] sm:text-[14px]">
+              <p className="font-light text-[12px] sm:text-[14px]">
                 {TEXTS.tenders.region}: {tenderDataSsr.result.region}
               </p>
             </div>
-            <p className="text-[13px] sm:text-[14px]">
+            <p className="text-[12px] sm:text-[14px]">
               {tenderDataSsr.result.finishes_at}
             </p>
           </div>

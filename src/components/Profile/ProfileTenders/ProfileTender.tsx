@@ -12,7 +12,7 @@ interface Props {
 
 const ProfileTender: React.FC<Props> = ({ tender, profileImage }) => (
   <div className="min-h-max sm:min-h-[570px] flex flex-col gap-3 sm:gap-4 border border-[#D6D8E7] rounded-md p-2 sm:p-3.5">
-    <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 sm:gap-0">
+    <div className="w-full flex flex-row justify-between items-center gap-2">
       <div className="flex gap-2 sm:gap-3 items-center">
         <Image
           className="rounded-full w-10 h-10 sm:w-12 sm:h-12 object-cover"
