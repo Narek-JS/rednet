@@ -41,7 +41,7 @@ const Tenders: React.FC = () => {
                 </div>
                 <Link
                   href={"/tenders/" + tender?.id}
-                  className="text-primary text-[18px] font-semibold"
+                  className="text-primary text-[15px] sm:text-[18px] font-semibold"
                 >
                   {TEXTS.tenders.seeAll}
                 </Link>

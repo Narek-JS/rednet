@@ -11,12 +11,12 @@ interface Props {
 }
 
 const ProfileTender: React.FC<Props> = ({ tender, profileImage }) => (
-  <div className="min-h-[634px] flex flex-col gap-4 border border-[#D6D8E7] rounded-md p-3.5">
+  <div className="min-h-max sm:min-h-[570px] flex flex-col gap-4 border border-[#D6D8E7] rounded-md p-3.5">
     <div className="w-full flex justify-between items-center">
       <div className="flex gap-3">
         <Image
+          className="rounded-full max-w-[48px] min-w-[48px] max-h-[48px] min-h-[48px]"
           src={profileImage || "/images/profile-photo.jpg"}
-          className="rounded-full"
           alt="Tender image"
           height={48}
           width={48}
@@ -32,7 +32,7 @@ const ProfileTender: React.FC<Props> = ({ tender, profileImage }) => (
       </div>
       <Link
         href={"/tenders/" + tender?.id}
-        className="text-primary text-[18px] font-semibold"
+        className="text-primary text-[15px] sm:text-[18px] font-semibold"
       >
         {TEXTS.tenders.seeAll}
       </Link>
