@@ -48,7 +48,7 @@ const Tenders: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {tender?.lots.slice(0, 4)?.map((lot, index) => (
+                {tender?.lots?.slice(0, 4)?.map((lot, index) => (
                   <TenderLot key={index} lot={lot} />
                 ))}
               </div>

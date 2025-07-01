@@ -7,6 +7,7 @@ export {
 export { DatePickerComponent as DatePicker } from "./DatePicker";
 export { MultipleFileUpload } from "./MultipleFileUpload";
 export { RadioGroup, RadioGroupItem } from "./Radio";
+export { Dropdown, DropdownItem } from "./Dropdown";
 export { Progress } from "./Progress";
 export { Skeleton } from "./Skeleton";
 export { SelectItem } from "./Select";

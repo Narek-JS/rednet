@@ -6,6 +6,7 @@ import { UserDropdown } from "./UserDropdown";
 import { useRouter } from "next/navigation";
 import { TEXTS } from "@/constants/texts";
 import { Menu, X } from "lucide-react";
+import { AddBlock } from "./AddBlock";
 import { Button, Logo } from "../UI";
 import { useState } from "react";
 import classNames from "classnames";
@@ -62,10 +63,22 @@ const Header: React.FC = () => {
             { flex: isOpen, hidden: !isOpen }
           )}
         >
-          <Link href="/">New Item</Link>
-          <Link href="/">New Item</Link>
-          <Link href="/">New Item</Link>
-          <Link href="/tenders">Tenders</Link>
+          {!!state?.profile?.id && (
+            <AddBlock profileId={String(state?.profile?.id)} />
+          )}
+
+          <Link
+            className="hover:text-primary transition-colors"
+            href="/#contact-us"
+          >
+            Contact Us
+          </Link>
+          <Link
+            className="hover:text-primary transition-colors"
+            href="/tenders"
+          >
+            Tenders
+          </Link>
 
           <div className="hidden lg:block">
             {getStartedLink() ? (

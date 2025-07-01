@@ -29,7 +29,11 @@ const ProfileTenders: React.FC<Props> = ({ profileId }) => {
       {!!tenders?.data?.length && (
         <div className="flex flex-col gap-12">
           {tenders?.data.map((tender) => (
-            <ProfileTender key={tender.id} tender={tender} />
+            <ProfileTender
+              profileImage={state?.data?.profile?.profile_photo_url}
+              key={tender.id}
+              tender={tender}
+            />
           ))}
         </div>
       )}

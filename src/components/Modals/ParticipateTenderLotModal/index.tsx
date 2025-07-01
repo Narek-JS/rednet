@@ -49,25 +49,33 @@ const ParticipateTenderLotModal: React.FC<Props> = ({ closeModal }) => {
           <p className="text-[#64748B] text-[12px]">
             {TEXTS.participateTenderLot.supplyDeadline}
           </p>
-          <span className="text-[14px] text-[#191D23]">40 օր</span>
+          <span className="text-[14px] text-[#191D23]">
+            {TEXTS.participateTenderLot.supplyDeadlineValue}
+          </span>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-[#64748B] text-[12px]">
             {TEXTS.participateTenderLot.auctionDays}
           </p>
-          <span className="text-[14px] text-[#191D23]">3 օր</span>
+          <span className="text-[14px] text-[#191D23]">
+            {TEXTS.participateTenderLot.auctionDaysValue}
+          </span>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-[#64748B] text-[12px]">
             {TEXTS.participateTenderLot.lot}
           </p>
-          <span className="text-[14px] text-[#191D23]">30</span>
+          <span className="text-[14px] text-[#191D23]">
+            {TEXTS.participateTenderLot.lotValue}
+          </span>
         </div>
         <div className="flex flex-col gap-1">
           <p className="text-[#64748B] text-[12px]">
             {TEXTS.participateTenderLot.region}
           </p>
-          <span className="text-[14px] text-[#191D23]">Երևան</span>
+          <span className="text-[14px] text-[#191D23]">
+            {TEXTS.participateTenderLot.regionValue}
+          </span>
         </div>
         <div className="w-fit h-[36px] bg-[#EFF0F6] rounded-md flex items-center gap-1.5 px-1.5 text-[#14142B] text-[14px]">
           <Time />

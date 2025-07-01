@@ -3,6 +3,7 @@
 import { useProfileProductsQuery } from "@/store/profile/api";
 import { Down, EmptyItems, Plus } from "@/components/Icons";
 import { useGetStateQuery } from "@/store/auth/api";
+import { SECTION_TAGS } from "@/constants/sections";
 import { Button, Skeleton } from "@/components/UI";
 import { openModal } from "@/store/modal/slice";
 import { useAppDispatch } from "@/store/hooks";
@@ -40,7 +41,10 @@ const ProfileProducts: React.FC<Props> = ({ profileId }) => {
   const hasMoreProducts = !!page && products && products.meta.total > 1;
 
   return (
-    <div className="w-full min-h-[200px] p-2.5 sm:p-6 bg-white mt-6 rounded-[8px] flex flex-col gap-4">
+    <div
+      id={SECTION_TAGS.PROFILE_PRODUCTS.ID}
+      className="w-full min-h-[200px] p-2.5 sm:p-6 bg-white mt-6 rounded-[8px] flex flex-col gap-4"
+    >
       <h3 className="text-[#002366] text-[18px] sm:text-[24px] font-semibold">
         {TEXTS.profileProducts.title}
       </h3>

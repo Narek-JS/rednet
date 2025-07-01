@@ -82,3 +82,7 @@
     @apply w-full 2xl:mx-auto px-4 xl:px-[120px] lg:px-12 2xl:max-w-[1440px] max-w-full;
   }
 }
+
+html {
+  scroll-behavior: smooth;
+}
