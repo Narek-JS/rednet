@@ -42,8 +42,8 @@ const Tender: React.FC<Props> = async ({ params }) => {
           />
         </div>
         <div className="flex flex-col gap-3 sm:gap-4 border border-[#D6D8E7] rounded-md p-2 sm:p-3.5">
-          <div className="w-full flex flex-col sm:flex-row sm:justify-between sm:items-center rounded-md h-auto sm:h-[50px] bg-[#EFF0F6] text-[#14142B] px-2 sm:px-3.5 py-2 sm:py-0 gap-2 sm:gap-0">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2.5">
+          <div className="w-full flex flex-row justify-between items-center rounded-md h-auto sm:h-[50px] bg-[#EFF0F6] text-[#14142B] px-2 sm:px-3.5 py-2 sm:py-0 gap-2 sm:gap-0">
+            <div className="flex flex-row items-center gap-1 sm:gap-2.5">
               <p className="font-bold text-[16px] sm:text-[18px]">
                 {tenderDataSsr.result.name}
               </p>
@@ -55,6 +55,7 @@ const Tender: React.FC<Props> = async ({ params }) => {
               {tenderDataSsr.result.finishes_at}
             </p>
           </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
             {tenderDataSsr.result.lots.map((lot, index) => (
               <TenderLot key={index} lot={lot} />

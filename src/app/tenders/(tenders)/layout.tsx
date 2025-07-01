@@ -14,9 +14,11 @@ const TendersLayout: React.FC<Props> = ({ children }) => {
     <div className="bg-[#FCFCFC]">
       <div className="container mx-auto">
         <div className="my-[34px] w-full flex">
-          <FilterSidebar />
+          <div className="hidden md:block">
+            <FilterSidebar />
+          </div>
           <main className="flex-1 p-6 pt-0">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center gap-3 mb-4">
               <h1 className="text-[24px] font-bold text-[#000D26]">
                 {TEXTS.tendersLayout.title}
               </h1>
