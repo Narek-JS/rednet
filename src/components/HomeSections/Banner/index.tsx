@@ -13,7 +13,7 @@ const Banner: React.FC = () => {
   };
 
   return (
-    <section className="relative w-full h-[600px] flex">
+    <section className="relative w-full h-[450px] md:h-[600px] flex overflow-clip">
       <Image
         className="object-cover"
         src="/images/banner.jpg"
