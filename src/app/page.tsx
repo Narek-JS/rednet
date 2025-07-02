@@ -1,3 +1,4 @@
+import { Footer } from "@/components/Footer";
 import {
   SubscriptionsSection,
   ContactUsSection,
@@ -16,6 +17,7 @@ const Home: React.FC = () => {
       <SubscriptionsSection />
       <ContactUsSection />
       <DemoSection />
+      <Footer/>
     </main>
   );
 };
