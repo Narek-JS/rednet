@@ -39,14 +39,17 @@ const Header: React.FC = () => {
               </Button>
             </Link>
           ) : (
-            <UserDropdown
-              onProfile={() => router.push(`/profile/${state?.profile?.id}`)}
-              avatarUrl={
-                state?.profile?.profile_photo_url || "/images/profile-photo.jpg"
-              }
-              onChangePassword={() => {}}
-              onSubscription={() => {}}
-            />
+            <div className={classNames({ "pointer-events-none": isOpen })}>
+              <UserDropdown
+                onProfile={() => router.push(`/profile/${state?.profile?.id}`)}
+                avatarUrl={
+                  state?.profile?.profile_photo_url ||
+                  "/images/profile-photo.jpg"
+                }
+                onChangePassword={() => {}}
+                onSubscription={() => {}}
+              />
+            </div>
           )}
           <button onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? (
