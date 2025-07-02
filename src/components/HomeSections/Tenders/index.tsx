@@ -37,7 +37,7 @@ const Tenders: React.FC = async () => {
           </p>
         </div>
 
-        <div className="min-h-[320px] sm:min-h-[642px] flex flex-col gap-4 shadow-2xl bg-[#F6F9FC] rounded-md p-2 sm:p-3.5">
+        <div className="flex flex-col gap-4 shadow-2xl bg-[#F6F9FC] rounded-md px-4 py-4 sm:py-7">
           <div className="w-full flex flex-row justify-between items-center gap-2">
             <div className="flex gap-2 sm:gap-3 items-center">
               <Image

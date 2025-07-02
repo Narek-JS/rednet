@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 
 const logoList = [
-  '/images/logo1.jpg',
-  '/images/logo2.jpg',
-  '/images/logo1.jpg',
-  '/images/logo2.jpg',
-  '/images/logo1.jpg',
+  "/images/logo1.jpg",
+  "/images/logo2.jpg",
+  "/images/logo1.jpg",
+  "/images/logo2.jpg",
+  "/images/logo1.jpg",
 ];
 
 const Partners: React.FC = () => {
   return (
-    <section className="bg-[#f0f0f2] py-12 sm:block hidden">
+    <section className="bg-[#F6F9FC] py-12 sm:block hidden">
       <div className="container mx-auto px-4 text-center">
         <p className="text-gray-500 text-base mb-10">
           Trusted by 4,000+ companies

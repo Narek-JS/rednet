@@ -1,13 +1,9 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/UI/Button';
-import Image from 'next/image';
+import { Button } from "@/components/UI/Button";
+import Image from "next/image";
 
-const checklist = [
-  'Create an auction',
-  'Create an tenders',
-  'Publish',
-];
+const checklist = ["Create an auction", "Create an tenders", "Publish"];
 
 const Demo: React.FC = () => {
   return (
@@ -20,23 +16,29 @@ const Demo: React.FC = () => {
 
           <div className="space-y-4 mb-10">
             {checklist.map((item, idx) => (
-              <li key={idx} className="flex items-center gap-3 text-base text-gray-600">
-                    <Image
-                      src="/svgs/checked.svg"
-                      alt="checks"
-                      width={18}
-                      height={18}
-                    />
+              <li
+                key={idx}
+                className="flex items-center gap-3 text-base text-gray-600"
+              >
+                <Image
+                  src="/svgs/checked.svg"
+                  alt="checks"
+                  width={18}
+                  height={18}
+                />
                 {item}
               </li>
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-4">
-            <Button variant="border" className="w-auto">
+          <div className="flex items-center gap-4">
+            <Button
+              variant="border"
+              className="max-w-[180px] !rounded-full border-primary"
+            >
               View demo
             </Button>
-            <Button variant="primery" className="w-auto">
+            <Button variant="primery" className="max-w-[180px] !rounded-full">
               Get started
             </Button>
           </div>

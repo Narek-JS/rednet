@@ -1,65 +1,65 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/UI/Button';
-import type { Variant } from '@/components/UI/Button';
+import type { Variant } from "@/components/UI/Button";
+import { Button } from "@/components/UI/Button";
 
 const plans = [
   {
-    title: 'Startup',
-    subtitle: 'Starting at $0',
-    button: 'Buy now',
-    buttonVariant: 'primery',
+    title: "Startup",
+    subtitle: "Starting at $0",
+    button: "Buy now",
+    buttonVariant: "primery",
     data: {
-      firstLine: ['10', '300', '3000 AMD', '0%'],
-      secondLine: ['10', '100', '1000 AMD', '0%'],
+      firstLine: ["10", "300", "3000 AMD", "0%"],
+      secondLine: ["10", "100", "1000 AMD", "0%"],
     },
   },
   {
-    title: 'Professional',
-    subtitle: 'Starting at $40 / mo',
-    button: 'Buy now',
-    buttonVariant: 'primery',
+    title: "Professional",
+    subtitle: "Starting at $40 / mo",
+    button: "Buy now",
+    buttonVariant: "primery",
     data: {
-      firstLine: ['10', '300', '3000 AMD', '20%'],
-      secondLine: ['10', '100', '1000 AMD', '20%'],
+      firstLine: ["10", "300", "3000 AMD", "20%"],
+      secondLine: ["10", "100", "1000 AMD", "20%"],
     },
   },
   {
-    title: 'Growth',
-    subtitle: 'Starting at $40 / mo',
-    button: 'Buy now',
-    buttonVariant: 'primery',
+    title: "Growth",
+    subtitle: "Starting at $40 / mo",
+    button: "Buy now",
+    buttonVariant: "primery",
     data: {
-      firstLine: ['10', '300', '3000 AMD', '50%'],
-      secondLine: ['10', '100', '1000 AMD', '50%'],
+      firstLine: ["10", "300", "3000 AMD", "50%"],
+      secondLine: ["10", "100", "1000 AMD", "50%"],
     },
   },
   {
-    title: 'Scale',
-    subtitle: 'Starting at $40 / mo',
-    button: 'Buy now',
-    buttonVariant: 'primery',
+    title: "Scale",
+    subtitle: "Starting at $40 / mo",
+    button: "Buy now",
+    buttonVariant: "primery",
     data: {
-      firstLine: ['10', '300', '3000 AMD', '60%'],
-      secondLine: ['10', '100', '1000 AMD', '60%'],
+      firstLine: ["10", "300", "3000 AMD", "60%"],
+      secondLine: ["10", "100", "1000 AMD", "60%"],
     },
   },
   {
-    title: 'Custom',
-    subtitle: 'Starting at $40 / mo',
-    button: 'Get in touch',
-    buttonVariant: 'border',
+    title: "Custom",
+    subtitle: "Starting at $40 / mo",
+    button: "Get in touch",
+    buttonVariant: "border",
     data: {
-      firstLine: ['10', '300', '3000 AMD', '70%'],
-      secondLine: ['10', '100', '1000 AMD', '70%'],
+      firstLine: ["10", "300", "3000 AMD", "70%"],
+      secondLine: ["10", "100", "1000 AMD", "70%"],
     },
   },
 ];
 
-const rowLabels = ['Ներբեռնված քանակ', 'Միջին արժեք', 'Արժեք', 'Զեղչ'];
-const columns = ['Հաշվարկել', 'Մուտքագրել'];
+const rowLabels = ["Ներբեռնված", "Միջին արժեք", "Արժեք", "Զեղչ"];
+const columns = ["Հաշվարկել", "Մուտքագրել"];
 
-const renderDataRows = (type: 'firstLine' | 'secondLine') => {
+const renderDataRows = (type: "firstLine" | "secondLine") => {
   return rowLabels.map((_, rowIdx) =>
     plans.map((plan, idx) => (
       <div
@@ -76,7 +76,7 @@ export const Subscriptions: React.FC = () => {
   return (
     <div className="w-full overflow-hidden">
       <div className="flex w-full">
-        <div className="sm:min-w-[220px] min-w-[90px] flex-shrink-0 pr-4">
+        <div className="sm:min-w-[130px] min-w-[60px] flex-shrink-0 pr-4">
           <div className="h-[96px]" />
 
           {columns.map((sectionTitle) => (
@@ -100,17 +100,22 @@ export const Subscriptions: React.FC = () => {
           <div className="min-w-[900px] grid grid-cols-5">
             {plans.map((plan, idx) => (
               <div key={idx} className="text-center py-6 px-2 bg-white">
-                <h3 className="text-lg font-semibold text-[#101828]">{plan.title}</h3>
+                <h3 className="text-lg font-semibold text-[#101828]">
+                  {plan.title}
+                </h3>
                 <p className="text-sm text-[#667085] mb-3">{plan.subtitle}</p>
-                <Button  variant={plan.buttonVariant as Variant}>
+                <Button
+                  variant={plan.buttonVariant as Variant}
+                  className="max-w-[142px] !h-[42px] !rounded-full mx-auto"
+                >
                   {plan.button}
                 </Button>
               </div>
             ))}
 
-            {renderDataRows('firstLine')}
+            {renderDataRows("firstLine")}
             <div className="col-span-5 h-13" />
-            {renderDataRows('secondLine')}
+            {renderDataRows("secondLine")}
           </div>
         </div>
       </div>
