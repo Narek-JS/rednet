@@ -1,152 +1,167 @@
 "use client";
 
 import { Select, SelectItem } from "@/components/UI/Select";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Checkbox } from "@/components/UI/Chechbox";
 import { Button } from "@/components/UI/Button";
+import { Label } from "@/components/UI/Label";
 import { Input } from "@/components/UI/Input";
+import * as yup from "yup";
 
 const countryCodes = [
   { code: "AM", value: "+374" },
-  { code: "US", value: "+1" },
   { code: "AU", value: "+61" },
+  { code: "US", value: "+1" },
 ];
 
-type FormState = {
+const schema = yup.object({
+  email: yup.string().email("Invalid email").required("Email is required"),
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  message: yup.string().required("Message is required"),
+  phone: yup.string().required("Phone is required"),
+  country: yup.string().required(),
+  agree: yup
+    .bool()
+    .oneOf([true], "You must agree to the privacy policy")
+    .required(),
+});
+
+type FormValues = {
   firstName: string;
   lastName: string;
+  message: string;
+  country: string;
+  agree: boolean;
   email: string;
   phone: string;
-  message: string;
-  agree: boolean;
 };
 
-type ErrorState = Partial<Record<keyof FormState, string>>;
+const defaultValues = {
+  country: countryCodes[0].code,
+  firstName: "",
+  lastName: "",
+  agree: false,
+  message: "",
+  email: "",
+  phone: "",
+};
 
 const ContactUs: React.FC = () => {
-  const [country, setCountry] = useState(countryCodes[0].code);
-  const [form, setForm] = useState<FormState>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    message: "",
-    agree: false,
+  const form = useForm<FormValues>({
+    resolver: yupResolver(schema),
+    defaultValues,
   });
-  const [errors, setErrors] = useState<ErrorState>({});
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
-    let fieldValue: string | boolean = value;
-    if (type === "checkbox" && e.target instanceof HTMLInputElement) {
-      fieldValue = e.target.checked;
-    }
-    setForm((prev) => ({
-      ...prev,
-      [name]: fieldValue,
-    }));
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+    control,
+    watch,
+  } = form;
+
+  const onSubmit = async (data: FormValues) => {
+    console.log(data);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors({});
-    // Simulate backend validation
-    // If error: setErrors({ email: "Invalid email" })
-    // Else:
-    console.log({ ...form, country });
-  };
+  const selectedCountry = watch("country");
 
   return (
-    <div className="flex flex-col w-full max-w-xl">
+    <div className="flex flex-col w-full lg:max-w-xl">
       <h2 className="text-4xl font-bold mb-4">Contact us</h2>
       <p className="text-lg text-[#6B7280] mb-8">
         Our friendly team would love to hear from you.
       </p>
-      <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-6" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col sm:flex-row gap-4">
           <Input
-            label="First name *"
-            name="firstName"
+            error={errors.firstName?.message}
             placeholder="First name"
-            value={form.firstName}
-            onChange={handleChange}
-            error={errors.firstName}
+            label="First name *"
+            {...register("firstName")}
           />
           <Input
-            label="Last name *"
-            name="lastName"
+            error={errors.lastName?.message}
             placeholder="Last name"
-            value={form.lastName}
-            onChange={handleChange}
-            error={errors.lastName}
+            label="Last name *"
+            {...register("lastName")}
           />
         </div>
         <Input
-          label="Email *"
-          name="email"
+          error={errors.email?.message}
           placeholder="you@company.com"
-          value={form.email}
-          onChange={handleChange}
-          error={errors.email}
+          label="Email *"
           type="email"
+          {...register("email")}
         />
-        <div>
-          <label className="text-[#14142B] font-semibold text-[14px] text-left mb-2 block">
-            Phone number
-          </label>
-          <div className="flex gap-2">
-            <div className="w-28">
-              <Select
-                value={country}
-                onValueChange={setCountry}
-                placeholder="Code"
-              >
-                {countryCodes.map((c) => (
-                  <SelectItem key={c.code} value={c.code}>
-                    {c.code}
-                  </SelectItem>
-                ))}
-              </Select>
-            </div>
+        <div className="relative overflow-x-clip w-full flex flex-col gap-2.5">
+          <Label className="text-[#14142B] font-semibold text-[14px] text-left">
+            Phone number *
+          </Label>
+          <div className="flex">
+            <Controller
+              name="country"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  className="!rounded-tr-none !rounded-br-none"
+                  onValueChange={field.onChange}
+                  parentClassname="!w-fit"
+                  value={field.value}
+                  placeholder="Code"
+                >
+                  {countryCodes.map((c) => (
+                    <SelectItem key={c.code} value={c.code}>
+                      {c.code}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
+            />
             <Input
-              name="phone"
               placeholder={
-                countryCodes.find((c) => c.code === country)?.value || "+"
+                countryCodes.find((c) => c.code === selectedCountry)?.value ||
+                "+"
               }
-              value={form.phone}
-              onChange={handleChange}
-              error={errors.phone}
+              className="w-full !rounded-tl-none !rounded-bl-none"
               type="tel"
-              className="flex-1"
+              {...register("phone")}
             />
           </div>
+          {errors.phone && (
+            <p className="absolute left-0 -bottom-[22px] text-[#C30052] whitespace-nowrap text-sm font-semibold">
+              {errors.phone.message}
+            </p>
+          )}
         </div>
-        <div>
-          <label className="text-[#14142B] font-semibold text-[14px] text-left mb-2 block">
+        <div className="relative overflow-x-clip w-full flex flex-col gap-2.5">
+          <Label className="text-[#14142B] font-semibold text-[14px] text-left">
             Message *
-          </label>
+          </Label>
           <textarea
-            name="message"
-            placeholder="Leave us a message..."
-            value={form.message}
-            onChange={handleChange}
             className="w-full min-h-[100px] max-h-[200px] rounded-[12px] sm:rounded-[16px] border-none outline-none bg-[#EFF0F6] px-3 py-2 resize-y text-base"
+            placeholder="Leave us a message..."
+            {...register("message")}
           />
           {errors.message && (
-            <p className="text-[#C30052] text-sm font-semibold mt-1">
-              {errors.message}
+            <p className="absolute left-0 -bottom-[22px] text-[#C30052] whitespace-nowrap text-sm font-semibold">
+              {errors.message.message}
             </p>
           )}
         </div>
         <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
+          <Controller
+            control={control}
             name="agree"
-            checked={form.agree}
-            onChange={handleChange}
-            className="w-4 h-4 rounded border border-[#D1D5DB]"
-            id="privacy-policy"
+            render={({ field }) => (
+              <Checkbox
+                onChange={field.onChange}
+                checked={field.value}
+                id="privacy-policy"
+              />
+            )}
           />
           <label htmlFor="privacy-policy" className="text-sm text-[#6B7280]">
             You agree to our friendly{" "}
@@ -156,10 +171,15 @@ const ContactUs: React.FC = () => {
             .
           </label>
         </div>
+        {errors.agree && (
+          <p className="text-[#C30052] text-sm font-semibold -mt-4 mb-2">
+            {errors.agree.message}
+          </p>
+        )}
         <Button
-          type="submit"
-          variant="primery"
           className="mt-2 text-lg font-semibold"
+          variant="primery"
+          type="submit"
         >
           Send message
         </Button>

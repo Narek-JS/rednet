@@ -2,17 +2,18 @@
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { ChevronDownIcon } from "lucide-react";
+import { forwardRef, ReactNode } from "react";
 import { cn } from "@/utils/strings/cn";
-import React, { ReactNode } from "react";
 
 interface Props {
-  label?: string;
-  error?: string;
-  value?: string;
   onValueChange?: (value: string) => void;
+  parentClassname?: string;
   children: ReactNode;
   placeholder: string;
   className?: string;
+  label?: string;
+  error?: string;
+  value?: string;
 }
 
 const Select: React.FC<Props> = ({
@@ -23,8 +24,14 @@ const Select: React.FC<Props> = ({
   children,
   placeholder,
   className,
+  parentClassname,
 }) => (
-  <div className="relative overflow-x-clip w-full flex flex-col gap-2.5">
+  <div
+    className={cn(
+      "relative overflow-x-clip w-full flex flex-col gap-2.5",
+      parentClassname
+    )}
+  >
     {label && (
       <label className="text-[#14142B] font-semibold text-[14px] text-left">
         {label}
@@ -68,7 +75,7 @@ const Select: React.FC<Props> = ({
   </div>
 );
 
-const SelectItem = React.forwardRef<
+const SelectItem = forwardRef<
   HTMLDivElement,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
 >(({ children, className, ...props }, ref) => (

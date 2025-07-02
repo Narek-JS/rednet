@@ -9,12 +9,12 @@ const ContactUs: React.FC = () => {
           <ContactUsShared />
         </div>
 
-        <div className="w-full h-[300px] lg:h-full lg:w-1/2 lg:absolute -right-7 top-0 bottom-0 z-0 flex overflow-clip">
+        <div className="w-full h-[300px] lg:h-full lg:w-1/2 lg:absolute -right-20 top-0 bottom-0 z-0 flex overflow-clip">
           <div className="w-full h-full overflow-clip">
             <GoogleMapsEmbed
               apiKey="AIzaSyDLcdoN420sDVeALYer02_dtHRJWjsil10"
               q="Yerevan,Armenia"
-              height={1200}
+              height={1000}
               width="100%"
               mode="place"
             />
