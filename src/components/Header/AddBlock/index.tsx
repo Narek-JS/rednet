@@ -8,6 +8,9 @@ import { TEXTS } from "@/constants/texts";
 
 import Link from "next/link";
 import React from "react";
+import { TenderIcon } from "@/components/UI/TenderIcon";
+import { ProductIcon } from "@/components/UI/ProductIcon";
+import { ServiceIcon } from "@/components/UI/ServiceIcon";
 
 interface Props {
   profileId: string;
@@ -27,30 +30,39 @@ const AddBlock: React.FC<Props> = ({ profileId }) => (
     <DropdownItem className="text-gray-700 hover:bg-[#EFF0F6] transition-colors">
       <Link
         href={SECTION_TAGS.PROFILE_SERVICES.getProfileServiceTagUrl(profileId)}
-        className="flex items-center gap-2 w-full h-[32px]"
+        className="flex justify-between items-center gap-2 w-full h-[28px]"
       >
+        <div className="flex items-center gap-2">
+          <ServiceIcon />
+          <span>{TEXTS.addBlock.service}</span>
+        </div>
         <Plus className="w-4 h-4 text-primary" />
-        <span>{TEXTS.addBlock.service}</span>
       </Link>
     </DropdownItem>
 
     <DropdownItem className="text-gray-700 hover:bg-[#EFF0F6] transition-colors">
       <Link
         href={SECTION_TAGS.PROFILE_PRODUCTS.getProfileProductsTagUrl(profileId)}
-        className="flex items-center gap-2 w-full h-[32px]"
+        className="flex justify-between items-center gap-2 w-full h-[28px]"
       >
+        <div className="flex items-center gap-2">
+          <ProductIcon />
+          <span>{TEXTS.addBlock.product}</span>
+        </div>
         <Plus className="w-4 h-4 text-primary" />
-        <span>{TEXTS.addBlock.product}</span>
       </Link>
     </DropdownItem>
 
     <DropdownItem className="text-gray-700 hover:bg-[#EFF0F6] transition-colors">
       <Link
         href="/tenders/create"
-        className="flex items-center gap-2 w-full h-[32px]"
+        className="flex justify-between items-center gap-2 w-full h-[28px]"
       >
+        <div className="flex items-center gap-2">
+          <TenderIcon />
+          <span>{TEXTS.addBlock.tender}</span>
+        </div>
         <Plus className="w-4 h-4 text-primary" />
-        <span>{TEXTS.addBlock.tender}</span>
       </Link>
     </DropdownItem>
   </Dropdown>

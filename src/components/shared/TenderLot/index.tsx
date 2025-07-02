@@ -45,7 +45,7 @@ const TenderLot: React.FC<Props> = ({ lot }) => {
         <span className="font-semibold">{TEXTS.tenderLot.timeLeftValue}</span>
       </div>
       <Button
-        className="text-primary text-[14px] sm:text-[18px] font-semibold mt-4 sm:mt-6"
+        className="flex text-primary text-[14px] sm:text-[18px] font-semibold mt-4 sm:mt-6"
         onClick={openParticipateModal}
         variant="text"
       >
