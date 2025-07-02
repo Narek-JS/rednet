@@ -1,7 +1,7 @@
 import { ReactNode, ButtonHTMLAttributes } from "react";
 import { cn } from "@/utils/strings/cn";
 
-type Variant = "primery" | "border" | "text" | "outline" | "link";
+export type Variant = "primery" | "border" | "text" | "outline" | "link";
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
