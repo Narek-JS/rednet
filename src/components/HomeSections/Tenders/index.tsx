@@ -11,10 +11,15 @@ import Link from "next/link";
 const Tenders: React.FC = async () => {
   const singleTenderUrl = ENDPOINTS_ENUM.TENDER_BY_ID.replace(
     ":tenderId",
-    "24"
+    "19"
   );
 
   const tenderDataSsr = await api.get<TenderByIdResponse>(singleTenderUrl);
+
+  const lots = [
+    ...(tenderDataSsr.result?.lots || []),
+    tenderDataSsr.result?.lots?.[0],
+  ];
 
   return (
     <section className="py-10">
@@ -52,8 +57,8 @@ const Tenders: React.FC = async () => {
                   {tenderDataSsr.result?.name}
                 </p>
                 <p className="text-[12px] text-[#001D23]">
-                  {tenderDataSsr.result?.type} |{" "}
-                  {tenderDataSsr.result?.lots?.length} {TEXTS.tenders.lots}
+                  {tenderDataSsr.result?.type} | {lots?.length}{" "}
+                  {TEXTS.tenders.lots}
                 </p>
               </div>
             </div>
@@ -65,13 +70,11 @@ const Tenders: React.FC = async () => {
             </Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {tenderDataSsr.result?.lots?.slice(0, 3)?.map((lot, index) => (
-              <TenderLot key={index} lot={lot} />
+            {lots?.slice(0, 3)?.map((lot, index) => (
+              <TenderLot key={index} lot={lot as any} />
             ))}
           </div>
-          {!tenderDataSsr.result?.lots?.length && (
-            <EmptyItems text={TEXTS.tenders.empty} />
-          )}
+          {!lots?.length && <EmptyItems text={TEXTS.tenders.empty} />}
         </div>
       </div>
     </section>
