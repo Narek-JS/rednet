@@ -3,7 +3,7 @@ import { GoogleMapsEmbed } from "@next/third-parties/google";
 
 const ContactUs: React.FC = () => {
   return (
-    <section className="relative w-full bg-[#F7FAFC] py-16 min-h-[600px] overflow-clip">
+    <section className="relative w-full bg-[#F7FAFC] pt-2 sm:pt-13 sm:pb-16 min-h-[600px] overflow-clip">
       <div className="container mx-auto flex flex-col lg:flex-row items-stretch relative z-10 h-full min-h-[600px]">
         <div className="w-full lg:w-1/2 flex flex-col justify-center py-8 lg:py-0 z-10 lg:mr-8">
           <ContactUsShared />

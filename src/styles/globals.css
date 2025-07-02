@@ -12,6 +12,10 @@
   scrollbar-color: #eff0f6 transparent;
 }
 
+.subscriptions-scrollbar {
+  scrollbar-color: var(--color-primary) transparent;
+}
+
 /* For WebKit browsers (Chrome, Safari) */
 *::-webkit-scrollbar {
   width: 6px;

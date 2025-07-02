@@ -96,8 +96,8 @@ export const Subscriptions: React.FC = () => {
           ))}
         </div>
 
-        <div className="overflow-x-auto w-full">
-          <div className="min-w-[900px] grid grid-cols-5">
+        <div className="overflow-x-auto subscriptions-scrollbar w-full">
+          <div className="min-w-[745px] sm:min-w-[900px] grid grid-cols-5">
             {plans.map((plan, idx) => (
               <div key={idx} className="text-center py-6 px-2 bg-white">
                 <h3 className="text-lg font-semibold text-[#101828]">
